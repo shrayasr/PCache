@@ -141,6 +141,12 @@ public class CacheEngine {
 
 	}
 
+	/**
+	 * Qualify the structure ID with the namespace to guarentee uniqueness
+	 * @param namespace the namespace that needs to be created. This is what uniquely identifies the namespace in the cache
+	 * @param structId an identifier for the structure. This is what uniquely identifies the structure in the namespace
+	 * @return
+	 */
 	private static String getNamespaceQualifiedStructId(String namespace, String structId) {
 		return namespace + "." + structId;
 	}

@@ -6,8 +6,6 @@ import java.util.Collections;
 
 /**
  * Data Object for storing the list of structures in the cache
- * @author shrayas
- *
  */
 public class Structure {
 
@@ -48,6 +46,11 @@ public class Structure {
 		return (this._structure.equals(structureFromInstance));
 	}
 
+	/**
+	 * Get the base structure from the given structure instance
+	 * @param dirtyStructure the dirty structure instance ID to extract the base structure from
+	 * @return the base structure
+	 */
 	private String extractStructureFromInstance(String dirtyStructure) {
 
 		// Clean the structure first (with the K=V pairs)
@@ -73,6 +76,11 @@ public class Structure {
 
 	}
 
+	/**
+	 * Clean the structure by organizing all its parts in alphabetical order
+	 * @param dirtyStructure the dirty structure to clean
+	 * @return the cleaned structure
+	 */
 	private String cleanStructure(String dirtyStructure) {
 
 		String cleanStructure = "";
@@ -92,6 +100,8 @@ public class Structure {
 		return cleanStructure.substring(0, cleanStructure.length()-1);
 	}
 
+
+	// GETTERS
 	public String get_structure() {
 		return this._structure;
 	}
@@ -100,6 +110,10 @@ public class Structure {
 		return this._name;
 	}
 
+
+	// OVERRIDES
+
+	// Overriding equals and hashcode allows us to call .equals on an object of type "structure"
 	@Override
 	public boolean equals(Object obj) {
 
