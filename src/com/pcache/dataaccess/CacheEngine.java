@@ -31,6 +31,8 @@ public class CacheEngine {
 	 */
 	public static void createNamespace(String namespace) throws PCacheException {
 
+		long start = System.currentTimeMillis();
+
 		// If the namespace already exists, throw an exception
 		if (_namespaceToStructsMap.containsKey(namespace)) {
 			throw new PCacheException("Namespace already exists");
@@ -38,6 +40,8 @@ public class CacheEngine {
 
 		// Put the new namespace into the map, along with a blank arraylist to store the structures under this for the future
 		_namespaceToStructsMap.put(namespace, new ArrayList<String>());
+
+		System.out.println("Added namespace " + namespace + " in " + (System.currentTimeMillis() - start) + "ms");
 		
 	}
 
@@ -50,6 +54,8 @@ public class CacheEngine {
 	 * @throws PCacheException thrown if the namespace doesn't exist or if the structure already exists
 	 */
 	public static void addStructureToNamespace(String namespace, String structId, String structDefinition) throws PCacheException {
+
+		long start = System.currentTimeMillis();
 
 		// If the namespace doesn't exist, throw an exception
 		if (!_namespaceToStructsMap.containsKey(namespace)) {
@@ -82,6 +88,8 @@ public class CacheEngine {
 		// Along with the key, add a blank arraylist to store list of structure instances
 		_structIdToStructInstancesIdMap.put(struct.get_name(), new ArrayList<String>());
 		
+		System.out.println("Added struct " + structId + " to namespace " + namespace + " in " + (System.currentTimeMillis() - start) + "ms");
+
 	}
 
 	/**
@@ -94,6 +102,8 @@ public class CacheEngine {
 	 * @throws PCacheException thrown if the namespace doesn't exist or the structure doesn't exist or the instance types don't match or if the instance already exists
 	 */
 	public static void createStructureInstance(String namespace, String structId, String structInstance, Timeseries timeseries) throws PCacheException {
+
+		long start = System.currentTimeMillis();
 
 		// If the namespace doesn't exist, throw an exception
 		if (!_namespaceToStructsMap.containsKey(namespace)) {
@@ -138,6 +148,8 @@ public class CacheEngine {
 
 		// Add the new timeseries to that object key
 		_structInstanceIdToTimeSeriesMap.put(structInstanceId, timeseries);
+
+		System.out.println("Created an instance of structure " + structId + " ["+structInstance+"] under namespace " + namespace + " in " + (System.currentTimeMillis() - start) +"ms");
 
 	}
 
