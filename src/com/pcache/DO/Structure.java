@@ -34,7 +34,7 @@ public class Structure {
 	 * @return the Unique ID
 	 */
 	public static String generateUUID(String namespace, String structId, String structInstance) {
-		return namespace + "#" + structId + "#" + structInstance;
+		return namespace + "." + structId + "." + structInstance;
 	}
 
 	/**

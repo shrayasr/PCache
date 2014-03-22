@@ -12,10 +12,17 @@ import com.pcache.exceptions.PCacheException;
  */
 public class CacheEngine {
 
-	private static HashMap<String, ArrayList<String>> _namespaceKeyStructMap = new HashMap<String, ArrayList<String>>();
-	private static HashMap<String, Structure> _structKeyStructMap = new HashMap<String, Structure>();
-	private static HashMap<String, ArrayList<String>> _structKeyStructInstancesMap = new HashMap<String, ArrayList<String>>();
-	private static HashMap<String, Timeseries> _structInstanceKeyTimeSeriesMap = new HashMap<String, Timeseries>();
+	// Namespace - Structure ID map. This gives the list of structures that belong to a namespace
+	private static HashMap<String, ArrayList<String>> _namespaceToStructsMap = new HashMap<String, ArrayList<String>>();
+
+	// Structure ID - Structure map. This gives the structure object associated to a structure ID
+	private static HashMap<String, Structure> _structIdToStructMap = new HashMap<String, Structure>();
+
+	// Structure ID - Structure instances map. This gives the list of structure Instances that belong to a given structure ID
+	private static HashMap<String, ArrayList<String>> _structIdToStructInstancesIdMap = new HashMap<String, ArrayList<String>>();
+
+	// Structure Instance - Timeseries map. Gives the timeseries that is associated to the structure instance
+	private static HashMap<String, Timeseries> _structInstanceIdToTimeSeriesMap = new HashMap<String, Timeseries>();
 
 	/**
 	 * Create a namespace.
@@ -25,12 +32,12 @@ public class CacheEngine {
 	public static void createNamespace(String namespace) throws PCacheException {
 
 		// If the namespace already exists, throw an exception
-		if (_namespaceKeyStructMap.containsKey(namespace)) {
+		if (_namespaceToStructsMap.containsKey(namespace)) {
 			throw new PCacheException("Namespace already exists");
 		}
 
 		// Put the new namespace into the map, along with a blank arraylist to store the structures under this for the future
-		_namespaceKeyStructMap.put(namespace, new ArrayList<String>());
+		_namespaceToStructsMap.put(namespace, new ArrayList<String>());
 		
 	}
 
@@ -45,15 +52,18 @@ public class CacheEngine {
 	public static void addStructureToNamespace(String namespace, String structId, String structDefinition) throws PCacheException {
 
 		// If the namespace doesn't exist, throw an exception
-		if (!_namespaceKeyStructMap.containsKey(namespace)) {
+		if (!_namespaceToStructsMap.containsKey(namespace)) {
 			throw new PCacheException("Namespace doesnt exist");
 		}
 
 		// Get the list of structure keys in the namespace
-		ArrayList<String> structuresInNamespace = _namespaceKeyStructMap.get(namespace);
+		ArrayList<String> structuresInNamespace = _namespaceToStructsMap.get(namespace);
+
+		// Qualify the struct ID with the namespace to make it unique
+		String namespaceQualifiedStructId = getNamespaceQualifiedStructId(namespace, structId);
 
 		// Create a structure out of the given properties
-		Structure struct = new Structure(structId, structDefinition);
+		Structure struct = new Structure(namespaceQualifiedStructId, structDefinition);
 		
 		// If the structure already exists, throw an exception
 		if (structuresInNamespace.contains(struct.get_name())) {
@@ -64,13 +74,13 @@ public class CacheEngine {
 		structuresInNamespace.add(struct.get_name());
 		
 		// Update the list of structure keys for the namespace
-		_namespaceKeyStructMap.put(namespace, structuresInNamespace);
+		_namespaceToStructsMap.put(namespace, structuresInNamespace);
 
 		// Add a key - structure mapping
-		_structKeyStructMap.put(struct.get_name(), struct);
+		_structIdToStructMap.put(struct.get_name(), struct);
 
 		// Along with the key, add a blank arraylist to store list of structure instances
-		_structKeyStructInstancesMap.put(struct.get_name(), new ArrayList<String>());
+		_structIdToStructInstancesIdMap.put(struct.get_name(), new ArrayList<String>());
 		
 	}
 
@@ -86,20 +96,23 @@ public class CacheEngine {
 	public static void createStructureInstance(String namespace, String structId, String structInstance, Timeseries timeseries) throws PCacheException {
 
 		// If the namespace doesn't exist, throw an exception
-		if (!_namespaceKeyStructMap.containsKey(namespace)) {
+		if (!_namespaceToStructsMap.containsKey(namespace)) {
 			throw new PCacheException("Namespace doesnt exist");
 		}
 
+		// Qualify the structure with the namespace to make it unique
+		String namespaceQualifiedStructId = getNamespaceQualifiedStructId(namespace, structId);
+
 		// Get the list of structure keys in the namespace
-		ArrayList<String> structuresInNamespace = _namespaceKeyStructMap.get(namespace);
+		ArrayList<String> structuresInNamespace = _namespaceToStructsMap.get(namespace);
 		
 		// If the structure doesn't exist, throw an exception
-		if (!structuresInNamespace.contains(structId)) {
+		if (!structuresInNamespace.contains(namespaceQualifiedStructId)) {
 			throw new PCacheException("Structure doesn't exist");
 		}
 
 		// Pick up the structure whose instance is being created
-		Structure structInQuestion = _structKeyStructMap.get(structId);
+		Structure structInQuestion = _structIdToStructMap.get(namespaceQualifiedStructId);
 
 		// If the instance being created isn't the type of the structure being referred to, throw an exception
 		if (!structInQuestion.containsInstance(structInstance)) {
@@ -107,25 +120,29 @@ public class CacheEngine {
 		}
 
 		// Create an object key from the namespace, structure ID and the structure instance details
-		String objectKey = Structure.generateUUID(namespace, structId, structInstance);
+		String structInstanceId = Structure.generateUUID(namespace, structId, structInstance);
 
-		// Pick up the list of structure instance for that structure
-		ArrayList<String> structureInstances = _structKeyStructInstancesMap.get(structId);
+		// Pick up the list of structure instances for that structure
+		ArrayList<String> structureInstances = _structIdToStructInstancesIdMap.get(namespaceQualifiedStructId);
 
 		// If the object already exists in the list, throw an exception
-		if (structureInstances.contains(objectKey)) {
+		if (structureInstances.contains(structInstanceId)) {
 			throw new PCacheException("Instance already exists");
 		}
 
 		// Add the object key to the list of structure instances
-		structureInstances.add(objectKey);
+		structureInstances.add(structInstanceId);
 
 		// Update the structure - structure instances map with the new set of structure instances
-		_structKeyStructInstancesMap.put(structId, structureInstances);
+		_structIdToStructInstancesIdMap.put(namespaceQualifiedStructId, structureInstances);
 
 		// Add the new timeseries to that object key
-		_structInstanceKeyTimeSeriesMap.put(objectKey, timeseries);
+		_structInstanceIdToTimeSeriesMap.put(structInstanceId, timeseries);
 
+	}
+
+	private static String getNamespaceQualifiedStructId(String namespace, String structId) {
+		return namespace + "." + structId;
 	}
 
 }
