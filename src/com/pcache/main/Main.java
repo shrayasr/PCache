@@ -4,17 +4,12 @@ import java.util.ArrayList;
 
 import com.pcache.DO.Timeseries;
 import com.pcache.dataaccess.CacheEngine;
+import com.pcache.dataaccess.CacheEngineV2;
 import com.pcache.exceptions.PCacheException;
 
 public class Main {
 
 	public static void main(String[] args) throws PCacheException {
-
-		String namespace = "sentinel";
-
-		CacheEngine.createNamespace(namespace);
-
-		CacheEngine.addStructureToNamespace(namespace, "filmstrip", "tid,sid");
 
 		ArrayList<String> timestamps = new ArrayList<String>();
 		ArrayList<String> dataPoints = new ArrayList<String>();
@@ -29,10 +24,17 @@ public class Main {
 
 		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
-		CacheEngine.createStructureInstance(namespace, "filmstrip", "tid=1,sid=1", ts);
+		CacheEngineV2.addNewNamespace("sentinel");
+		CacheEngineV2.renameNamespace("sentinel", "xentinel");
 
+		CacheEngineV2.addNewStructure("xentinel", "filmstrip");
+		CacheEngineV2.renameStructure("xentinel", "filmstrip", "xilmstrip");
 
-		System.out.println("Cache initialized!");
+		CacheEngineV2.addNewStructureInstance("xentinel", "xilmstrip", "tid=1,sid=1", ts);
+
+		Timeseries ts2 = CacheEngineV2.get("xentinel.xilmstrip.tid=1,sid=1");
+
+		System.out.println("Cache initialized | " + ts2.size());
 	}
 
 }

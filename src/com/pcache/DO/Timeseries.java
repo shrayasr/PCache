@@ -12,6 +12,10 @@ public class Timeseries {
 	private ArrayList<String> _timestamps;
 	private ArrayList<String> _dataPoints;
 
+	public int size() {
+		return this._timestamps.size();
+	}
+
 	/**
 	 * Constructor. Initialize a time series 
 	 * @param timestamps the list of timestamps
