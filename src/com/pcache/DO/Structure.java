@@ -64,10 +64,10 @@ public class Structure {
 		// Go through the list of parts, only extracting the Keys from the K=V pairs
 		for (String cleanInstanceStructurePart : cleanInstanceStructureParts) {
 
-			if (cleanInstanceStructurePart.contains("=")) {
+			if (cleanInstanceStructurePart.trim().contains("=")) {
 
 				// Append the extracted parts to a string
-				structureFromInstance += cleanInstanceStructurePart.substring(0,cleanInstanceStructurePart.indexOf("=")) + ",";
+				structureFromInstance += cleanInstanceStructurePart.trim().substring(0,cleanInstanceStructurePart.indexOf("=")) + ",";
 			}
 		}
 
@@ -86,14 +86,14 @@ public class Structure {
 		String cleanStructure = "";
 
 		// Split by comma and throw into an arraylist for easier sorting
-		ArrayList<String> unSortedList = new ArrayList<String>(Arrays.asList(dirtyStructure.split(",")));
+		ArrayList<String> unSortedList = new ArrayList<String>(Arrays.asList(dirtyStructure.trim().split(",")));
 		
 		// Sort the dirty array
 		Collections.sort(unSortedList);
 
 		// Append the sorted parts to a string
 		for (String cleanStructurePart : unSortedList) {
-			cleanStructure += cleanStructurePart + ",";
+			cleanStructure += cleanStructurePart.trim() + ",";
 		}
 
 		// Remove the trailing comma and return
