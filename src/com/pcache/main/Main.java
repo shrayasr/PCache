@@ -3,7 +3,6 @@ package com.pcache.main;
 import java.util.ArrayList;
 
 import com.pcache.DO.Timeseries;
-import com.pcache.dataaccess.CacheEngine;
 import com.pcache.dataaccess.CacheEngineV2;
 import com.pcache.exceptions.PCacheException;
 
@@ -27,12 +26,12 @@ public class Main {
 		CacheEngineV2.addNewNamespace("sentinel");
 		CacheEngineV2.renameNamespace("sentinel", "xentinel");
 
-		CacheEngineV2.addNewStructure("xentinel", "filmstrip");
+		CacheEngineV2.addNewStructure("xentinel", "filmstrip", "tid,sid");
 		CacheEngineV2.renameStructure("xentinel", "filmstrip", "xilmstrip");
 
-		CacheEngineV2.addNewStructureInstance("xentinel", "xilmstrip", "tid=1,sid=1", ts);
+		CacheEngineV2.addNewStructureInstance("xentinel", "xilmstrip", "tid=1, sid=1", ts);
 
-		Timeseries ts2 = CacheEngineV2.get("xentinel.xilmstrip.tid=1,sid=1");
+		Timeseries ts2 = CacheEngineV2.getTimeseries("xentinel","xilmstrip","tid=1,sid=1");
 
 		System.out.println("Cache initialized | " + ts2.size());
 	}
