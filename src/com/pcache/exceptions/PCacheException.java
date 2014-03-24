@@ -6,4 +6,8 @@ public class PCacheException extends Exception {
 		super(message);
 	}
 
+	public PCacheException(String message, Exception ex) {
+		super(message, ex);
+	}
+
 }
