@@ -60,6 +60,7 @@ public class CacheEngineV2 {
 		}
 	}
 
+
 	/**
 	 * Create a namespace.
 	 * @param namespace the namespace that needs to be created. This is what 
@@ -68,11 +69,10 @@ public class CacheEngineV2 {
 	 */
 	public static void addNewNamespace(String namespace) 
 			throws PCacheException {
-		
-		// If the namespace already exists in the cache, except
-		if (_cacheTree.containsChild(namespace)) {
-			throw new PCacheException("Namespace already exists");
-		}
+
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNamespaceExists(namespace);
 
 		// Create a new node to represent the namespace
 		Node newNamespace = new Node(namespace);
@@ -91,10 +91,12 @@ public class CacheEngineV2 {
 	public static void renameNamespace(String oldNamespace, 
 			String newNamespace) throws PCacheException {
 		
-		// If the cache doesn't contain the namespace, except
-		if (!_cacheTree.containsChild(oldNamespace)) {
-			throw new PCacheException("Namespace doesn't exist");
-		}
+		// Sanity checks
+		exceptIfNamespaceInvalid(oldNamespace);
+		exceptIfNoNamespaceExists(oldNamespace);
+
+		exceptIfNamespaceInvalid(newNamespace);
+		exceptIfNamespaceExists(newNamespace);
 
 		// Pick up the Node associated to the old namespace
 		Node namespaceNode = _cacheTree.getChild(oldNamespace);
@@ -122,16 +124,14 @@ public class CacheEngineV2 {
 	public static void addNewStructure(String namespace, String structureId, 
 			String structureDefinition) throws PCacheException {
 		
-		// If the namespace doesn't exist in the cache, except
-		if (!_cacheTree.containsChild(namespace)) {
-			throw new PCacheException("Namespace doesn't exist");
-		}
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
 
-		// If the structure ID is already associated with the namespace, except
-		if (_cacheTree.getChild(namespace).containsChild(structureId)) {
-			throw new PCacheException("Structure ID already exists under "
-					+ "given namespace");
-		}
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfStructureIdExists(namespace, structureId);
+
+		exceptIfStructureDefinitionInvalid(structureDefinition);
 
 		// Pick up the Node associated with the namespace
 		Node namespaceNode = _cacheTree.getChild(namespace);
@@ -160,15 +160,16 @@ public class CacheEngineV2 {
 			String oldStructureId, String newStructureId) 
 					throws PCacheException {
 
-		// If the namespace doesn't exist, except
-		if (!_cacheTree.containsChild(namespace)) {
-			throw new PCacheException("Namespace doesn't exist");
-		}
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
 
-		// If the structure doesn't exist, except
-		if (!_cacheTree.getChild(namespace).containsChild(oldStructureId)) {
-			throw new PCacheException("Structure doesn't exist");
-		}
+		exceptIfStructureIdInvalid(oldStructureId);
+		exceptIfNoStructureIdExists(namespace, oldStructureId);
+
+		exceptIfStructureIdExists(namespace, newStructureId);
+		exceptIfStructureIdInvalid(newStructureId);
+
 
 		// Pick up the Node associated with that namespace and structure
 		Node structureNode = _cacheTree.getChild(namespace)
@@ -198,15 +199,16 @@ public class CacheEngineV2 {
 			String structureId, String structureInstanceId, 
 			Timeseries timeseries) throws PCacheException {
 
-		// If the namespace doesn't exist, except
-		if (!_cacheTree.containsChild(namespace)) {
-			throw new PCacheException("Namespace doesn't exist");
-		}
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
 
-		// If the structure doesn't exist, except
-		if (!_cacheTree.getChild(namespace).containsChild(structureId)) {
-			throw new PCacheException("Structure doesn't exist");
-		}
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
 
 		// Pick up the node associated with the structure
 		Node structureNode = _cacheTree.getChild(namespace).
@@ -230,6 +232,162 @@ public class CacheEngineV2 {
 		// Update the current structure with the new one
 		_cacheTree.getChild(namespace).replaceChild(structureId, structureNode);
 		
+	}
+
+	/**
+	 * Check if the namespace is invalid. Namespaces can only contain "a-z" 
+	 * "A-Z" "0-9" and "_"
+	 * @param namespace the namespace to check for validity
+	 * @throws PCacheException thrown if the namespace isn't of the valid
+	 * 			format
+	 */
+	private static void exceptIfNamespaceInvalid(String namespace) 
+			throws PCacheException {
+
+		// If the namespace doesn't match set pattern, except
+		if (!namespace.matches("[a-zA-Z0-9_]+")) {
+			throw new PCacheException("Namespace can only contain alpabets"
+					+ ", underscores and numbers");
+		}
+	}
+
+	/**
+	 * Check if the namespace already exists in the cache.
+	 * @param namespace the namespace to check for existance
+	 * @throws PCacheException thrown if the namespace already exists in the
+	 * 			cache
+	 */
+	private static void exceptIfNamespaceExists(String namespace) 
+			throws PCacheException {
+
+		// If the namespace already exists in the cache, except
+		if (_cacheTree.containsChild(namespace)) {
+			throw new PCacheException("Namespace already exists");
+		}
+	}
+
+	/**
+	 * Check if the namespace doesn't exist in the cache.
+	 * @param namespace the namespace to check for existance
+	 * @throws PCacheException thrown if the namespace doesn't exist in the 
+	 * 			cache
+	 */
+	private static void exceptIfNoNamespaceExists(String namespace) 
+			throws PCacheException {
+
+		// If the namespace already exists in the cache, except
+		if (!_cacheTree.containsChild(namespace)) {
+			throw new PCacheException("Namespace doesn't exist");
+		}
+	}
+
+	/**
+	 * Check if the structure definition is invalid. Structures can only contain
+	 * "a-z" "A-Z" "0-9" "," and "_"
+	 * @param structureDefinition the structure definition to check for 
+	 * 			validity
+	 * @throws PCacheException thrown if the structure definition is invalid
+	 */
+	private static void exceptIfStructureDefinitionInvalid(
+			String structureDefinition) throws PCacheException {
+
+		// If the structureID doesn't match required pattern, except
+		if (!structureDefinition.matches("[a-zA-Z0-9_,]+")) {
+			throw new PCacheException("Structure definition can only contain "
+					+ "alpabets, underscores and numbers");
+		}
+		
+	}
+
+	/**
+	 * Check if the structure ID is invalid. Structure IDs can only contain
+	 * "a-z" "A-Z" "0-9" and "_"
+	 * @param structureId the structure ID to check for validity
+	 * @throws PCacheException thrown if the structure ID is invalid
+	 */
+	private static void exceptIfStructureIdInvalid(String structureId) 
+			throws PCacheException {
+
+		// If the structureID doesn't match required pattern, except
+		if (!structureId.matches("[a-zA-Z0-9_]+")) {
+			throw new PCacheException("Structure ID can only contain alpabets"
+					+ ", underscores and numbers");
+		}
+		
+	}
+
+	/**
+	 * Check if the structure ID already exists under the namespace
+	 * @param namespace the namespace to check under
+	 * @param structureId the structure ID to look for under the namespace
+	 * @throws PCacheException thrown if the structure ID exists under that 
+	 * 			namespace
+	 */
+	private static void exceptIfStructureIdExists(String namespace,
+			String structureId) throws PCacheException {
+
+		// If the structure ID is already associated with the namespace, except
+		if (_cacheTree.getChild(namespace).containsChild(structureId)) {
+			throw new PCacheException("Structure ID already exists under "
+					+ "given namespace");
+		}
+	}
+
+	/**
+	 * Check if the structure ID doesn't exist under the namespace
+	 * @param namespace the namespace to check under
+	 * @param structureId the structure ID to look for under the namespace
+	 * @throws PCacheException thrown if the structure ID doesn't exist under
+	 * 			that namespace
+	 */
+	private static void exceptIfNoStructureIdExists(String namespace,
+			String structureId) throws PCacheException {
+
+		// If the structure ID is already associated with the namespace, except
+		if (!_cacheTree.getChild(namespace).containsChild(structureId)) {
+			throw new PCacheException("Structure ID already exists under "
+					+ "given namespace");
+		}
+	}
+
+	/**
+	 * Check if the structure instance ID is valid. Structure instance IDs can
+	 * contain only "a-z" "A-Z" "0-9" "_" "=" and ","
+	 * @param structureInstanceId the structure instance ID to check for 
+	 * @throws PCacheException thrown if the structure instance ID is invalid
+	 */
+	private static void exceptIfStructureInstanceIdInvalid(
+			String structureInstanceId) throws PCacheException {
+
+		// Except if the structure instance ID doesn't match pattern
+		if (!structureInstanceId.matches("[a-zA-Z0-9_,=]+")) {
+			throw new PCacheException("Structure instance ID can only contain"
+					+ " alpabets, underscores and numbers");
+		}
+		
+	}
+
+	/**
+	 * Check if the structure instance ID exists associated to a structure under
+	 * the given namespace
+	 * @param namespace the namespace to look under
+	 * @param structureId the structure ID to which the instance is associated
+	 * @param structureInstanceId the structure instance ID to check for
+	 * @throws PCacheException thrown if the structure instance ID already 
+	 * 			associated to that structure under the namespace
+	 */
+	private static void exceptIfStructureInstanceIdExists(String namespace,
+			String structureId, String structureInstanceId)
+					throws PCacheException {
+		
+		// If the structure instance ID already exists for the given structure
+		// under that namespace, except
+		if (_cacheTree.getChild(namespace).getChild(structureId)
+				.containsChild(structureInstanceId)) {
+
+			throw new PCacheException("Structure instance ID already exists "
+					+ "under given namespace");
+		}
 	}
 
 }
