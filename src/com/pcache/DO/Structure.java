@@ -24,18 +24,6 @@ public class Structure {
 	}
 
 	/**
-	 * Get a unique ID for the combination
-	 * @param namespace the namespace that needs to be created. This is what uniquely identifies the namespace in the cache
-	 * @param structId an identifier for the structure. This is what uniquely identifies the structure in the namespace
-	 * @param structInstance an instance of that structure. This is a comma separated list of key=value pairs.
-	 * Eg: sensor_type=heat,sensor_name=S451_heat
-	 * @return the Unique ID
-	 */
-	public static String generateUUID(String namespace, String structId, String structInstance) {
-		return namespace + "." + structId + "." + structInstance;
-	}
-
-	/**
 	 * Check if the given structure instance can be a part of the structure
 	 * @param structInstance an instance of that structure. This is a comma separated list of key=value pairs.
 	 * Eg: sensor_type=heat,sensor_name=S451_heat
@@ -63,7 +51,6 @@ public class Structure {
 		
 		// Go through the list of parts, only extracting the Keys from the K=V pairs
 		for (String cleanInstanceStructurePart : cleanInstanceStructureParts) {
-
 			if (cleanInstanceStructurePart.trim().contains("=")) {
 
 				// Append the extracted parts to a string
