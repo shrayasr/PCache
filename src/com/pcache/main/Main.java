@@ -3,7 +3,7 @@ package com.pcache.main;
 import java.util.ArrayList;
 
 import com.pcache.DO.Timeseries;
-import com.pcache.dataaccess.CacheEngineV2;
+import com.pcache.dataaccess.CacheEngine;
 import com.pcache.exceptions.PCacheException;
 
 public class Main {
@@ -23,15 +23,15 @@ public class Main {
 
 		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
-		CacheEngineV2.addNewNamespace("sentinel");
-		CacheEngineV2.renameNamespace("sentinel", "xentinel");
+		CacheEngine.addNewNamespace("sentinel");
+		CacheEngine.renameNamespace("sentinel", "xentinel");
 
-		CacheEngineV2.addNewStructure("xentinel", "filmstrip", "tid,sid");
-		CacheEngineV2.renameStructure("xentinel", "filmstrip", "xilmstrip");
+		CacheEngine.addNewStructure("xentinel", "filmstrip", "tid,sid");
+		CacheEngine.renameStructure("xentinel", "filmstrip", "xilmstrip");
 
-		CacheEngineV2.addNewStructureInstance("xentinel", "xilmstrip", "tid=1, sid=1", ts);
+		CacheEngine.addNewStructureInstance("xentinel", "xilmstrip", "tid=1, sid=1", ts);
 
-		Timeseries ts2 = CacheEngineV2.getTimeseries("xentinel","xilmstrip","tid=1,sid=1");
+		Timeseries ts2 = CacheEngine.getTimeseries("xentinel","xilmstrip","tid=1,sid=1");
 
 		System.out.println("Cache initialized | " + ts2.size());
 	}
