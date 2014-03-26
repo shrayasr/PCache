@@ -30,6 +30,10 @@ public class CacheEngine {
 	// The main tree that stores the entire cache
 	private static Node _cacheTree = new Node("cache");
 
+	public static void reInitializeCache() {
+		_cacheTree = new Node("cache");
+	}
+	
 	/**
 	 * Get the Timeseries associated to a Structure Instance Node
 	 * @param namespace the namespace being referred to in the cache
