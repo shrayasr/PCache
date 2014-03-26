@@ -6,8 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import sun.misc.Cache;
-
+import com.pcache.DO.Timeseries;
 import com.pcache.exceptions.PCacheException;
 
 public class CacheEngineTest
@@ -104,7 +103,8 @@ public class CacheEngineTest
 	}
 	
 	@Test (expected=PCacheException.class)
-	public void testAddNewStructure_structDefnInvalid() throws PCacheException
+	public void testAddNewStructure_structDefnInvalid() 
+			throws PCacheException
 	{
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "!!baz,boo");
@@ -116,5 +116,143 @@ public class CacheEngineTest
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 	}
+
+	@Test (expected=PCacheException.class)
+	public void testRenameStructure_nsInvalid() throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.renameStructure("foo!", "bar", "barz");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRenameStructure_nsNoExists() throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.renameStructure("fooz", "bar", "barz");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRenameStructure_oldStructInvalid() 
+			throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.renameStructure("foo", "bar!", "barz");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRenameStructure_oldStructNoExists() 
+			throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.renameStructure("foo", "barz", "barzz");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRenameStructure_newStructInvalid() 
+			throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.renameStructure("foo", "bar", "bar!");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRenameStructure_newStructExists() 
+			throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructure("foo", "baz", "foo,bar");
+		CacheEngine.renameStructure("foo", "bar", "baz");
+	}
 	
+	/*
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
+	 */
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_nsInvalid() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo!", "bar", "baz=1,boo=2",null);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_nsNoExist() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_structIdInvalid() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_structIdNoExist() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_structInstIdInvalid() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo!=2",null);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_structInstIdExist() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddNewStructureInstance_structInstanceIdNoMatch() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,bo=2",null);
+	}
+
+	@Test 
+	public void testAddNewStructureInstance_ok() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+	}
+
 }
