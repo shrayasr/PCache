@@ -141,7 +141,21 @@ public class CacheEngine {
 		Node namespaceNode = _cacheTree.getChild(namespace);
 		
 		// Create the structure object
-		Structure structure = new Structure(structureId, structureDefinition);
+
+		/*
+		 * THIS IS IMPORTANT. 
+		 * 
+		 * Using String as the type of the object always. When self adaptive
+		 * store comes into play, this part will change
+		 * 
+		 * Going with strings as of now so that things will be easy from a 
+		 * pushing shit out perspective. 
+		 * 
+		 * TODO self adaptive store
+		 */
+
+		Structure structure = new Structure(structureId, 
+				String.class, structureDefinition);
 
 		// Create a new node for the structure giving the definition
 		Node newStructure = new Node(structureId, structure);
