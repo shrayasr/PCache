@@ -10,33 +10,42 @@ import java.util.Collections;
 public class Structure {
 
 	private String _name;
-	//TODO add datatype field as well
+	private Class _structureInstanceDataType;
 	private String _structure;
 
 	/**
 	 * Constructor. Initialize a new structure
 	 * @param name of the structure (Unique)
-	 * @param structureDefinition, the structure that is going to be stored. It should be a comma separated list of keys
+	 * @param structureInstanceDataType the class of the object going to be 
+	 * 			stored alongside the timeseries
+	 * @param structureDefinition, the structure that is going to be stored. 
+	 * 			It should be a comma separated list of keys
 	 */
-	public Structure (String name, String structureDefinition) {
+	public Structure (String name, Class structureInstanceDataType, 
+			String structureDefinition) {
+
 		this._name = name;
+		this._structureInstanceDataType = structureInstanceDataType;
 		this._structure = cleanStructure(structureDefinition);
 	}
 
 	/**
 	 * Check if the given structure instance can be a part of the structure
-	 * @param structInstance an instance of that structure. This is a comma separated list of key=value pairs.
+	 * @param structInstance an instance of that structure. This is a comma 
+	 * 			separated list of key=value pairs.
 	 * Eg: sensor_type=heat,sensor_name=S451_heat
 	 * @return true or false based on the validity
 	 */
 	public boolean containsInstance(String structInstance) {
-		String structureFromInstance = extractStructureFromInstance(structInstance);
+		String structureFromInstance = 
+				extractStructureFromInstance(structInstance);
 		return (this._structure.equals(structureFromInstance));
 	}
 
 	/**
 	 * Get the base structure from the given structure instance
-	 * @param dirtyStructure the dirty structure instance ID to extract the base structure from
+	 * @param dirtyStructure the dirty structure instance ID to extract the 
+	 * 			base structure from
 	 * @return the base structure
 	 */
 	private String extractStructureFromInstance(String dirtyStructure) {
@@ -45,7 +54,9 @@ public class Structure {
 		String cleanInstanceStructure = cleanStructure(dirtyStructure);
 
 		// Extract the individual parts
-		ArrayList<String> cleanInstanceStructureParts = new ArrayList<String>(Arrays.asList(cleanInstanceStructure.split(",")));
+		ArrayList<String> cleanInstanceStructureParts = 
+				new ArrayList<String>(Arrays.asList(
+						cleanInstanceStructure.split(",")));
 
 		String structureFromInstance = "";
 		
@@ -54,7 +65,8 @@ public class Structure {
 			if (cleanInstanceStructurePart.trim().contains("=")) {
 
 				// Append the extracted parts to a string
-				structureFromInstance += cleanInstanceStructurePart.trim().substring(0,cleanInstanceStructurePart.indexOf("=")) + ",";
+				structureFromInstance += cleanInstanceStructurePart.trim().
+						substring(0,cleanInstanceStructurePart.indexOf("=")) + ",";
 			}
 		}
 
@@ -73,7 +85,8 @@ public class Structure {
 		String cleanStructure = "";
 
 		// Split by comma and throw into an arraylist for easier sorting
-		ArrayList<String> unSortedList = new ArrayList<String>(Arrays.asList(dirtyStructure.trim().split(",")));
+		ArrayList<String> unSortedList = new ArrayList<String>(
+				Arrays.asList(dirtyStructure.trim().split(",")));
 		
 		// Sort the dirty array
 		Collections.sort(unSortedList);
@@ -100,7 +113,8 @@ public class Structure {
 
 	// OVERRIDES
 
-	// Overriding equals and hashcode allows us to call .equals on an object of type "structure"
+	// Overriding equals and hashcode allows us to call .equals on an object 
+	// of type "structure"
 	@Override
 	public boolean equals(Object obj) {
 
