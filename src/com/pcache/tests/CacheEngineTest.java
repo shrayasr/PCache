@@ -1,8 +1,7 @@
 package com.pcache.tests;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -171,18 +170,6 @@ public class CacheEngineTest
 		CacheEngine.renameStructure("foo", "bar", "baz");
 	}
 	
-	/*
-		exceptIfNamespaceInvalid(namespace);
-		exceptIfNoNamespaceExists(namespace);
-
-		exceptIfStructureIdInvalid(structureId);
-		exceptIfNoStructureIdExists(namespace, structureId);
-
-		exceptIfStructureInstanceIdInvalid(structureInstanceId);
-		exceptIfStructureInstanceIdExists(namespace, structureId, 
-				structureInstanceId);
-	 */
-
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_nsInvalid() 
 			throws PCacheException
@@ -251,9 +238,38 @@ public class CacheEngineTest
 	public void testAddNewStructureInstance_ok() 
 			throws PCacheException
 	{
+
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-23T12:00:00.000+05:30");
+			add("2010-01-27T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
-		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",ts);
 	}
 
 }

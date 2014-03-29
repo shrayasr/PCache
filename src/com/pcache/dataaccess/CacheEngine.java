@@ -45,7 +45,7 @@ public class CacheEngine {
 	 * @throws PCacheException when either namespaceId, structureId or
 	 * 			structureInstanceId don't exist
 	 */
-	public static Timeseries getTimeseries(String namespace, 
+	public static Timeseries<?> getTimeseries(String namespace, 
 			String structureId, String structureInstanceId) 
 					throws PCacheException {
 
@@ -206,6 +206,7 @@ public class CacheEngine {
 
 	/**
 	 * Add a new Instance of an existing structure 
+	 * @param <T>
 	 * @param namespace the namespace under which the structure is associated
 	 * @param structureId the ID of the structure to whom the instance is to
 	 * 			be associated with
@@ -213,9 +214,9 @@ public class CacheEngine {
 	 * @param timeseries the timeseries object to associate with that instance
 	 * @throws PCacheException 
 	 */
-	public static void addNewStructureInstance(String namespace, 
+	public static <T> void addNewStructureInstance(String namespace, 
 			String structureId, String structureInstanceId, 
-			Timeseries timeseries) throws PCacheException {
+			Timeseries<T> timeseries) throws PCacheException {
 
 		// Sanity checks
 		exceptIfNamespaceInvalid(namespace);

@@ -53,7 +53,7 @@ public class Node {
 	private String _name;
 	private Map<String, Node> _children;
 	private Structure _structure;
-	private Timeseries _timeseries;
+	private Timeseries<?> _timeseries;
 
 	/**
 	 * Constructor. Initialize a barebones node
@@ -68,10 +68,11 @@ public class Node {
 
 	/**
 	 * Constructor. Initialize a node with a Timeseries associated to it
+	 * @param <T>
 	 * @param name of the node
 	 * @param timeseries the data to associate with the node
 	 */
-	public Node(String name, Timeseries timeseries) {
+	public <T> Node(String name, Timeseries<T> timeseries) {
         this._name = name;
         this._structure = null;
 		this._timeseries = timeseries;
@@ -100,7 +101,7 @@ public class Node {
 		this._name = name;
 	}
 
-	public Timeseries getTimeseries() {
+	public Timeseries<?> getTimeseries() {
 		return this._timeseries;
 	}
 
