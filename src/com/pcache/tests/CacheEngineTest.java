@@ -1,10 +1,14 @@
 package com.pcache.tests;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.pcache.DO.Node;
 import com.pcache.DO.Timeseries;
 import com.pcache.dataaccess.CacheEngine;
 import com.pcache.exceptions.PCacheException;
@@ -71,6 +75,18 @@ public class CacheEngineTest
 	{
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.renameNamespace("foo", "bar");
+	}
+
+	@Test
+	public void testGetNamespaces_ok() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewNamespace("bar");
+		CacheEngine.addNewNamespace("baz");
+
+		List<Node> namespaces = new ArrayList<Node>(CacheEngine.getNamespaces());
+
+		assertEquals(3, namespaces.size());
 	}
 
 	@Test (expected=PCacheException.class)
@@ -168,6 +184,37 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructure("foo", "baz", "foo,bar");
 		CacheEngine.renameStructure("foo", "bar", "baz");
+	}
+
+	@Test(expected=PCacheException.class)
+	public void testGetStructuresUnderNamespace_nsInvalid() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.getStructuresUnderNamespace("foo!");
+	}
+
+	@Test(expected=PCacheException.class)
+	public void testGetStructuresUnderNamespace_nsNoExist() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.getStructuresUnderNamespace("bar");
+	}
+
+	@Test
+	public void testGetStructuresUnderNamespace_ok() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "foo1", "a,b");
+		CacheEngine.addNewStructure("foo", "foo2", "c,d");
+		CacheEngine.addNewStructure("foo", "foo3", "e,f");
+
+		List<Node> structures = new ArrayList<Node>(CacheEngine
+				.getStructuresUnderNamespace("foo"));
+
+		assertEquals(3, structures.size());
 	}
 	
 	@Test (expected=PCacheException.class)
@@ -270,6 +317,66 @@ public class CacheEngineTest
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",ts);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testGetInstancesUnderStructure_nsInvalid() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		
+		CacheEngine.getStructureInstancesUnderStructure("foo!", "bar");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testGetInstancesUnderStructure_nsNoExist() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
+
+		CacheEngine.getStructureInstancesUnderStructure("fooz", "bar");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testGetInstancesUnderStructure_structIdInvalid() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
+
+		CacheEngine.getStructureInstancesUnderStructure("foo", "bar!");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testGetInstancesUnderStructure_structIdNoExist() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
+
+		CacheEngine.getStructureInstancesUnderStructure("foo", "bara");
+	}
+
+	@Test 
+	public void testGetInstancesUnderStructure_ok() 
+			throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2",null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=3,boo=2",null);
+
+		List<Node> structInstances = new ArrayList<Node>(CacheEngine
+				.getStructureInstancesUnderStructure("foo", "bar"));
+
+		assertEquals(3, structInstances.size());
 	}
 
 }

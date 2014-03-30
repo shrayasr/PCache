@@ -1,5 +1,8 @@
 package com.pcache.dataaccess;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.pcache.DO.Node;
 import com.pcache.DO.Structure;
 import com.pcache.DO.Timeseries;
@@ -30,6 +33,13 @@ public class CacheEngine {
 	// The main tree that stores the entire cache
 	private static Node _cacheTree = new Node("cache");
 
+	/**
+	 * Reinitialize the cache. Throw away EVERYTHING that was there and restart.
+	 * To be used very carefully.
+	 * 
+	 * TODO
+	 * Bring some kind of persistence here?
+	 */
 	public static void reInitializeCache() {
 		_cacheTree = new Node("cache");
 	}
@@ -64,6 +74,111 @@ public class CacheEngine {
 		}
 	}
 
+	/**
+	 * Get the Timeseries associated to a Structure instance Node between 2
+	 * given timestamps. The timestamps are to be in ISO8601 format with 
+	 * miliseconds. i.e. YYYY-MM-DDTHH:MM:SS.SSS+Z
+	 * Eg. 2014-03-30T20:13:00.000+05:30
+	 * @param namespace the namespace being referred to in the cache
+	 * @param structureId the ID of the structure under the namespace
+	 * @param structureInstanceId the ID of the specific instance under the 
+	 * 			structure 
+	 * @param timestampFrom the ISO8601 timestamp representing the from 
+	 * @param timestampTo the ISO8601 timestamp representing the to 
+	 * @return the subset of the Timeseries for the given 
+	 * 			namespace.structure.structureInstance combination
+	 * @throws PCacheException when either namespaceId, structureId or
+	 * 			structureInstanceId don't exist
+	 */
+	public static Map<Long, ?> getTimeseriesBetween(String namespace, 
+			String structureId, String structureInstanceId, 
+			String timestampFrom, String timestampTo) throws PCacheException {
+
+		try {
+
+			// Try to return the subset of the timeseries requested
+			return _cacheTree.getChild(namespace).getChild(structureId)
+				.getChild(structureInstanceId).getTimeseries()
+				.rangeBetween(timestampFrom, timestampTo);
+
+		} catch (NullPointerException ex) {
+			// If some part of it isn't returned, it will return null and hence
+			// following parts of the chain will throw a null pointer exception
+			// which is caught here and a PCacheException is thrown
+			throw new PCacheException("Namespace/Structure/Structure Instance"
+					+ " doesn't exist", ex);
+		}
+	}
+
+	/**
+	 * Get the Timeseries associated to a Structure instance Node from a given 
+	 * timestamp. The timestamp should be in ISO8601 format with miliseconds. 
+	 * i.e. YYYY-MM-DDTHH:MM:SS.SSS+Z
+	 * Eg. 2014-03-30T20:13:00.000+05:30
+	 * @param namespace the namespace being referred to in the cache
+	 * @param structureId the ID of the structure under the namespace
+	 * @param structureInstanceId the ID of the specific instance under the 
+	 * 			structure 
+	 * @param timestampFrom the ISO8601 timestamp representing the from 
+	 * @return the subset of the Timeseries for the given 
+	 * 			namespace.structure.structureInstance combination
+	 * @throws PCacheException when either namespaceId, structureId or
+	 * 			structureInstanceId don't exist
+	 */
+	public static Map<Long, ?> getTimeseriesFrom(String namespace, 
+			String structureId, String structureInstanceId, 
+			String timestampFrom) throws PCacheException {
+
+		try {
+
+			// Try to return the subset of the timeseries requested
+			return _cacheTree.getChild(namespace).getChild(structureId)
+				.getChild(structureInstanceId).getTimeseries()
+				.rangeFrom(timestampFrom);
+
+		} catch (NullPointerException ex) {
+			// If some part of it isn't returned, it will return null and hence
+			// following parts of the chain will throw a null pointer exception
+			// which is caught here and a PCacheException is thrown
+			throw new PCacheException("Namespace/Structure/Structure Instance"
+					+ " doesn't exist", ex);
+		}
+	}
+
+	/**
+	 * Get the Timeseries associated to a Structure instance Node till a given 
+	 * timestamp. The timestamp should be in ISO8601 format with miliseconds. 
+	 * i.e. YYYY-MM-DDTHH:MM:SS.SSS+Z
+	 * Eg. 2014-03-30T20:13:00.000+05:30
+	 * @param namespace the namespace being referred to in the cache
+	 * @param structureId the ID of the structure under the namespace
+	 * @param structureInstanceId the ID of the specific instance under the 
+	 * 			structure 
+	 * @param timestampTo the ISO8601 timestamp representing the to 
+	 * @return the subset of the Timeseries for the given 
+	 * 			namespace.structure.structureInstance combination
+	 * @throws PCacheException when either namespaceId, structureId or
+	 * 			structureInstanceId don't exist
+	 */
+	public static Map<Long, ?> getTimeseriesTo(String namespace, 
+			String structureId, String structureInstanceId, 
+			String timestampTo) throws PCacheException {
+
+		try {
+
+			// Try to return the subset of the timeseries requested
+			return _cacheTree.getChild(namespace).getChild(structureId)
+				.getChild(structureInstanceId).getTimeseries()
+				.rangeTo(timestampTo);
+
+		} catch (NullPointerException ex) {
+			// If some part of it isn't returned, it will return null and hence
+			// following parts of the chain will throw a null pointer exception
+			// which is caught here and a PCacheException is thrown
+			throw new PCacheException("Namespace/Structure/Structure Instance"
+					+ " doesn't exist", ex);
+		}
+	}
 
 	/**
 	 * Create a namespace.
@@ -113,6 +228,14 @@ public class CacheEngine {
 
 		// Add it back with the name name
 		_cacheTree.addChild(namespaceNode);
+	}
+
+	/**
+	 * Get the set of namespaces in the cache
+	 * @return the namespaces as an unmodifiable set
+	 */
+	public static Set<Node> getNamespaces() {
+		return _cacheTree.getChildren();
 	}
 
 	/**
@@ -205,6 +328,26 @@ public class CacheEngine {
 	}
 
 	/**
+	 * Get the set of structures under a given namespace
+	 * @param namespace the namespace under which the structure are to be 
+	 * 			retrieved
+	 * @return the set of structures under the given namespace as an 
+	 * 			unmodifiable set
+	 * @throws PCacheException thrown when either the namespace is invalid
+	 * 			or the namespace doesn't exist
+	 */
+	public static Set<Node> getStructuresUnderNamespace(String namespace) 
+			throws PCacheException {
+		
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+
+		return _cacheTree.getChild(namespace).getChildren();
+
+	}
+
+	/**
 	 * Add a new Instance of an existing structure 
 	 * @param <T>
 	 * @param namespace the namespace under which the structure is associated
@@ -251,6 +394,31 @@ public class CacheEngine {
 		// Update the current structure with the new one
 		_cacheTree.getChild(namespace).replaceChild(structureId, structureNode);
 		
+	}
+
+	/**
+	 * Get the set of structure instances under the given structure in a given
+	 * namespace
+	 * @param namespace the namespace under which the structure is associated
+	 * @param structureId the ID of the structure to whom the instance is to
+	 * @return the set of structure instances under a given structure in a 
+	 * 			namespace as an unmodifiable set
+	 * @throws PCacheException thrown if the namespace is invalid, doesn't exist
+	 * 			or if the structure id is invalid or it doesn't exist
+	 */
+	public static Set<Node> getStructureInstancesUnderStructure(String namespace,
+			String structureId) throws PCacheException {
+		
+		// Sanity Checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+
+		return _cacheTree.getChild(namespace).getChild(structureId)
+				.getChildren();
+
 	}
 
 	/**
@@ -364,7 +532,7 @@ public class CacheEngine {
 
 		// If the structure ID is already associated with the namespace, except
 		if (!_cacheTree.getChild(namespace).containsChild(structureId)) {
-			throw new PCacheException("Structure ID already exists under "
+			throw new PCacheException("Structure ID doesn't exist under "
 					+ "given namespace");
 		}
 	}
