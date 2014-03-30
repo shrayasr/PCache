@@ -114,7 +114,8 @@ public class Node {
 	}
 
 	public Set<Node> getChildren() {
-		return Collections.unmodifiableSet(new HashSet<Node>(this._children.values()));
+		return Collections.unmodifiableSet(new HashSet<Node>(this._children
+				.values()));
 	}
 
 	/******************************/
