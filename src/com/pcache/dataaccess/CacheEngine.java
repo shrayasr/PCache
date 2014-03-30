@@ -239,6 +239,25 @@ public class CacheEngine {
 	}
 
 	/**
+	 * Remove a namespace and ALL its associated children from the cache.
+	 * *WARNING* this removes ALL the namespaces associated structures and its
+	 * structure instances.
+	 * @param namespace the namespace to remove
+	 * @throws PCacheException thrown if the namespace doesn't exist or has
+	 * 			invalid characters
+	 */
+	public static void removeNamespace(String namespace) 
+			throws PCacheException {
+
+		// Sanity check
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+
+		// Remove, BOOM!
+		_cacheTree.removeChild(namespace);
+	}
+
+	/**
 	 * Add a new structure to an existing namespace
 	 * @param namespace the namespace to assign the structure to
 	 * @param structureId the ID of the structure that is being created
@@ -336,7 +355,7 @@ public class CacheEngine {
 	 * @throws PCacheException thrown when either the namespace is invalid
 	 * 			or the namespace doesn't exist
 	 */
-	public static Set<Node> getStructuresUnderNamespace(String namespace) 
+	public static Set<Node> getStructures(String namespace) 
 			throws PCacheException {
 		
 		// Sanity checks
@@ -346,6 +365,31 @@ public class CacheEngine {
 		return _cacheTree.getChild(namespace).getChildren();
 
 	}
+
+	/**
+	 * Remove a given structure and its instances from the cache.
+	 * *WARNING* this will remove all the instances under the structure and the
+	 * structure itself
+	 * @param namespace the namespace the structure is under
+	 * @param structureId ID of the existing structure
+	 * @throws PCacheException thrown if the namespace is invalid or doesn't 
+	 * 			exist. Also thrown if the structure id is invalid or the 
+	 * 			structure
+	 */
+	public static void removeStructure(String namespace, String structureId) 
+			throws PCacheException {
+		
+		// Sanity Checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+		
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+
+		_cacheTree.getChild(namespace).removeChild(structureId);
+
+	}
+
 
 	/**
 	 * Add a new Instance of an existing structure 
@@ -406,7 +450,7 @@ public class CacheEngine {
 	 * @throws PCacheException thrown if the namespace is invalid, doesn't exist
 	 * 			or if the structure id is invalid or it doesn't exist
 	 */
-	public static Set<Node> getStructureInstancesUnderStructure(String namespace,
+	public static Set<Node> getStructureInstances(String namespace,
 			String structureId) throws PCacheException {
 		
 		// Sanity Checks
@@ -419,6 +463,37 @@ public class CacheEngine {
 		return _cacheTree.getChild(namespace).getChild(structureId)
 				.getChildren();
 
+	}
+
+	/**
+	 * Remove the structure instance associated to the structure under the 
+	 * namespace. The will remove the associated timeseries data also
+	 * @param namespace the namespace under which the structure is associated
+	 * @param structureId the ID of the structure to whom the instance is to
+	 * 			be associated with
+	 * @param structureInstanceId the ID of the structure instance 
+	 * @throws PCacheException thrown if the namespace is invalid, namespace
+	 * 			doesn't exist, structure ID is invalid, structure ID doesn't
+	 * 			exist, structure instance ID is invalid or the structure 
+	 * 			instance ID doesn't exist
+	 */
+	public static void removeStructureInstance(String namespace, 
+			String structureId, String structureInstanceId) 
+					throws PCacheException {
+
+		// Sanity Checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfNoStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
+		
+		_cacheTree.getChild(namespace).getChild(structureId)
+			.removeChild(structureInstanceId);
 	}
 
 	/**
@@ -573,6 +648,29 @@ public class CacheEngine {
 				.containsChild(structureInstanceId)) {
 
 			throw new PCacheException("Structure instance ID already exists "
+					+ "under given namespace");
+		}
+	}
+
+	/**
+	 * Check if the structure instance ID isn't associated to a structure under
+	 * the given namespace
+	 * @param namespace the namespace to look under
+	 * @param structureId the structure ID to which the instance is associated
+	 * @param structureInstanceId the structure instance ID to check for
+	 * @throws PCacheException thrown if the structure instance ID already 
+	 * 			associated to that structure under the namespace
+	 */
+	private static void exceptIfNoStructureInstanceIdExists(String namespace,
+			String structureId, String structureInstanceId)
+					throws PCacheException {
+		
+		// If the structure instance ID doesn't exist for the given structure
+		// under that namespace, except
+		if (!_cacheTree.getChild(namespace).getChild(structureId)
+				.containsChild(structureInstanceId)) {
+
+			throw new PCacheException("Structure instance ID doesn't exist "
 					+ "under given namespace");
 		}
 	}

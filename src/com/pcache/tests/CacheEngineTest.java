@@ -1,6 +1,6 @@
 package com.pcache.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +87,43 @@ public class CacheEngineTest
 		List<Node> namespaces = new ArrayList<Node>(CacheEngine.getNamespaces());
 
 		assertEquals(3, namespaces.size());
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveNamespace_nsInvalid() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewNamespace("bar");
+		CacheEngine.addNewNamespace("baz");
+
+		CacheEngine.removeNamespace("foo!");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveNamespace_nsNoExist() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewNamespace("bar");
+		CacheEngine.addNewNamespace("baz");
+
+		CacheEngine.removeNamespace("fooz");
+	}
+
+	@Test 
+	public void testRemoveNamespace_ok() throws PCacheException
+	{
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewNamespace("bar");
+		CacheEngine.addNewNamespace("baz");
+
+		int noOfNamespaceBeforeDelete = CacheEngine.getNamespaces().size();
+
+		CacheEngine.removeNamespace("foo");
+
+		int noOfNamespaceAfterDelete = CacheEngine.getNamespaces().size();
+
+		assertEquals(noOfNamespaceBeforeDelete-1, noOfNamespaceAfterDelete);
 	}
 
 	@Test (expected=PCacheException.class)
@@ -191,7 +228,7 @@ public class CacheEngineTest
 			throws PCacheException
 	{
 		CacheEngine.addNewNamespace("foo");
-		CacheEngine.getStructuresUnderNamespace("foo!");
+		CacheEngine.getStructures("foo!");
 	}
 
 	@Test(expected=PCacheException.class)
@@ -199,7 +236,7 @@ public class CacheEngineTest
 			throws PCacheException
 	{
 		CacheEngine.addNewNamespace("foo");
-		CacheEngine.getStructuresUnderNamespace("bar");
+		CacheEngine.getStructures("bar");
 	}
 
 	@Test
@@ -212,9 +249,65 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "foo3", "e,f");
 
 		List<Node> structures = new ArrayList<Node>(CacheEngine
-				.getStructuresUnderNamespace("foo"));
+				.getStructures("foo"));
 
 		assertEquals(3, structures.size());
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructure_nsInvalid() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+
+		CacheEngine.removeStructure("foo!", "bar");
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructure_nsNoExists() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+
+		CacheEngine.removeStructure("fooz", "bar");
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructure_structInvalid() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+
+		CacheEngine.removeStructure("foo", "bar!");
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructure_structNoExists() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+
+		CacheEngine.removeStructure("foo", "barz");
+	}
+
+	@Test 
+	public void testRemoveStructure_ok() throws PCacheException
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+
+		int noStructsBeforeDelete = CacheEngine.getStructures("foo").size();
+
+		CacheEngine.removeStructure("foo", "bar");
+
+		int noStructsAfterDelete = CacheEngine.getStructures("foo").size();
+
+		assertEquals(noStructsBeforeDelete-1, noStructsAfterDelete);
 	}
 	
 	@Test (expected=PCacheException.class)
@@ -327,7 +420,7 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
 		
-		CacheEngine.getStructureInstancesUnderStructure("foo!", "bar");
+		CacheEngine.getStructureInstances("foo!", "bar");
 	}
 
 	@Test (expected=PCacheException.class)
@@ -338,7 +431,7 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
 
-		CacheEngine.getStructureInstancesUnderStructure("fooz", "bar");
+		CacheEngine.getStructureInstances("fooz", "bar");
 	}
 
 	@Test (expected=PCacheException.class)
@@ -349,7 +442,7 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
 
-		CacheEngine.getStructureInstancesUnderStructure("foo", "bar!");
+		CacheEngine.getStructureInstances("foo", "bar!");
 	}
 
 	@Test (expected=PCacheException.class)
@@ -360,7 +453,7 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
 
-		CacheEngine.getStructureInstancesUnderStructure("foo", "bara");
+		CacheEngine.getStructureInstances("foo", "bara");
 	}
 
 	@Test 
@@ -374,9 +467,97 @@ public class CacheEngineTest
 		CacheEngine.addNewStructureInstance("foo", "bar", "baz=3,boo=2",null);
 
 		List<Node> structInstances = new ArrayList<Node>(CacheEngine
-				.getStructureInstancesUnderStructure("foo", "bar"));
+				.getStructureInstances("foo", "bar"));
 
 		assertEquals(3, structInstances.size());
 	}
 
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructureInstance_nsInvalid() throws PCacheException 
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+
+		CacheEngine.removeStructureInstance("foo!", "bar", "baz=1,boo=2");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructureInstance_nsNoExist() throws PCacheException  
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+
+		CacheEngine.removeStructureInstance("fooz", "bar", "baz=1,boo=2");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructureInstance_structInvalid() 
+			throws PCacheException  
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		
+		CacheEngine.removeStructureInstance("foo", "bar!", "baz=1,boo=2");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructureInstance_structNoExist() 
+			throws PCacheException  
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		
+		CacheEngine.removeStructureInstance("foo", "barz", "baz=1,boo=2");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructureInstance_structInstanceInvalid() 
+			throws PCacheException  
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		
+		CacheEngine.removeStructureInstance("foo", "bar", "!baz=1,boo=2");
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemoveStructureInstance_structInstanceNoExist() 
+			throws PCacheException  
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		
+		CacheEngine.removeStructureInstance("foo", "bar", "bazz=1,boo=2");
+	}
+
+	@Test 
+	public void testRemoveStructureInstance_ok() throws PCacheException  
+	{
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		
+		int noOfInstancesBeforeDel = CacheEngine
+				.getStructureInstances("foo", "bar").size();
+
+		CacheEngine.removeStructureInstance("foo", "bar", "baz=1,boo=2");
+
+		int noOfInstancesAfterDel = CacheEngine
+				.getStructureInstances("foo", "bar").size();
+
+		assertEquals(noOfInstancesBeforeDel-1, noOfInstancesAfterDel);
+	}
 }
