@@ -27,13 +27,13 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			
 		}};
 		
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 		
 	}
 
@@ -54,7 +54,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -67,13 +67,13 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
 		String timestampFrom = "2010-01-05T12:00:00.000+05:30";
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
 
-		Map<Long, String> tsSub = ts.getRangeBetween(timestampFrom, timestampTo);
+		Map<Long, Object> tsSub = ts.getRangeBetween(timestampFrom, timestampTo);
 
 		assertEquals(3, tsSub.size());
 
@@ -96,7 +96,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -109,11 +109,11 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
 		String timestampFrom = "2010-01-05T12:00:00.000+05:30";
 
-		Map<Long, String> tsSub = ts.getRangeFrom(timestampFrom);
+		Map<Long, Object> tsSub = ts.getRangeFrom(timestampFrom);
 
 		assertEquals(5, tsSub.size());
 
@@ -136,7 +136,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -149,11 +149,11 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
-		Map<Long, String> tsSub = ts.getRangeTo(timestampTo);
+		Map<Long, Object> tsSub = ts.getRangeTo(timestampTo);
 
 		assertEquals(6, tsSub.size());
 
@@ -176,7 +176,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -189,7 +189,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
 		int timestampsBeforeAdd = ts.size();
 
@@ -202,7 +202,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> moreDataPoints = new ArrayList<String>() {{
+		ArrayList<Object> moreDataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -234,7 +234,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -247,7 +247,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
 		int timestampsBeforeRemove = ts.size();
 
