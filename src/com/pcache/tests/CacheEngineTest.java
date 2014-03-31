@@ -392,7 +392,7 @@ public class CacheEngineTest
 			
 		}};
 		
-		ArrayList<String> dataPoints = new ArrayList<String>() {{
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -405,7 +405,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
 
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");

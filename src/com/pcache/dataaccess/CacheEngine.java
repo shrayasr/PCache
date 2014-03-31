@@ -55,7 +55,7 @@ public class CacheEngine {
 	 * @throws PCacheException when either namespaceId, structureId or
 	 * 			structureInstanceId don't exist
 	 */
-	public static Timeseries<?> getTimeseries(String namespace, 
+	public static Timeseries getTimeseries(String namespace, 
 			String structureId, String structureInstanceId) 
 					throws PCacheException {
 
@@ -403,7 +403,7 @@ public class CacheEngine {
 	 */
 	public static <T> void addNewStructureInstance(String namespace, 
 			String structureId, String structureInstanceId, 
-			Timeseries<T> timeseries) throws PCacheException {
+			Timeseries timeseries) throws PCacheException {
 
 		// Sanity checks
 		exceptIfNamespaceInvalid(namespace);

@@ -11,10 +11,8 @@ import com.pcache.exceptions.PCacheException;
 
 /**
  * The central class for storing timeseries
- *
- * @param <T> the Class associated to the data being stored in the timeseries
  */
-public class Timeseries<T> {
+public class Timeseries {
 
 	/**
 	 * The main treemap to represent the timeseries.
@@ -23,7 +21,7 @@ public class Timeseries<T> {
 	 * find the right place. Also treemaps have a neat "submap" feature that
 	 * allows to get a subset of a map
 	 */
-	private Map<Long, T> _timeseries;
+	private Map<Long, Object> _timeseries;
 
 	/**
 	 * Get the size of the timeseries
@@ -45,7 +43,7 @@ public class Timeseries<T> {
 	 * 			between the timestamps and the data points
 	 */
 	public void addOrUpdatePoints(ArrayList<String> timestamps, 
-			ArrayList<T> dataPoints) throws PCacheException{
+			ArrayList<Object> dataPoints) throws PCacheException{
 
 		// If the 2 arraylists aren't of the same size, throw an exception
 		if (timestamps.size() != dataPoints.size()) {
@@ -63,7 +61,7 @@ public class Timeseries<T> {
 			
 			// Pick up the timestamp and the data point
 			String timestampISO8601 = timestamps.get(i);
-			T dataPoint = dataPoints.get(i);
+			Object dataPoint = dataPoints.get(i);
 			
 			// Convert the timestamp to a UNIX time representation,
 			// getting the no. of miliseconds elapsed since EPOC
@@ -114,7 +112,7 @@ public class Timeseries<T> {
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
 	 */
-	public Map<Long, T> getRangeBetween(String timestampFrom, 
+	public Map<Long, Object> getRangeBetween(String timestampFrom, 
 			String timestampTo) {
 		
 		// Pick up a ISO8601 formatter
@@ -129,8 +127,8 @@ public class Timeseries<T> {
 				.getMillis();
 
 		// Return a map
-		return ((TreeMap<Long, T>) this._timeseries).subMap(milisSinceEpocFrom, 
-				true, milisSinceEpocTo, true);
+		return ((TreeMap<Long, Object>) this._timeseries)
+				.subMap(milisSinceEpocFrom, true, milisSinceEpocTo, true);
 
 	}
 
@@ -140,7 +138,7 @@ public class Timeseries<T> {
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
 	 */
-	public Map<Long, T> getRangeFrom(String timestampFrom) {
+	public Map<Long, Object> getRangeFrom(String timestampFrom) {
 
 		// Pick up a ISO8601 formatter
 		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
@@ -150,11 +148,11 @@ public class Timeseries<T> {
 				.getMillis();
 
 		// Get the last key in the series of timestamps
-		long lastKey = ((TreeMap<Long, T>) this._timeseries).lastKey();
+		long lastKey = ((TreeMap<Long, Object>) this._timeseries).lastKey();
 
 		// Return a map
-		return ((TreeMap<Long, T>) this._timeseries).subMap(milisSinceEpocFrom, 
-				true, lastKey, true);
+		return ((TreeMap<Long, Object>) this._timeseries)
+				.subMap(milisSinceEpocFrom, true, lastKey, true);
 		
 	}
 
@@ -164,7 +162,7 @@ public class Timeseries<T> {
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
 	 */
-	public Map<Long, T> getRangeTo(String timestampTo) {
+	public Map<Long, Object> getRangeTo(String timestampTo) {
 
 		// Pick up a ISO8601 formatter
 		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
@@ -174,11 +172,11 @@ public class Timeseries<T> {
 				.getMillis();
 
 		// Get the first key in the series of timestamps
-		long firstKey = ((TreeMap<Long, T>) this._timeseries).firstKey();
+		long firstKey = ((TreeMap<Long, Object>) this._timeseries).firstKey();
 
 		// Return a map
-		return ((TreeMap<Long, T>) this._timeseries).subMap(firstKey, 
-				true, milisSinceEpocTo, true);
+		return ((TreeMap<Long, Object>) this._timeseries)
+				.subMap(firstKey, true, milisSinceEpocTo, true);
 		
 	}
 
@@ -186,7 +184,7 @@ public class Timeseries<T> {
 	 * Get the entire timeseries
 	 * @return the entire timeseries map
 	 */
-	public Map<Long, T> getAll() {
+	public Map<Long, Object> getAll() {
 		return this._timeseries;
 	}
 	
@@ -201,10 +199,10 @@ public class Timeseries<T> {
 	 * 			the no. of data points
 	 */
 	public Timeseries (ArrayList<String> timestamps, 
-			ArrayList<T> dataPoints) throws PCacheException {
+			ArrayList<Object> dataPoints) throws PCacheException {
 		
 		// Declare a new tree map
-		_timeseries = new TreeMap<Long, T>();
+		_timeseries = new TreeMap<Long, Object>();
 
 		addOrUpdatePoints(timestamps, dataPoints);
 		
