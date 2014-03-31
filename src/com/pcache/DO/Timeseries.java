@@ -114,7 +114,7 @@ public class Timeseries<T> {
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
 	 */
-	public Map<Long, T> rangeBetween(String timestampFrom, 
+	public Map<Long, T> getRangeBetween(String timestampFrom, 
 			String timestampTo) {
 		
 		// Pick up a ISO8601 formatter
@@ -140,7 +140,7 @@ public class Timeseries<T> {
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
 	 */
-	public Map<Long, T> rangeFrom(String timestampFrom) {
+	public Map<Long, T> getRangeFrom(String timestampFrom) {
 
 		// Pick up a ISO8601 formatter
 		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
@@ -164,7 +164,7 @@ public class Timeseries<T> {
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
 	 */
-	public Map<Long, T> rangeTo(String timestampTo) {
+	public Map<Long, T> getRangeTo(String timestampTo) {
 
 		// Pick up a ISO8601 formatter
 		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
@@ -180,6 +180,14 @@ public class Timeseries<T> {
 		return ((TreeMap<Long, T>) this._timeseries).subMap(firstKey, 
 				true, milisSinceEpocTo, true);
 		
+	}
+
+	/**
+	 * Get the entire timeseries
+	 * @return the entire timeseries map
+	 */
+	public Map<Long, T> getAll() {
+		return this._timeseries;
 	}
 	
 	/**

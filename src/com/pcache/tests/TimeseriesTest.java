@@ -73,7 +73,7 @@ public class TimeseriesTest
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
 
-		Map<Long, String> tsSub = ts.rangeBetween(timestampFrom, timestampTo);
+		Map<Long, String> tsSub = ts.getRangeBetween(timestampFrom, timestampTo);
 
 		assertEquals(3, tsSub.size());
 
@@ -113,7 +113,7 @@ public class TimeseriesTest
 
 		String timestampFrom = "2010-01-05T12:00:00.000+05:30";
 
-		Map<Long, String> tsSub = ts.rangeFrom(timestampFrom);
+		Map<Long, String> tsSub = ts.getRangeFrom(timestampFrom);
 
 		assertEquals(5, tsSub.size());
 
@@ -153,7 +153,7 @@ public class TimeseriesTest
 
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
-		Map<Long, String> tsSub = ts.rangeTo(timestampTo);
+		Map<Long, String> tsSub = ts.getRangeTo(timestampTo);
 
 		assertEquals(6, tsSub.size());
 

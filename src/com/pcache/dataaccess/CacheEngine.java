@@ -99,7 +99,7 @@ public class CacheEngine {
 			// Try to return the subset of the timeseries requested
 			return _cacheTree.getChild(namespace).getChild(structureId)
 				.getChild(structureInstanceId).getTimeseries()
-				.rangeBetween(timestampFrom, timestampTo);
+				.getRangeBetween(timestampFrom, timestampTo);
 
 		} catch (NullPointerException ex) {
 			// If some part of it isn't returned, it will return null and hence
@@ -134,7 +134,7 @@ public class CacheEngine {
 			// Try to return the subset of the timeseries requested
 			return _cacheTree.getChild(namespace).getChild(structureId)
 				.getChild(structureInstanceId).getTimeseries()
-				.rangeFrom(timestampFrom);
+				.getRangeFrom(timestampFrom);
 
 		} catch (NullPointerException ex) {
 			// If some part of it isn't returned, it will return null and hence
@@ -169,7 +169,7 @@ public class CacheEngine {
 			// Try to return the subset of the timeseries requested
 			return _cacheTree.getChild(namespace).getChild(structureId)
 				.getChild(structureInstanceId).getTimeseries()
-				.rangeTo(timestampTo);
+				.getRangeTo(timestampTo);
 
 		} catch (NullPointerException ex) {
 			// If some part of it isn't returned, it will return null and hence
