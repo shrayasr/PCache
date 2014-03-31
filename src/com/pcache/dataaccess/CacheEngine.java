@@ -1,5 +1,6 @@
 package com.pcache.dataaccess;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class CacheEngine {
 	 * @throws PCacheException when either namespaceId, structureId or
 	 * 			structureInstanceId don't exist
 	 */
-	public static Map<Long, ?> getTimeseriesBetween(String namespace, 
+	public static Map<Long, Object> getTimeseriesBetween(String namespace, 
 			String structureId, String structureInstanceId, 
 			String timestampFrom, String timestampTo) throws PCacheException {
 
@@ -125,7 +126,7 @@ public class CacheEngine {
 	 * @throws PCacheException when either namespaceId, structureId or
 	 * 			structureInstanceId don't exist
 	 */
-	public static Map<Long, ?> getTimeseriesFrom(String namespace, 
+	public static Map<Long, Object> getTimeseriesFrom(String namespace, 
 			String structureId, String structureInstanceId, 
 			String timestampFrom) throws PCacheException {
 
@@ -160,7 +161,7 @@ public class CacheEngine {
 	 * @throws PCacheException when either namespaceId, structureId or
 	 * 			structureInstanceId don't exist
 	 */
-	public static Map<Long, ?> getTimeseriesTo(String namespace, 
+	public static Map<Long, Object> getTimeseriesTo(String namespace, 
 			String structureId, String structureInstanceId, 
 			String timestampTo) throws PCacheException {
 
@@ -179,6 +180,55 @@ public class CacheEngine {
 					+ " doesn't exist", ex);
 		}
 	}
+
+	public static void addPointsToTimeseries(String namespace, 
+			String structureId, String structureInstanceId, 
+			ArrayList<String> timestamps, ArrayList<Object> dataPoints) 
+					throws PCacheException {
+		
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+		
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+		
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfNoStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
+
+		exceptIfNullTimeseries(namespace, structureId, structureInstanceId);
+
+		_cacheTree.getChild(namespace).getChild(structureId)
+			.getChild(structureInstanceId).getTimeseries()
+			.addOrUpdatePoints(timestamps, dataPoints);
+
+	}
+
+	public static void updatePointsInTimeseries(String namespace, 
+			String structureId, String structureInstanceId, 
+			ArrayList<String> timestampsToUpdateFor, 
+			ArrayList<Object> newDataPoints) throws PCacheException {
+		
+		// Sanity checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+		
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+		
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfNoStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
+
+		exceptIfNullTimeseries(namespace, structureId, structureInstanceId);
+
+		_cacheTree.getChild(namespace).getChild(structureId)
+			.getChild(structureInstanceId).getTimeseries()
+			.addOrUpdatePoints(timestampsToUpdateFor, newDataPoints);
+
+	}
+
 
 	/**
 	 * Create a namespace.
@@ -673,6 +723,18 @@ public class CacheEngine {
 			throw new PCacheException("Structure instance ID doesn't exist "
 					+ "under given namespace");
 		}
+	}
+
+	private static void exceptIfNullTimeseries(String namespace,
+			String structureId, String structureInstanceId) 
+					throws PCacheException {
+
+		if (_cacheTree.getChild(namespace).getChild(structureId)
+				.getChild(structureInstanceId).getTimeseries() == null) {
+			
+			throw new PCacheException("Timeseries associated can't be NULL");
+		}
+		
 	}
 
 }
