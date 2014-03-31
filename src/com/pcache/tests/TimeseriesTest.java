@@ -159,4 +159,113 @@ public class TimeseriesTest
 
 	}
 
+	@Test
+	public void testTimeseriesAddPoints() throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-23T12:00:00.000+05:30");
+			add("2010-01-27T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+
+		int timestampsBeforeAdd = ts.size();
+
+		ArrayList<String> moreTimestamps = new ArrayList<String>() {{
+			
+			add("2010-02-01T12:00:00.000+05:30");
+			add("2010-02-02T12:00:00.000+05:30");
+			add("2010-02-03T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<String> moreDataPoints = new ArrayList<String>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		ts.addOrUpdatePoints(moreTimestamps, moreDataPoints);
+
+		int timestampsAfterAdd = ts.size();
+
+		assertEquals(timestampsBeforeAdd+3, timestampsAfterAdd);
+	}
+
+	public void testTimeseriesRemovePoints() throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-23T12:00:00.000+05:30");
+			add("2010-01-27T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries<String> ts = new Timeseries<String>(timestamps, dataPoints);
+
+		int timestampsBeforeRemove = ts.size();
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-23T12:00:00.000+05:30");
+			add("2010-01-27T12:00:00.000+05:30");
+			add("2010-02-01T12:00:00.000+05:30"); // this point doesn't exist
+			
+		}};
+
+		ts.removePoints(timestampsToRemove);
+
+		int timestampsAfterRemove = ts.size();
+
+		assertEquals(timestampsBeforeRemove-3, timestampsAfterRemove);
+		
+	}
+
 }

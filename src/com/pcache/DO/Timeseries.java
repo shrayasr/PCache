@@ -32,6 +32,80 @@ public class Timeseries<T> {
 	public int size() {
 		return this._timeseries.size();
 	}
+
+	/**
+	 * Add or Update points inside the timeseries. The nature of the TreeMap 
+	 * allows us to do both of these things in the same call since the .put()
+	 * function will replace an existsing value if it exists
+	 * @param timestamps the set of timestamps to add/update
+	 * @param dataPoints the associated set of data to the timestamps. 
+	 * 			Note: there should be a one to one correlation between the
+	 * 			timestamps and the data points
+	 * @throws PCacheException thrown if there is no one to one correlation 
+	 * 			between the timestamps and the data points
+	 */
+	public void addOrUpdatePoints(ArrayList<String> timestamps, 
+			ArrayList<T> dataPoints) throws PCacheException{
+
+		// If the 2 arraylists aren't of the same size, throw an exception
+		if (timestamps.size() != dataPoints.size()) {
+			throw new PCacheException("Sizes don't match. The number of data " +
+					"points should equal the number of timestamps");
+		}
+		
+		// Pick up a ISO date time formatter
+		// the .dateTime() means that it should be in the 
+		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
+		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+		
+		// Go through all the timestamps
+		for (int i=0; i<timestamps.size(); i++) {
+			
+			// Pick up the timestamp and the data point
+			String timestampISO8601 = timestamps.get(i);
+			T dataPoint = dataPoints.get(i);
+			
+			// Convert the timestamp to a UNIX time representation,
+			// getting the no. of miliseconds elapsed since EPOC
+			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
+					.getMillis();
+			
+			// Add or update the timestamp, datapoint
+			// Put does updates also. so 2 birds, one stone!
+			_timeseries.put(milisSinceEpoc, dataPoint);
+			
+		}
+
+	}
+
+	/**
+	 * Remove a set of points from the timeseries
+	 * @param timestamps the set of timestamps to remove
+	 */
+	public void removePoints(ArrayList<String> timestamps) {
+
+		// Pick up a ISO date time formatter
+		// the .dateTime() means that it should be in the 
+		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
+		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+		
+		// Go through all the timestamps
+		for (int i=0; i<timestamps.size(); i++) {
+			
+			// Pick up the timestamp and the data point
+			String timestampISO8601 = timestamps.get(i);
+			
+			// Convert the timestamp to a UNIX time representation,
+			// getting the no. of miliseconds elapsed since EPOC
+			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
+					.getMillis();
+			
+			_timeseries.remove(milisSinceEpoc);
+			
+		}
+
+		
+	}
 	
 	/**
 	 * Get the set of points between 2 given timeseries'
@@ -123,34 +197,8 @@ public class Timeseries<T> {
 		
 		// Declare a new tree map
 		_timeseries = new TreeMap<Long, T>();
-		
-		// If the 2 arraylists aren't of the same size, throw an exception
-		if (timestamps.size() != dataPoints.size()) {
-			throw new PCacheException("Sizes don't match. The number of data " +
-					"points should equal the number of timestamps");
-		}
-		
-		// Pick up a ISO date time formatter
-		// the .dateTime() means that it should be in the 
-		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-		
-		// Go through all the timestamps
-		for (int i=0; i<timestamps.size(); i++) {
-			
-			// Pick up the timestamp and the data point
-			String timestampISO8601 = timestamps.get(i);
-			T dataPoint = dataPoints.get(i);
-			
-			// Convert the timestamp to a UNIX time representation,
-			// getting the no. of miliseconds elapsed since EPOC
-			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
-					.getMillis();
-			
-			// Add the timestamp, datapoint
-			_timeseries.put(milisSinceEpoc, dataPoint);
-			
-		}
+
+		addOrUpdatePoints(timestamps, dataPoints);
 		
 	}
 
