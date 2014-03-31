@@ -32,6 +32,23 @@ public class Timeseries {
 	}
 
 	/**
+	 * Check if a given timestamp exists within the series
+	 * @param timestamp the timestamp to check for
+	 * @return true/false based on its existance
+	 */
+	public boolean contains(String timestamp) {
+		
+		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+		
+		// Convert the timestamp to a UNIX time representation,
+		// getting the no. of miliseconds elapsed since EPOC
+		long milisSinceEpoc = formatter.parseDateTime(timestamp)
+				.getMillis();
+
+		return this._timeseries.containsKey(milisSinceEpoc);
+	}
+
+	/**
 	 * Add or Update points inside the timeseries. The nature of the TreeMap 
 	 * allows us to do both of these things in the same call since the .put()
 	 * function will replace an existsing value if it exists
