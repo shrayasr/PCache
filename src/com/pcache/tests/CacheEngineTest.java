@@ -476,7 +476,8 @@ public class CacheEngineTest
 	}
 
 	@Test (expected=PCacheException.class)
-	public void testRemoveStructureInstance_nsInvalid() throws PCacheException 
+	public void testRemoveStructureInstance_nsInvalid() 
+			throws PCacheException 
 	{
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -564,8 +565,236 @@ public class CacheEngineTest
 		assertEquals(noOfInstancesBeforeDel-1, noOfInstancesAfterDel);
 	}
 
-	@Test
-	public void testAddPointsToTimeseries_ok() throws PCacheException
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_nsInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("UP");
+			
+		}};
+
+		CacheEngine.addPointsToTimeseries("foo!", "bar", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_nsNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("UP");
+			
+		}};
+
+		CacheEngine.addPointsToTimeseries("fooz", "bar", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_structIdInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("UP");
+			
+		}};
+
+		CacheEngine.addPointsToTimeseries("foo", "bar!", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_structIdNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("UP");
+			
+		}};
+
+		CacheEngine.addPointsToTimeseries("foo", "barz", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_structInstanceIdInvalid() 
+			throws PCacheException
 	{
 		
 		ArrayList<String> timestamps = new ArrayList<String>() {{
@@ -601,9 +830,89 @@ public class CacheEngineTest
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
 		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
-		int noOfPointsBeforeAdd = CacheEngine.getTimeseries("foo", "bar", 
-				"baz=1,boo=2").size();
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("UP");
+			
+		}};
 
+		CacheEngine.addPointsToTimeseries("foo", "bar", "!baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_structInstanceIdNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("UP");
+			
+		}};
+
+		CacheEngine.addPointsToTimeseries("foo", "bar", "baz=2,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testAddPointsToTimeseries_tsNull() throws PCacheException
+	{
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
 			add("2010-01-09T12:00:00.000+05:30");
@@ -621,10 +930,369 @@ public class CacheEngineTest
 		CacheEngine.addPointsToTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
-		int noOfPointsAfterAdd = CacheEngine.getTimeseries("foo", "bar", 
-				"baz=1,boo=2").size();
+	}
 
-		assertEquals(noOfPointsBeforeAdd+2, noOfPointsAfterAdd);
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_nsInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("foo!", "bar", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_nsNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("fooz", "bar", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_structIdInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("foo", "bar!", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_structIdNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("foo", "barz", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_structInstanceIdInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("foo", "bar", "!baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_structInstanceIdNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("foo", "bar", "baz=2,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
+
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testUpdatePointsInTimeseries_nullTs() 
+			throws PCacheException
+	{
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		
+		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			
+			add("DOWN");
+			add("DOWN");
+			
+		}};
+
+		CacheEngine.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
+				timestampsToAdd, dataPointsToAdd);
 
 	}
 
@@ -666,7 +1334,8 @@ public class CacheEngineTest
 
 		int downCountBeforeUpdate = 0;
 
-		Map<Long, Object> points = CacheEngine.getTimeseriesFrom("foo", "bar", "baz=1,boo=2", "2010-01-07T12:00:00.000+05:30");
+		Map<Long, Object> points = CacheEngine.getTimeseriesFrom("foo", "bar", 
+				"baz=1,boo=2", "2010-01-07T12:00:00.000+05:30");
 
 		for (Entry<Long, Object> entry : points.entrySet()) {
 			downCountBeforeUpdate++ ;
@@ -689,7 +1358,8 @@ public class CacheEngineTest
 		CacheEngine.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
-		points = CacheEngine.getTimeseriesFrom("foo", "bar", "baz=1,boo=2", "2010-01-07T12:00:00.000+05:30");
+		points = CacheEngine.getTimeseriesFrom("foo", "bar", "baz=1,boo=2", 
+				"2010-01-07T12:00:00.000+05:30");
 
 		int downCountAfterUpdate = 0;
 
