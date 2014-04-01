@@ -1866,6 +1866,294 @@ public class CacheEngineTest
 		
 	}
 
+	@Test (expected=PCacheException.class)
+	public void testRemovePointsFromTimeseries_nsInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+
+		CacheEngine.removePointsFromTimeseries("foo!", "bar", "baz=1,boo=2", 
+				timestampsToRemove);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemovePointsFromTimeseries_nsNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+
+		CacheEngine.removePointsFromTimeseries("fooz", "bar", "baz=1,boo=2", 
+				timestampsToRemove);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemovePointsFromTimeseries_structIdInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+
+		CacheEngine.removePointsFromTimeseries("foo", "bar!", "baz=1,boo=2", 
+				timestampsToRemove);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemovePointsFromTimeseries_structIdNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+
+		CacheEngine.removePointsFromTimeseries("foo", "barz", "baz=1,boo=2", 
+				timestampsToRemove);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemovePointsFromTimeseries_structInstanceIdInvalid() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+
+		CacheEngine.removePointsFromTimeseries("foo", "bar", "!baz=1,boo=2", 
+				timestampsToRemove);
+	}
+
+	@Test (expected=PCacheException.class)
+	public void testRemovePointsFromTimeseries_structInstanceIdNoExist() 
+			throws PCacheException
+	{
+		
+		ArrayList<String> timestamps = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-06T12:00:00.000+05:30");
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+			
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("DOWN");
+			add("UP");
+			add("UP");
+			add("UP");
+			
+		}};
+
+		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		
+		CacheEngine.addNewNamespace("foo");
+		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
+		CacheEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+
+		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
+			
+			add("2010-01-07T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			
+		}};
+
+		CacheEngine.removePointsFromTimeseries("foo", "bar", "baz=2,boo=2", 
+				timestampsToRemove);
+	}
+
 	@Test
 	public void testRemovePointsFromTimeseries_ok() throws PCacheException
 	{
