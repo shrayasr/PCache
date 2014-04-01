@@ -686,7 +686,7 @@ public class CacheEngineTest
 			
 		}};
 
-		CacheEngine.addPointsToTimeseries("foo", "bar", "baz=1,boo=2", 
+		CacheEngine.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 		points = CacheEngine.getTimeseriesFrom("foo", "bar", "baz=1,boo=2", "2010-01-07T12:00:00.000+05:30");

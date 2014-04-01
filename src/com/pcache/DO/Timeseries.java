@@ -59,14 +59,9 @@ public class Timeseries {
 	 * @throws PCacheException thrown if there is no one to one correlation 
 	 * 			between the timestamps and the data points
 	 */
-	public void addOrUpdatePoints(ArrayList<String> timestamps, 
+	private void addOrUpdatePoints(ArrayList<String> timestamps, 
 			ArrayList<Object> dataPoints) throws PCacheException{
 
-		// If the 2 arraylists aren't of the same size, throw an exception
-		if (timestamps.size() != dataPoints.size()) {
-			throw new PCacheException("Sizes don't match. The number of data " +
-					"points should equal the number of timestamps");
-		}
 		
 		// Pick up a ISO date time formatter
 		// the .dateTime() means that it should be in the 
@@ -91,6 +86,26 @@ public class Timeseries {
 			
 		}
 
+	}
+
+	public void addPoints(ArrayList<String> timestamps,
+			ArrayList<Object> dataPoints) throws PCacheException {
+		
+		// Sanity checks
+		exceptIfLengthUnequal(timestamps, dataPoints);
+		exceptIfPointsExist(timestamps);
+		
+		addOrUpdatePoints(timestamps, dataPoints);
+	}
+
+	public void updatePoints(ArrayList<String> timestamps,
+			ArrayList<Object> dataPoints) throws PCacheException {
+
+		// Sanity checks
+		exceptIfLengthUnequal(timestamps, dataPoints);
+		exceptIfNoPointsExist(timestamps);
+		
+		addOrUpdatePoints(timestamps, dataPoints);
 	}
 
 	/**
@@ -224,5 +239,79 @@ public class Timeseries {
 		addOrUpdatePoints(timestamps, dataPoints);
 		
 	}
+
+	private void exceptIfLengthUnequal(ArrayList<String> timestamps,
+			ArrayList<Object> dataPoints) throws PCacheException {
+		
+		if (timestamps.size() != dataPoints.size()) {
+			throw new PCacheException("Sizes don't match. The number of data " +
+					"points should equal the number of timestamps");
+		}
+
+	}
+
+	private ArrayList<Long> convertToUnixTimeMiliseconds(
+			ArrayList<String> timestamps) {
+
+		ArrayList<Long> timestampsSinceEpoc = new ArrayList<>();
+
+		// Pick up a ISO date time formatter
+		// the .dateTime() means that it should be in the 
+		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
+		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+		
+		// Go through all the timestamps
+		for (int i=0; i<timestamps.size(); i++) {
+			
+			// Pick up the timestamp 
+			String timestampISO8601 = timestamps.get(i);
+			
+			// Convert the timestamp to a UNIX time representation,
+			// getting the no. of miliseconds elapsed since EPOC
+			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
+					.getMillis();
+			
+			timestampsSinceEpoc.add(milisSinceEpoc);
+		}
+		
+		return timestampsSinceEpoc;
+		
+	}
+
+
+	private void exceptIfPointsExist(ArrayList<String> timestamps) 
+			throws PCacheException {
+
+		ArrayList<Long> timestampsInMilis = 
+				convertToUnixTimeMiliseconds(timestamps);
+		
+		for (long timestamp : timestampsInMilis) {
+			
+			if (this._timeseries.containsKey(timestamp)) {
+				throw new PCacheException("Some point(s) already exist in the "
+						+ "timeseries");
+			}
+
+		}
+
+	}
+
+	private void exceptIfNoPointsExist(ArrayList<String> timestamps) 
+			throws PCacheException {
+
+		ArrayList<Long> timestampsInMilis = 
+				convertToUnixTimeMiliseconds(timestamps);
+		
+		for (long timestamp : timestampsInMilis) {
+			
+			if (!this._timeseries.containsKey(timestamp)) {
+				throw new PCacheException("Some point(s) don't exist in the "
+						+ "timeseries");
+			}
+
+		}
+
+	}
+
 
 }

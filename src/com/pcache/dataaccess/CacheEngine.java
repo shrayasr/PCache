@@ -201,7 +201,7 @@ public class CacheEngine {
 
 		_cacheTree.getChild(namespace).getChild(structureId)
 			.getChild(structureInstanceId).getTimeseries()
-			.addOrUpdatePoints(timestamps, dataPoints);
+			.addPoints(timestamps, dataPoints);
 
 	}
 
@@ -225,7 +225,7 @@ public class CacheEngine {
 
 		_cacheTree.getChild(namespace).getChild(structureId)
 			.getChild(structureInstanceId).getTimeseries()
-			.addOrUpdatePoints(timestampsToUpdateFor, newDataPoints);
+			.updatePoints(timestampsToUpdateFor, newDataPoints);
 
 	}
 

@@ -198,7 +198,6 @@ public class TimeseriesTest
 			add("2010-02-01T12:00:00.000+05:30");
 			add("2010-02-02T12:00:00.000+05:30");
 			add("2010-02-03T12:00:00.000+05:30");
-			add("2010-01-02T12:00:00.000+05:30");
 			
 		}};
 		
@@ -207,11 +206,10 @@ public class TimeseriesTest
 			add("UP");
 			add("DOWN");
 			add("UP");
-			add("UP");
 			
 		}};
 
-		ts.addOrUpdatePoints(moreTimestamps, moreDataPoints);
+		ts.addPoints(moreTimestamps, moreDataPoints);
 
 		int timestampsAfterAdd = ts.size();
 
