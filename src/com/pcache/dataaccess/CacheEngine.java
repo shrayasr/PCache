@@ -181,6 +181,22 @@ public class CacheEngine {
 		}
 	}
 
+	/**
+	 * Add points to a given timeseries dataset
+	 * @param namespace the namespace being referred to in the cache
+	 * @param structureId the ID of the structure under the namespace
+	 * @param structureInstanceId the ID of the specific instance under the 
+	 * 			structure 
+	 * @param timestamps the set of timestamps to add
+	 * @param dataPoints the associated set of data points to add. There should
+	 * 			be a one to one relation between the timestamps and the data
+	 * 			points
+	 * @throws PCacheException throw if the namespace is invalid, namespace
+	 * 			doesn't exist, structure id is invalid, structure id doesn't
+	 * 			exist, structure instance id is invalid, structure instance id
+	 * 			doesn't exist, if the timeseries associated itself is null or
+	 * 			if one or more of te timestamps already exists in the cache
+	 */
 	public static void addPointsToTimeseries(String namespace, 
 			String structureId, String structureInstanceId, 
 			ArrayList<String> timestamps, ArrayList<Object> dataPoints) 
@@ -199,12 +215,29 @@ public class CacheEngine {
 
 		exceptIfNullTimeseries(namespace, structureId, structureInstanceId);
 
+		// Get the respective timeseries and add the points to it
 		_cacheTree.getChild(namespace).getChild(structureId)
 			.getChild(structureInstanceId).getTimeseries()
 			.addPoints(timestamps, dataPoints);
 
 	}
 
+	/**
+	 * Update points in a given timeseries dataset
+	 * @param namespace the namespace being referred to in the cache
+	 * @param structureId the ID of the structure under the namespace
+	 * @param structureInstanceId the ID of the specific instance under the 
+	 * 			structure 
+	 * @param timestamps the set of timestamps to update
+	 * @param dataPoints the associated set of data points to add. There should
+	 * 			be a one to one relation between the timestamps and the data
+	 * 			points
+	 * @throws PCacheException throw if the namespace is invalid, namespace
+	 * 			doesn't exist, structure id is invalid, structure id doesn't
+	 * 			exist, structure instance id is invalid, structure instance id
+	 * 			doesn't exist, if the timeseries associated itself is null or if
+	 * 			one or more of the timestamps doesn't exist in the cache
+	 */
 	public static void updatePointsInTimeseries(String namespace, 
 			String structureId, String structureInstanceId, 
 			ArrayList<String> timestampsToUpdateFor, 
@@ -223,6 +256,7 @@ public class CacheEngine {
 
 		exceptIfNullTimeseries(namespace, structureId, structureInstanceId);
 
+		// Get the respective time series and update the values
 		_cacheTree.getChild(namespace).getChild(structureId)
 			.getChild(structureInstanceId).getTimeseries()
 			.updatePoints(timestampsToUpdateFor, newDataPoints);
@@ -443,7 +477,6 @@ public class CacheEngine {
 
 	/**
 	 * Add a new Instance of an existing structure 
-	 * @param <T>
 	 * @param namespace the namespace under which the structure is associated
 	 * @param structureId the ID of the structure to whom the instance is to
 	 * 			be associated with
@@ -451,7 +484,7 @@ public class CacheEngine {
 	 * @param timeseries the timeseries object to associate with that instance
 	 * @throws PCacheException 
 	 */
-	public static <T> void addNewStructureInstance(String namespace, 
+	public static void addNewStructureInstance(String namespace, 
 			String structureId, String structureInstanceId, 
 			Timeseries timeseries) throws PCacheException {
 
@@ -725,6 +758,14 @@ public class CacheEngine {
 		}
 	}
 
+	/**
+	 * Check if the timeseries associated to a structure instance ID isn't null
+	 * @param namespace the namespace to look under
+	 * @param structureId the structure ID to which the instance is associated
+	 * @param structureInstanceId the structure instance ID to check for
+	 * @throws PCacheException thrown if the timeseries associated with the
+	 * 			structure instance is null
+	 */
 	private static void exceptIfNullTimeseries(String namespace,
 			String structureId, String structureInstanceId) 
 					throws PCacheException {

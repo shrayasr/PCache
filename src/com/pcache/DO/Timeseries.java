@@ -1,6 +1,7 @@
 package com.pcache.DO;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -49,6 +50,7 @@ public class Timeseries {
 	}
 
 	/**
+	 * A core procedure. This isn't called from the outside. 
 	 * Add or Update points inside the timeseries. The nature of the TreeMap 
 	 * allows us to do both of these things in the same call since the .put()
 	 * function will replace an existsing value if it exists
@@ -88,6 +90,13 @@ public class Timeseries {
 
 	}
 
+	/**
+	 * Add points to the timeseries
+	 * @param timestamps the set of timestamps to add
+	 * @param dataPoints the associated set of data points to add
+	 * @throws PCacheException thrown if timeseries isn't associated to the
+	 * 			datapoints or if the points already exist in the timeseries
+	 */
 	public void addPoints(ArrayList<String> timestamps,
 			ArrayList<Object> dataPoints) throws PCacheException {
 		
@@ -95,9 +104,17 @@ public class Timeseries {
 		exceptIfLengthUnequal(timestamps, dataPoints);
 		exceptIfPointsExist(timestamps);
 		
+		// Call the core procedure to add points into the timeseries
 		addOrUpdatePoints(timestamps, dataPoints);
 	}
 
+	/**
+	 * Update points in the timeseries
+	 * @param timestamps the set of timestamps to update
+	 * @param dataPoints the associated set of data points to update
+	 * @throws PCacheException thrown if timeseries isn't associated to the
+	 * 			datapoints or if the points don't exist in the timeseries
+	 */
 	public void updatePoints(ArrayList<String> timestamps,
 			ArrayList<Object> dataPoints) throws PCacheException {
 
@@ -105,6 +122,7 @@ public class Timeseries {
 		exceptIfLengthUnequal(timestamps, dataPoints);
 		exceptIfNoPointsExist(timestamps);
 		
+		// Call the core procedure to update points in the timeseries
 		addOrUpdatePoints(timestamps, dataPoints);
 	}
 
@@ -240,6 +258,13 @@ public class Timeseries {
 		
 	}
 
+	/**
+	 * Check if the length of the timeseries is not equal to the length of the
+	 * data points that it is associated with 
+	 * @param timestamps the set of timestamps
+	 * @param dataPoints the associated set of data points
+	 * @throws PCacheException thrown if the length of both are unequal
+	 */
 	private void exceptIfLengthUnequal(ArrayList<String> timestamps,
 			ArrayList<Object> dataPoints) throws PCacheException {
 		
@@ -250,7 +275,12 @@ public class Timeseries {
 
 	}
 
-	private ArrayList<Long> convertToUnixTimeMiliseconds(
+	/**
+	 * Convert the given timestamps to UNIX time representation (in miliseconds)
+	 * @param timestamps the set of timestamps to convert
+	 * @return a list of timestamps in miliseconds since EPOC format
+	 */
+	private List<Long> convertToUnixTimeMiliseconds(
 			ArrayList<String> timestamps) {
 
 		ArrayList<Long> timestampsSinceEpoc = new ArrayList<>();
@@ -279,14 +309,23 @@ public class Timeseries {
 	}
 
 
+	/**
+	 * Check if the set of points already exist in the cache
+	 * @param timestamps the set of timestamps to check
+	 * @throws PCacheException thrown if the set of points already exist in the
+	 * 			cache
+	 */
 	private void exceptIfPointsExist(ArrayList<String> timestamps) 
 			throws PCacheException {
 
-		ArrayList<Long> timestampsInMilis = 
+		// Get the EPOC representations
+		List<Long> timestampsInMilis = 
 				convertToUnixTimeMiliseconds(timestamps);
 		
+		// Go through the timestamps
 		for (long timestamp : timestampsInMilis) {
 			
+			// If timeseries already contains it, except
 			if (this._timeseries.containsKey(timestamp)) {
 				throw new PCacheException("Some point(s) already exist in the "
 						+ "timeseries");
@@ -296,14 +335,23 @@ public class Timeseries {
 
 	}
 
+	/**
+	 * Check if the set of points don't exist in the cache
+	 * @param timestamps the set of timestamps to check
+	 * @throws PCacheException thrown if the set of points don't exist in the
+	 * 			cache
+	 */
 	private void exceptIfNoPointsExist(ArrayList<String> timestamps) 
 			throws PCacheException {
 
-		ArrayList<Long> timestampsInMilis = 
+		// Get the EPOC representations
+		List<Long> timestampsInMilis = 
 				convertToUnixTimeMiliseconds(timestamps);
 		
+		// Go through the timestamps
 		for (long timestamp : timestampsInMilis) {
 			
+			// If the timeseries doesn't contain it, except
 			if (!this._timeseries.containsKey(timestamp)) {
 				throw new PCacheException("Some point(s) don't exist in the "
 						+ "timeseries");
