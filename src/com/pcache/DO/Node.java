@@ -105,6 +105,10 @@ public class Node {
 		return this._timeseries;
 	}
 
+	public void setTimeseries(Timeseries ts) {
+		this._timeseries = ts;
+	}
+
 	public Structure getStructure() {
 		return this._structure;
 	}
