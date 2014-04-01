@@ -263,6 +263,59 @@ public class CacheEngine {
 
 	}
 
+	public static void removePointsFromTimeseries(String namespace, 
+			String structureId, String structureInstanceId,
+			ArrayList<String> timestampsToDelete) throws PCacheException {
+		
+		// Sanity Checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+		
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+		
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfNoStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
+
+		// Get the respective time series and delete the values
+		_cacheTree.getChild(namespace).getChild(structureId)
+			.getChild(structureInstanceId).getTimeseries()
+			.removePoints(timestampsToDelete);
+
+	}
+
+	/**
+	 * Update the timeseries associated to the structure id.
+	 * WARNING: This replaces the existing timeseries with the new one
+	 * @param namespace the namespace being referred to in the cache
+	 * @param structureId the ID of the structure under the namespace
+	 * @param structureInstanceId the ID of the specific instance under the 
+	 * 			structure 
+	 * @param ts the new timeseries
+	 * @throws PCacheException
+	 */
+	public static void updateTimeseries(String namespace, String structureId, 
+			String structureInstanceId, Timeseries ts) throws PCacheException {
+		
+		// Sanity Checks
+		exceptIfNamespaceInvalid(namespace);
+		exceptIfNoNamespaceExists(namespace);
+		
+		exceptIfStructureIdInvalid(structureId);
+		exceptIfNoStructureIdExists(namespace, structureId);
+		
+		exceptIfStructureInstanceIdInvalid(structureInstanceId);
+		exceptIfNoStructureInstanceIdExists(namespace, structureId, 
+				structureInstanceId);
+
+		exceptIfNullTimeseries(namespace, structureId, structureInstanceId);
+
+		_cacheTree.getChild(namespace).getChild(structureId)
+			.getChild(structureInstanceId).setTimeseries(ts);
+
+	}
+
 
 	/**
 	 * Create a namespace.

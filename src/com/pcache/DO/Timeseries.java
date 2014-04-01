@@ -129,29 +129,20 @@ public class Timeseries {
 	/**
 	 * Remove a set of points from the timeseries
 	 * @param timestamps the set of timestamps to remove
+	 * @throws PCacheException thrown if one or more points specified to be 
+	 * 			deleted, doesn't exist
 	 */
-	public void removePoints(ArrayList<String> timestamps) {
+	public void removePoints(ArrayList<String> timestamps) 
+			throws PCacheException {
 
-		// Pick up a ISO date time formatter
-		// the .dateTime() means that it should be in the 
-		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-		
-		// Go through all the timestamps
-		for (int i=0; i<timestamps.size(); i++) {
-			
-			// Pick up the timestamp and the data point
-			String timestampISO8601 = timestamps.get(i);
-			
-			// Convert the timestamp to a UNIX time representation,
-			// getting the no. of miliseconds elapsed since EPOC
-			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
-					.getMillis();
-			
-			_timeseries.remove(milisSinceEpoc);
-			
+		// Sanity Checks
+		exceptIfNoPointsExist(timestamps);
+
+		List<Long> timestampsSinceEpoc = convertToUnixTimeMiliseconds(timestamps);
+
+		for (long timestamp : timestampsSinceEpoc) {
+			this._timeseries.remove(timestamp);
 		}
-
 		
 	}
 	
