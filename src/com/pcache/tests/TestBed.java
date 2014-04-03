@@ -51,7 +51,80 @@ public class TestBed {
 	}
 
 	public static void main(String args[]) throws PCacheException {
+		dfsTest(10);
+		//bfsTest(10);
+	}
+
+	private static void bfsTest(int noOfNsSSi) throws PCacheException {
+				
+		String namespacePrefix = "ns_";
+		String structurePrefix = "_s_";
 		
+		ArrayList<String> structDefs = new ArrayList<>();
+
+		int totalPointsInCache=0;
+
+        int startId = 1;
+        int endId = noOfNsSSi;
+
+        structDefs.add("!!");
+        for (int i=startId; i<=endId; i++) {
+        	structDefs.add(UUID.randomUUID().toString().replace("-", "_"));
+        }
+
+        long start,end;
+        start = System.currentTimeMillis();
+        for (int i=startId;i<endId;i++) {
+        	
+			String namespace = namespacePrefix + i;
+			CacheEngine.addNewNamespace(namespace);
+        }
+        end = System.currentTimeMillis();
+        System.out.println(String.format("%s Ns' created in %sms", noOfNsSSi, (end-start)));
+
+        int nsId = 1;
+
+        start = System.currentTimeMillis();
+        for (int i=startId;i<endId;i++) {
+        	
+        	String namespace = "ns_" + nsId;
+        	String structureId = String.format("ns_%s_s_%s", nsId, i);
+        	String structureDefinition = structDefs.get(i);
+
+            CacheEngine.addNewStructure(namespace, structureId, structureDefinition);
+        }
+        end = System.currentTimeMillis();
+        System.out.println(String.format("%s S' created under 1 namespace in in %sms", noOfNsSSi, (end-start)));
+
+        start = System.currentTimeMillis();
+        long totalMakeTsTime = 0;
+        for (int i=startId;i<endId;i++) {
+        	
+        	String namespace = "ns_" + nsId;
+        	String structureId = String.format("ns_%s_s_%s", nsId, i);
+        	String structureDefinition = structDefs.get(i);
+        	String structureInstanceId = structureDefinition + "=" + i;
+
+            int noOfPointsInTs = randInt(100000000, 200000000);
+            totalPointsInCache += noOfPointsInTs;
+
+            long makeTsStart = System.currentTimeMillis();
+            Timeseries ts = makeTs(noOfPointsInTs);
+            long makeTsEnd = System.currentTimeMillis();
+
+            totalMakeTsTime += (makeTsEnd - makeTsStart);
+
+            CacheEngine.addNewStructureInstance(namespace, structureId, structureInstanceId, ts);
+        }
+        end = System.currentTimeMillis();
+        end = end - totalMakeTsTime;
+        System.out.println(String.format("%s Si' created under 1 structure in "
+        		+ "%sms. Total no. of points: %s", noOfNsSSi, (end-start), totalPointsInCache));
+
+	}
+
+	private static void dfsTest(int noOfNsSSi) throws PCacheException {
+			
 		String namespacePrefix = "ns_";
 		String structurePrefix = "_s_";
 		
@@ -61,13 +134,14 @@ public class TestBed {
         long start = System.currentTimeMillis();
 
         int startId = 1;
-        int endId = 100;
+        int endId = noOfNsSSi;
 
         structDefs.add("!!");
         for (int i=startId; i<=endId; i++) {
         	structDefs.add(UUID.randomUUID().toString().replace("-", "_"));
         }
 
+        long totalMakeTsTime = 0;
 		for (int i=startId;i<=endId;i++) {
 			
 			String namespace = namespacePrefix + i;
@@ -89,10 +163,13 @@ public class TestBed {
 					
 					String structureInstanceId = structureDefinition + "=" + k;
 
-					int noOfPointsInTs = randInt(10000, 20000);
+					long startMakeTs = System.currentTimeMillis();
+					int noOfPointsInTs = randInt(10000000, 20000000);
 					totalPointsInCache += noOfPointsInTs;
-
 					Timeseries ts = makeTs(noOfPointsInTs);
+					long endMakeTs = System.currentTimeMillis();
+
+					totalMakeTsTime += (endMakeTs - startMakeTs);
 
 					CacheEngine.addNewStructureInstance(namespace, structureId, structureInstanceId, ts);
 
@@ -102,7 +179,7 @@ public class TestBed {
 		}
 
 		System.out.println("Done. No of points in cache: "+totalPointsInCache);
-		System.out.println("Took " + (System.currentTimeMillis() - start) + "ms");
+		System.out.println("Took " + (System.currentTimeMillis() - start - totalMakeTsTime) + "ms");
 
 		int nsId = randInt(startId,endId);
 		int sId = randInt(startId,endId);
@@ -115,7 +192,7 @@ public class TestBed {
 		System.out.println("Fetching... ["+nsToGet + " " + sToGet + " " + siToGet+"]");
 		start = System.currentTimeMillis();
 		Timeseries tsGot = CacheEngine.getTimeseries(nsToGet, sToGet, siToGet);
-		System.out.println("Done. Took " + (System.currentTimeMillis() - start) + "ms");
+		System.out.println("Done. Took " + (System.currentTimeMillis() - start) + "ms");	
 	}
 
 }
