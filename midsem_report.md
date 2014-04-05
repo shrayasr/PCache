@@ -1,5 +1,6 @@
 # PCache 
-> A report | 5th April 2014
+> Active cache tailormade for Timeseries Data
+
 
 * Source code: [Github](https://github.com/shrayas/PCache)
 * Email: shrayasr@gmail.com
