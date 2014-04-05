@@ -5,7 +5,7 @@
 We handle Timeseries data on a daily basis in our team and it turns out to be
 very volume oriented and something that could greatly benifit from a cache.  The 
 PCache (_Project Cache_) started off as an idea that was floated within the
-current team I work in as something that "should" exist. At that time, none of us
+current team I work in as something that **should** exist. At that time, none of us
 had the time to build something like that out. With the MS project around the
 corner, I decided i'd build this for my MS project
 
@@ -22,14 +22,14 @@ learning with the Timeseries data.
 
 ## Choice of Technology
 
-The idea was to use a technology like GO to write the cache. GO or GOLANG as it
+The idea was to use a technology like `GO` to write the cache. `GO` or `GOLANG` as it
 is sometimes called, is a language that is developed by Google and is majorly
 used for systems level programs (like a cache). The advantage of using something
-like GO would've been in the fact that GO was designed from the ground up to be
+like `GO` would've been in the fact that `GO` was designed from the ground up to be
 a concurrent programming language. Given that a cache needs to handle a lot of 
-simultaneous connections, GO would've helped there.
+simultaneous connections, `GO` would've helped there.
 
-I ended up going for JAVA because of 1 simple reason. It is productionizable in a
+I ended up going for `JAVA` because of 1 simple reason. It is productionizable in a
 company like SAP far more easily than a more recent language like GO. 
 
 ## Progress
@@ -82,11 +82,15 @@ of the simple fact that CRUD on the timeseries was to be supported. This means
 that Points should be added into the timeseries, retrieved, updated and removed
 all in a good period of time. 
 
-For this reason, i went ahead with a Red-Black tree based data structure for 
-containing the timseries. Timestamps were to be in the ISO 8601 format and the
-datapoints associated can be in any datatype. The timestamps are converted to the 
-number of miliseconds since EPOC. This allows me to handle information at a 
-milisecond granularity and in a continuous fashion because of the Red Black tree
-structure.
+For this reason, i went ahead with a `TreeMap` (implemented on Red-Black tree based 
+data structure) for containing the timseries. Timestamps were to be in the **ISO 
+8601** format and the datapoints associated can be in any datatype. The timestamps 
+are converted to the number of miliseconds since EPOC. This allows me to handle 
+information at a milisecond granularity and in a continuous fashion because of 
+`TreeMap`
 
-
+In addition, maintaining it as a 
+`TreeMap` allowed me to allow for insertions whersoever into the timeseries. To 
+give an example, I have the power to add data for a consecutive number of days 
+and then fill it with minute data if it is required. This gives a lot of power to 
+the user.
