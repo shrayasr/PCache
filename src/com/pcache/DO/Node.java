@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.pcache.DO.timeseries.VariableTimeseries;
+
 /**
  * The cache is modeled as a tree. It is a basic set of Node objects linked with
  * each other. Heres what it looks like pictorially: 
@@ -53,7 +55,7 @@ public class Node {
 	private String _name;
 	private Map<String, Node> _children;
 	private Structure _structure;
-	private Timeseries _timeseries;
+	private VariableTimeseries _timeseries;
 
 	/**
 	 * Constructor. Initialize a barebones node
@@ -72,7 +74,7 @@ public class Node {
 	 * @param name of the node
 	 * @param timeseries the data to associate with the node
 	 */
-	public Node(String name, Timeseries timeseries) {
+	public Node(String name, VariableTimeseries timeseries) {
         this._name = name;
         this._structure = null;
 		this._timeseries = timeseries;
@@ -101,11 +103,11 @@ public class Node {
 		this._name = name;
 	}
 
-	public Timeseries getTimeseries() {
+	public VariableTimeseries getTimeseries() {
 		return this._timeseries;
 	}
 
-	public void setTimeseries(Timeseries ts) {
+	public void setTimeseries(VariableTimeseries ts) {
 		this._timeseries = ts;
 	}
 

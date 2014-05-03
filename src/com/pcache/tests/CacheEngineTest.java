@@ -12,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.pcache.DO.Node;
-import com.pcache.DO.Timeseries;
-import com.pcache.dataaccess.CacheEngine;
+import com.pcache.DO.timeseries.VariableTimeseries;
+import com.pcache.engines.CacheEngine;
 import com.pcache.exceptions.PCacheException;
 
 public class CacheEngineTest
@@ -408,7 +408,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -596,7 +596,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
 		CacheEngine.addNewNamespace("foo");
@@ -653,7 +653,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -709,7 +709,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
 		CacheEngine.addNewNamespace("foo");
@@ -766,7 +766,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
 		CacheEngine.addNewNamespace("foo");
@@ -823,7 +823,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
 		CacheEngine.addNewNamespace("foo");
@@ -880,7 +880,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
 		CacheEngine.addNewNamespace("foo");
@@ -963,7 +963,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
 		CacheEngine.addNewNamespace("foo");
@@ -1027,7 +1027,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1083,7 +1083,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1139,7 +1139,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1195,7 +1195,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1251,7 +1251,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1307,7 +1307,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1390,7 +1390,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1466,7 +1466,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1486,7 +1486,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo!", "bar", "baz=1,boo=2", ts2);
 
@@ -1522,7 +1522,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1542,7 +1542,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("fooz", "bar", "baz=1,boo=2", ts2);
 
@@ -1579,7 +1579,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1599,7 +1599,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo", "bar!", "baz=1,boo=2", ts2);
 
@@ -1636,7 +1636,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1656,7 +1656,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo", "barz", "baz=1,boo=2", ts2);
 
@@ -1693,7 +1693,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1713,7 +1713,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo", "bar", "!baz=1,boo=2", ts2);
 
@@ -1750,7 +1750,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1770,7 +1770,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo", "bar", "baz=2,boo=2", ts2);
 
@@ -1798,7 +1798,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo", "bar", "baz=1,boo=2", ts2);
 
@@ -1835,7 +1835,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1855,7 +1855,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts2 = new Timeseries(newTimestamps, newDataPoints);
+		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
 		CacheEngine.updateTimeseries("foo", "bar", "baz=1,boo=2", ts2);
 
@@ -1897,7 +1897,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1945,7 +1945,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -1993,7 +1993,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -2041,7 +2041,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -2089,7 +2089,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -2137,7 +2137,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");
@@ -2184,7 +2184,7 @@ public class CacheEngineTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 		CacheEngine.addNewNamespace("foo");
 		CacheEngine.addNewStructure("foo", "bar", "baz,boo");

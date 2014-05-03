@@ -11,10 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.pcache.DO.Timeseries;
+import com.pcache.DO.timeseries.VariableTimeseries;
 import com.pcache.exceptions.PCacheException;
 
-public class TimeseriesTest
+public class VariableTimeseriesTest
 {
 
 	@Test
@@ -33,7 +33,7 @@ public class TimeseriesTest
 			
 		}};
 		
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 	}
 
@@ -67,7 +67,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		String timestampFrom = "2010-01-05T12:00:00.000+05:30";
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
@@ -109,7 +109,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		String timestampFrom = "2010-01-05T12:00:00.000+05:30";
 
@@ -149,7 +149,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
@@ -189,7 +189,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		int timestampsBeforeAdd = ts.size();
 
@@ -245,7 +245,7 @@ public class TimeseriesTest
 			
 		}};
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		int timestampsBeforeRemove = ts.size();
 

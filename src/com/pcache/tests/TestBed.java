@@ -7,13 +7,13 @@ import java.util.UUID;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-import com.pcache.DO.Timeseries;
-import com.pcache.dataaccess.CacheEngine;
+import com.pcache.DO.timeseries.VariableTimeseries;
+import com.pcache.engines.CacheEngine;
 import com.pcache.exceptions.PCacheException;
 
 public class TestBed {
 
-	public static Timeseries makeTs(int noOfPoints) throws PCacheException {
+	public static VariableTimeseries makeTs(int noOfPoints) throws PCacheException {
 
         String[] outputOptions = {"UP","DOWN"};
 		
@@ -34,7 +34,7 @@ public class TestBed {
 			
 		}
 
-		Timeseries ts = new Timeseries(timestamps, dataPoints);
+		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
 		return ts;
 
@@ -109,7 +109,7 @@ public class TestBed {
             totalPointsInCache += noOfPointsInTs;
 
             long makeTsStart = System.currentTimeMillis();
-            Timeseries ts = makeTs(noOfPointsInTs);
+            VariableTimeseries ts = makeTs(noOfPointsInTs);
             long makeTsEnd = System.currentTimeMillis();
 
             totalMakeTsTime += (makeTsEnd - makeTsStart);
@@ -166,7 +166,7 @@ public class TestBed {
 					long startMakeTs = System.currentTimeMillis();
 					int noOfPointsInTs = randInt(10000000, 20000000);
 					totalPointsInCache += noOfPointsInTs;
-					Timeseries ts = makeTs(noOfPointsInTs);
+					VariableTimeseries ts = makeTs(noOfPointsInTs);
 					long endMakeTs = System.currentTimeMillis();
 
 					totalMakeTsTime += (endMakeTs - startMakeTs);
@@ -191,7 +191,7 @@ public class TestBed {
 
 		System.out.println("Fetching... ["+nsToGet + " " + sToGet + " " + siToGet+"]");
 		start = System.currentTimeMillis();
-		Timeseries tsGot = CacheEngine.getTimeseries(nsToGet, sToGet, siToGet);
+		VariableTimeseries tsGot = CacheEngine.getTimeseries(nsToGet, sToGet, siToGet);
 		System.out.println("Done. Took " + (System.currentTimeMillis() - start) + "ms");	
 	}
 

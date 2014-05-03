@@ -1,4 +1,4 @@
-package com.pcache.DO;
+package com.pcache.DO.timeseries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.pcache.exceptions.PCacheException;
 /**
  * The central class for storing timeseries
  */
-public class Timeseries {
+public class VariableTimeseries {
 
 	/**
 	 * The main treemap to represent the timeseries.
@@ -239,7 +239,7 @@ public class Timeseries {
 	 * @throws PCacheException thrown if the no. of timestamps do not match
 	 * 			the no. of data points
 	 */
-	public Timeseries (ArrayList<String> timestamps, 
+	public VariableTimeseries (ArrayList<String> timestamps, 
 			ArrayList<Object> dataPoints) throws PCacheException {
 		
 		// Declare a new tree map

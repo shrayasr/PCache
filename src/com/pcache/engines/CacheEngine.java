@@ -1,4 +1,4 @@
-package com.pcache.dataaccess;
+package com.pcache.engines;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.pcache.DO.Node;
 import com.pcache.DO.Structure;
-import com.pcache.DO.Timeseries;
+import com.pcache.DO.timeseries.VariableTimeseries;
 import com.pcache.exceptions.PCacheException;
 
 /**
@@ -56,7 +56,7 @@ public class CacheEngine {
 	 * @throws PCacheException when either namespaceId, structureId or
 	 * 			structureInstanceId don't exist
 	 */
-	public static Timeseries getTimeseries(String namespace, 
+	public static VariableTimeseries getTimeseries(String namespace, 
 			String structureId, String structureInstanceId) 
 					throws PCacheException {
 
@@ -296,7 +296,7 @@ public class CacheEngine {
 	 * @throws PCacheException
 	 */
 	public static void updateTimeseries(String namespace, String structureId, 
-			String structureInstanceId, Timeseries ts) throws PCacheException {
+			String structureInstanceId, VariableTimeseries ts) throws PCacheException {
 		
 		// Sanity Checks
 		exceptIfNamespaceInvalid(namespace);
@@ -539,7 +539,7 @@ public class CacheEngine {
 	 */
 	public static void addNewStructureInstance(String namespace, 
 			String structureId, String structureInstanceId, 
-			Timeseries timeseries) throws PCacheException {
+			VariableTimeseries timeseries) throws PCacheException {
 
 		// Sanity checks
 		exceptIfNamespaceInvalid(namespace);
