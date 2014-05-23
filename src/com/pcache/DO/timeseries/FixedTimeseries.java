@@ -10,6 +10,30 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import com.pcache.exceptions.PCacheException;
 
+/**
+ * The FixedTimeseries class allows another take on handling timeseries data.
+ * This is modelled on Arrays and hence inserts are a bit costlier but then 
+ * selects are super fast. 
+ * 
+ * The only downside to having something like an array based representation is
+ * the fact that one has to deal with gaps in the data and doing "between" 
+ * operations takes up a lot of understanding. The current implementation will 
+ * "try" to solve this problem by asking for the "ticks" from the user itself.
+ * This will allow us to pre-fill the array with nulls so that the gaps are 
+ * handled in a better fashion. This approach however isn't tested. There ought
+ * to be places that i'm overlooking. 
+ * 
+ * The storing of ticks gives us an advantage that we don't need to store the
+ * timeseries data in itself. Storing the starting timestamp along with the 
+ * ticks should be enough since seeking to a point would be a simple offset 
+ * operation.
+ * 
+ * This also however means that for every kind of data, the NULL values might 
+ * differ. We require a value that we prefill that will indicate to you that 
+ * a particular data point is a NULL point.
+ * 
+ * @param <T> the Type of data to store
+ */
 public class FixedTimeseries<T>
 {
 
