@@ -29,7 +29,7 @@ import com.pcache.exceptions.PCacheException;
  * However, structure names can be modified.
  * 
  */
-public class CacheEngine {
+public class VariableTimeseriesEngine {
 
 	// The main tree that stores the entire cache
 	private static Node _cacheTree = new Node("cache");
