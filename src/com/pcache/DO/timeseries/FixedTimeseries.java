@@ -1,14 +1,9 @@
 package com.pcache.DO.timeseries;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import com.pcache.exceptions.PCacheException;
+import com.pcache.utils.Commons;
 
 /**
  * The FixedTimeseries class allows another take on handling timeseries data.
@@ -32,6 +27,25 @@ import com.pcache.exceptions.PCacheException;
  * differ. We require a value that we prefill that will indicate to you that 
  * a particular data point is a NULL point.
  * 
+ * The tick itself should be specified in a string format. The general syntax
+ * for specifying a tick is <number><unit>
+ * 
+ * 	The following units are acceptable:
+ * 		d:  Day,
+ * 		m:  Month,
+ * 		y:  Year,
+ * 		h:  Hour,
+ * 		M:  Minute,
+ * 		s:  Second.
+ * 
+ * So, a tick can be declared as 1d, 2m, 1s, etc.
+ * 
+ * The timestamps are to be in the ISO8601 format. Anything that isn't of the
+ * ISO8601 standard will not be put into the cache.
+ * 
+ * Note: This is a very user input dependent type of storing timeseries.If wrong
+ * input is given, the user is responsible for it. He will get back wrong output.
+ * 
  * @param <T> the Type of data to store
  */
 public class FixedTimeseries<T>
@@ -39,10 +53,22 @@ public class FixedTimeseries<T>
 
 	private long _startingTimestamp;
 	private long _endingTimestamp;
+	
 	private long _tick;
+	
 	private T _null;
 	private ArrayList<T> _dataPoints;
 	
+	/**
+	 * Constructor. Initialize a fixed timeseries. 
+	 * @param timestamps an arraylist of timestamps 
+	 * @param dataPoints an arraylist of the data points
+	 * @param tickStr a tick string representing the duration between 2 given
+	 * 			points
+	 * @param nullValue what is the value to be used to represent nulls?
+	 * @throws PCacheException thrown if:
+	 * 			* Timestamps and data points aren't of the same length
+	 */
 	public FixedTimeseries(ArrayList<String> timestamps, ArrayList<T> dataPoints,
 			String tickStr, T nullValue) throws PCacheException {
 		
@@ -51,42 +77,74 @@ public class FixedTimeseries<T>
 					"the same length");
 		}
 		
+		// Pick up the starting and ending time stamps
 		String startingTimestamp = timestamps.get(0);
 		String endingTimestamp = timestamps.get(timestamps.size()-1);
 		
-		this._startingTimestamp = ISO8601toMilis(startingTimestamp);
-		this._endingTimestamp = ISO8601toMilis(endingTimestamp);
+		// Convert them to Milis
+		this._startingTimestamp = Commons.ISO8601toMilis(startingTimestamp);
+		this._endingTimestamp = Commons.ISO8601toMilis(endingTimestamp);
 		
+		// Declare a new arraylist for holding data points
 		this._dataPoints = new ArrayList<>();
-		this._tick = parseTickString(tickStr);
+		
+		// Get the tick, in milis by parsing the tick string as per the rules
+		this._tick = Commons.parseTickString(tickStr);
 		this._null = nullValue;
 		
+		// Fill it initially with NULL values
 		fillNULLs(this._startingTimestamp, this._endingTimestamp, this._null);
+		
+		// Fill in the points
 		fillPoints(timestamps, dataPoints);
 	}
 	
-	private long ISO8601toMilis(String timestamp) {
-		
-		DateTimeFormatter ISO8601Formatter = ISODateTimeFormat.dateTime();
-		return ISO8601Formatter.parseDateTime(timestamp).getMillis();
-	}
-	
+	/**
+	 * Given the timestamps and data points, update the already NULL filled set
+	 * of points with the actual data points
+	 * @param timestamps Arraylist of timestamps that feature in the dataset
+	 * @param dataPoints Arraylist of data points
+	 */
 	private void fillPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) {
 		
+		// Go through the list of timestamps
 		for (int i=0;i<timestamps.size();i++) {
 			
 			String timestamp = timestamps.get(i);
 			T dataPoint = dataPoints.get(i);
 			
-			long timestampInMilis = ISO8601toMilis(timestamp);
+			// Get the timestamps representation in milis
+			long timestampInMilis = Commons.ISO8601toMilis(timestamp);
+			
+			/*
+			 * Calculate the index to offset. 
+			 * 
+			 * It is calculated as (timestamp - starting_timestamp) / tick 
+			 * 
+			 * Eg:
+			 * 		starting_timestamp = Jan 1 2013 = 1356998400
+			 * 		timestamp = Jan 5 2014 = 1357344000
+			 * 		tick = 1d = no. of milis in a day = 86400
+			 * 
+			 * 		Index of Jan 5th = (1357430400 - 1356998400) / 86400
+			 * 						 = 4
+			 * 
+			 */
 			int index = (int)((timestampInMilis - this._startingTimestamp)
 					/this._tick);
 			
+			// Set the data point at that location
 			this._dataPoints.set(index, dataPoint);
 		}
 		
 	}
 	
+	/**
+	 * Given the from, to and NULL, fill the timeseries with NULLS
+	 * @param from milisecond representation of the from point
+	 * @param to milisecond representation of the to point
+	 * @param nullValue the null value to use 
+	 */
 	private void fillNULLs(long from, long to, T nullValue) {
 		
 		long currentTimestamp = from;
