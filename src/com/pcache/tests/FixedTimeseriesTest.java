@@ -63,5 +63,61 @@ public class FixedTimeseriesTest
 		assert true;
 		
 	}
+	
+	@Test
+	public void test_addPoints() throws PCacheException {
+		
+		ArrayList<String> initialTimeseries = new ArrayList<String>() {{
+			
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Integer> initialDataPoints = new ArrayList<Integer>() {{
+			
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			
+		}};
+		
+		FixedTimeseries<Integer> tsInt = new FixedTimeseries<Integer>(
+				initialTimeseries, initialDataPoints, "1d", -1);
+		
+		ArrayList<String> toAppendTimeseries = new ArrayList<String>() {{
+			
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+			
+		}};
+		
+		ArrayList<Integer> toAppendDataPoints = new ArrayList<Integer>() {{
+			
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+			
+		}};
+		
+		int beforeAppend = tsInt.size();
+		tsInt.addPoints(toAppendTimeseries, toAppendDataPoints);
+		int afterAppend = tsInt.size();
+		
+		// adding a +2 to make room for the 2 days that were left out
+		// in between. The fixedTS adds nulls in those places
+		assertEquals((beforeAppend+6+2), afterAppend);
+		
+	}
 
 }

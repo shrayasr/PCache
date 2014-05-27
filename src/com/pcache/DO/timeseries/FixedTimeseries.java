@@ -93,10 +93,10 @@ public class FixedTimeseries<T>
 		this._null = nullValue;
 		
 		// Fill it initially with NULL values
-		fillNULLs(this._startingTimestamp, this._endingTimestamp, this._null);
+		_fillNULLs(this._startingTimestamp, this._endingTimestamp, this._null);
 		
 		// Fill in the points
-		fillPoints(timestamps, dataPoints);
+		_fillPoints(timestamps, dataPoints);
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class FixedTimeseries<T>
 	 * @param timestamps Arraylist of timestamps that feature in the dataset
 	 * @param dataPoints Arraylist of data points
 	 */
-	private void fillPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) {
+	private void _fillPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) {
 		
 		// Go through the list of timestamps
 		for (int i=0;i<timestamps.size();i++) {
@@ -145,7 +145,7 @@ public class FixedTimeseries<T>
 	 * @param to milisecond representation of the to point
 	 * @param nullValue the null value to use 
 	 */
-	private void fillNULLs(long from, long to, T nullValue) {
+	private void _fillNULLs(long from, long to, T nullValue) {
 		
 		long currentTimestamp = from;
 		
@@ -153,6 +153,63 @@ public class FixedTimeseries<T>
 			this._dataPoints.add(nullValue);
 			currentTimestamp = currentTimestamp + this._tick;
 		}
+	}
+	
+	/**
+	 * Add points to the given timeseries.
+	 * 
+	 * Note: Since it is an append only timeseries class, the first point of the
+	 * 		 list of timestamps to be appended should be greater than what
+	 * 		 already exists in the timeseries
+	 * 
+	 * @param timestamps the set of timestamps to append
+	 * @param dataPoints the set of correlated data points to the timestamps
+	 * @throws PCacheException thrown if:
+	 * 			* Size of the timestamps and data points don't match
+	 * 			* If the first point of the list of timestamps to be appended
+	 * 			  isn't greater than what already exists
+	 */
+	public void addPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) 
+			throws PCacheException {
+		
+		String startingTimestamp = timestamps.get(0);
+		long startingTimestampMilis = Commons.ISO8601toMilis(startingTimestamp);
+		
+		if (startingTimestampMilis < this._endingTimestamp) {
+			throw new PCacheException("New timeseries has the starting point" +
+					" before the existing timeseries. Are you trying to insert" +
+					" points? Insertions aren't supported in FixedTimeseries." +
+					" Use variableTimeseries for that.");
+		}
+		
+		String endingTimestamp = timestamps.get(timestamps.size()-1);
+		long endingTimestampMilis = Commons.ISO8601toMilis(endingTimestamp);
+		
+		_fillNULLs(startingTimestampMilis, endingTimestampMilis, this._null);
+		_fillPoints(timestamps, dataPoints);
+	}
+	
+	/**
+	 * Return the size of the timeseries. 
+	 * 
+	 * This isn't really the size of the data points in the timeseries but the 
+	 * total no. of points in the timeseries. This means that it accounts for
+	 * the points that are missed out in what was provided. 
+	 * 
+	 * Eg:
+	 * 	If the initial set contained points for the following days:
+	 * 			Mon - Tue - Wed - Thu - Fri - Mon - Tue
+	 * 	i.e. missing out the Sat and Sun.
+	 * 
+	 *  The Cache fills those 2 points with null values. So even though the
+	 *  effective size of the cache would only be 7 points. The size would
+	 *  return 7 + 2 = 9 points since it accounts for the missed out parts as
+	 *  well
+	 *  
+	 * @return the "effective" size of the cache
+	 */
+	public int size() {
+		return this._dataPoints.size();
 	}
 	
 }
