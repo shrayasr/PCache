@@ -225,7 +225,7 @@ public class FixedTimeseries<T>
 		
 		// If the offset ends up being greater than the size of the data points
 		//  He's an idiot
-		if (offset > this._dataPoints.size()) {
+		if (offset > this._dataPoints.size() || offset < 0) {
 			throw new PCacheException("Timestamp doesn't exist");
 		}
 		
@@ -280,7 +280,7 @@ public class FixedTimeseries<T>
 		
 		// If the offset ends up being greater than the size of the data points
 		//  He's an idiot
-		if (offset > this._dataPoints.size()) {
+		if (offset > this._dataPoints.size() || offset < 0) {
 			throw new PCacheException("Timestamp doesn't exist");
 		}
 		
