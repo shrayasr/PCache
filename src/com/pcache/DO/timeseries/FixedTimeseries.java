@@ -300,6 +300,31 @@ public class FixedTimeseries<T>
 	}
 	
 	/**
+	 * Modify an point within the timeseries
+	 * @param timestampToModify the timestamp of the point to modify
+	 * @param newValue the new value for the point
+	 * @throws PCacheException thrown if:
+	 * 			* The timestamp to remove doesn't exist in the timeseries
+	 */
+	public void modifyPoint(String timestampToModify, T newValue) throws PCacheException {
+		
+		// All dat timestamp conversion shizbomb
+		long timestampToModifyInMilis = Commons.ISO8601toMilis(timestampToModify);
+		int offset = Commons.getOffset(timestampToModifyInMilis, 
+				this._startingTimestamp, this._tick);
+		
+		// If the offset calculated is more than the no. of data points
+		// He's an idiot
+		if (offset > this._dataPoints.size() || offset < 0) {
+			throw new PCacheException("Timestamp doesn't exist");
+		}
+		
+		// Update the value at that offset
+		this._dataPoints.set(offset, newValue);
+		
+	}
+	
+	/**
 	 * Return the size of the timeseries. 
 	 * 
 	 * This isn't really the size of the data points in the timeseries but the 
