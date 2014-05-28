@@ -1,6 +1,7 @@
 package com.pcache.DO.timeseries;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.pcache.exceptions.PCacheException;
 import com.pcache.utils.Commons;
@@ -57,7 +58,7 @@ public class FixedTimeseries<T>
 	private long _tick;
 	
 	private T _null;
-	private ArrayList<T> _dataPoints;
+	private List<T> _dataPoints;
 	
 	/**
 	 * Constructor. Initialize a fixed timeseries. 
@@ -187,6 +188,115 @@ public class FixedTimeseries<T>
 		
 		_fillNULLs(startingTimestampMilis, endingTimestampMilis, this._null);
 		_fillPoints(timestamps, dataPoints);
+	}
+	
+	/**
+	 * Remove data points till a specified timestamp
+	 * @param toTimestamp timestamp to remove till
+	 * @throws PCacheException thrown if:
+	 * 			* The timestamp to remove doesn't exist in the timeseries
+	 */
+	public void removeTill(String toTimestamp) throws PCacheException {
+		
+		// Get the timestamp in miliseconds
+		long toMilis = Commons.ISO8601toMilis(toTimestamp);
+		
+		/*
+		 * Calculate the offset. 
+		 * 
+		 * Consider this structure: 
+		 * [0] 2012-01-01
+		 * [1] 2012-01-02
+		 * [2] 2012-01-03
+		 * [3] 2012-01-04
+		 * [4] 2012-01-05
+		 * [5] 2012-01-06
+		 * 
+		 * If i want to remove TILL 2012-01-04, the offset would be calculated
+		 * as [3] so what needs to remain as part of the time series is from 
+		 * [4] till the rest. 
+		 * 
+		 * This is why, after getting the offset, we add 1 
+		 * 
+		 */
+		int offset  = Commons.getOffset(toMilis, this._startingTimestamp, 
+				this._tick);
+		offset = offset + 1;
+		
+		// If the offset ends up being greater than the size of the data points
+		//  He's an idiot
+		if (offset > this._dataPoints.size()) {
+			throw new PCacheException("Timestamp doesn't exist");
+		}
+		
+		// Update the starting timestamp
+		this._startingTimestamp = toMilis + this._tick;
+		
+		/*
+		 * Get a sublist FROM offset till the end of list, therby effectivly
+		 * removing everything from 0 till the offset-1
+		 * 
+		 * NOTE:
+		 *    The nature of the `subList` makes it so that we need to add 
+		 *    1 to the size() since the 2nd parameter is exclusive and not
+		 *    inclusive
+		 */
+		this._dataPoints = this._dataPoints.subList( offset, 
+				this._dataPoints.size());
+		
+	}
+	
+	/**
+	 * Remove data points from a specified timestamp till the end
+	 * @param fromTimestamp timestamp to remove from
+	 * @throws PCacheException thrown if:
+	 * 			* The timestamp to remove doesn't exist in the timeseries
+	 */
+	public void removeFrom(String fromTimestamp) throws PCacheException {
+		
+		long fromMilis = Commons.ISO8601toMilis(fromTimestamp);
+		
+		/*
+		 * Calculate the offset. 
+		 * 
+		 * Consider this structure: 
+		 * [0] 2012-01-01
+		 * [1] 2012-01-02
+		 * [2] 2012-01-03
+		 * [3] 2012-01-04
+		 * [4] 2012-01-05
+		 * [5] 2012-01-06
+		 * 
+		 * If i want to remove FROM 2012-01-04, the offset would be calculated
+		 * as [3] so what needs to remain as part of the time series is from 
+		 * [0] till [2]
+		 * 
+		 * This is why, after getting the offset, we subtract 1 
+		 * 
+		 */
+		int offset  = Commons.getOffset(fromMilis, this._startingTimestamp, 
+				this._tick);
+		offset = offset - 1;
+		
+		// If the offset ends up being greater than the size of the data points
+		//  He's an idiot
+		if (offset > this._dataPoints.size()) {
+			throw new PCacheException("Timestamp doesn't exist");
+		}
+		
+		// Update the ending timestamp
+		this._endingTimestamp = fromMilis - this._tick;
+		
+		/*
+		 * Get a sublist FROM 0 till the offset position, therby effectivly
+		 * removing everything from offset+1 till the end
+		 * 
+		 * NOTE:
+		 *    The nature of the `subList` makes it so that we need to add 
+		 *    1 to the offset since the 2nd parameter is exclusive and not
+		 *    inclusive
+		 */
+		this._dataPoints = this._dataPoints.subList(0, (offset+1));
 	}
 	
 	/**
