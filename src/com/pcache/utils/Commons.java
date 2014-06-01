@@ -90,20 +90,6 @@ public class Commons
 	    return (int) l;
 	}
 	
-			/*
-			 * Calculate the index to offset. 
-			 * 
-			 * It is calculated as (timestamp - starting_timestamp) / tick 
-			 * 
-			 * Eg:
-			 * 		starting_timestamp = Jan 1 2013 = 1356998400
-			 * 		timestamp = Jan 5 2014 = 1357344000
-			 * 		tick = 1d = no. of milis in a day = 86400
-			 * 
-			 * 		Index of Jan 5th = (1357430400 - 1356998400) / 86400
-			 * 						 = 4
-			 * 
-			 */
 	/**
 	 * Calculate the index to offset. 
 	 * 
