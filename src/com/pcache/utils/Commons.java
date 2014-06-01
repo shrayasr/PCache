@@ -90,7 +90,41 @@ public class Commons
 	    return (int) l;
 	}
 	
-	public static int getOffset(long milis, long startingMilis, long tick) {
-		return (safeLongToInt((milis - startingMilis) / tick));
+			/*
+			 * Calculate the index to offset. 
+			 * 
+			 * It is calculated as (timestamp - starting_timestamp) / tick 
+			 * 
+			 * Eg:
+			 * 		starting_timestamp = Jan 1 2013 = 1356998400
+			 * 		timestamp = Jan 5 2014 = 1357344000
+			 * 		tick = 1d = no. of milis in a day = 86400
+			 * 
+			 * 		Index of Jan 5th = (1357430400 - 1356998400) / 86400
+			 * 						 = 4
+			 * 
+			 */
+	/**
+	 * Calculate the index to offset. 
+	 * 
+	 * It is calculated as (timestamp - starting_timestamp) / tick 
+	 * 
+	 * Eg:
+	 * 		starting_timestamp = Jan 1 2013 = 1356998400
+	 * 		timestamp = Jan 5 2014 = 1357344000
+	 * 		tick = 1d = no. of milis in a day = 86400
+	 * 
+	 * 		Index of Jan 5th = (1357430400 - 1356998400) / 86400
+	 * 						 = 4
+	 * 
+	 * @param timestamp the timestamp to calculate the offset for
+	 * @param startime_timestamp the starting timestamp in the series
+	 * @param tick the tick value between timestamps
+	 * @return the offset into the array for that timestamp
+	 */
+	public static int getOffset(long timestamp, long startime_timestamp, 
+			long tick) {
+		
+		return (safeLongToInt((timestamp - startime_timestamp) / tick));
 	}
 }

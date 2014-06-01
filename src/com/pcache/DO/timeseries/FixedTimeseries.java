@@ -19,14 +19,15 @@ import com.pcache.utils.Commons;
  * handled in a better fashion. This approach however isn't tested. There ought
  * to be places that i'm overlooking. 
  * 
- * The storing of ticks gives us an advantage that we don't need to store the
- * timeseries data in itself. Storing the starting timestamp along with the 
- * ticks should be enough since seeking to a point would be a simple offset 
- * operation.
+ * The timeseries data is also being stored in a parallal array. The initial
+ * implementation was to NOT store the timeseries but then if we don't store the
+ * timeseries, then during gets, we will have to generate the timeseries which 
+ * would become a O(n) operation. The real purpose of this class is to make the 
+ * gets *extremely* fast. 
  * 
- * This also however means that for every kind of data, the NULL values might 
- * differ. We require a value that we prefill that will indicate to you that 
- * a particular data point is a NULL point.
+ * This means that for every kind of data, the NULL values might differ. We 
+ * require a value that we prefill that will indicate to you that a particular 
+ * data point is a NULL point.
  * 
  * The tick itself should be specified in a string format. The general syntax
  * for specifying a tick is <number><unit>
@@ -52,12 +53,10 @@ import com.pcache.utils.Commons;
 public class FixedTimeseries<T>
 {
 
-	private long _startingTimestamp;
-	private long _endingTimestamp;
-	
 	private long _tick;
-	
 	private T _null;
+	
+	private List<Long> _timestamps;
 	private List<T> _dataPoints;
 	
 	/**
@@ -83,18 +82,19 @@ public class FixedTimeseries<T>
 		String endingTimestamp = timestamps.get(timestamps.size()-1);
 		
 		// Convert them to Milis
-		this._startingTimestamp = Commons.ISO8601toMilis(startingTimestamp);
-		this._endingTimestamp = Commons.ISO8601toMilis(endingTimestamp);
+		long startingTimestampMilis = Commons.ISO8601toMilis(startingTimestamp);
+		long endingTimestampMilis = Commons.ISO8601toMilis(endingTimestamp);
 		
-		// Declare a new arraylist for holding data points
+		// Declare a new arraylist for holding data points and timestamps
 		this._dataPoints = new ArrayList<>();
+		this._timestamps = new ArrayList<>();
 		
 		// Get the tick, in milis by parsing the tick string as per the rules
 		this._tick = Commons.parseTickString(tickStr);
 		this._null = nullValue;
 		
 		// Fill it initially with NULL values
-		_fillNULLs(this._startingTimestamp, this._endingTimestamp, this._null);
+		_fillNULLs(startingTimestampMilis, endingTimestampMilis, this._null);
 		
 		// Fill in the points
 		_fillPoints(timestamps, dataPoints);
@@ -108,6 +108,8 @@ public class FixedTimeseries<T>
 	 */
 	private void _fillPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) {
 		
+		long seriesStartingTimestampMilis = this._timestamps.get(0);
+		
 		// Go through the list of timestamps
 		for (int i=0;i<timestamps.size();i++) {
 			
@@ -117,22 +119,9 @@ public class FixedTimeseries<T>
 			// Get the timestamps representation in milis
 			long timestampInMilis = Commons.ISO8601toMilis(timestamp);
 			
-			/*
-			 * Calculate the index to offset. 
-			 * 
-			 * It is calculated as (timestamp - starting_timestamp) / tick 
-			 * 
-			 * Eg:
-			 * 		starting_timestamp = Jan 1 2013 = 1356998400
-			 * 		timestamp = Jan 5 2014 = 1357344000
-			 * 		tick = 1d = no. of milis in a day = 86400
-			 * 
-			 * 		Index of Jan 5th = (1357430400 - 1356998400) / 86400
-			 * 						 = 4
-			 * 
-			 */
-			int index = (int)((timestampInMilis - this._startingTimestamp)
-					/this._tick);
+			// Get the index of that timestamp
+			int index = Commons.getOffset(timestampInMilis, 
+					seriesStartingTimestampMilis, this._tick);
 			
 			// Set the data point at that location
 			this._dataPoints.set(index, dataPoint);
@@ -151,6 +140,7 @@ public class FixedTimeseries<T>
 		long currentTimestamp = from;
 		
 		while (currentTimestamp <= to) {
+			this._timestamps.add(currentTimestamp);
 			this._dataPoints.add(nullValue);
 			currentTimestamp = currentTimestamp + this._tick;
 		}
@@ -173,19 +163,27 @@ public class FixedTimeseries<T>
 	public void addPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) 
 			throws PCacheException {
 		
+		// Get the last timestamp of the series
+		long seriesEndingTimestampMilis = this._timestamps.get(this._timestamps
+				.size()-1);
+		
+		// Get the first timestamp in what needs to be added
 		String startingTimestamp = timestamps.get(0);
 		long startingTimestampMilis = Commons.ISO8601toMilis(startingTimestamp);
 		
-		if (startingTimestampMilis < this._endingTimestamp) {
+		// what needs to be added should be greater than what exists
+		if (startingTimestampMilis < seriesEndingTimestampMilis) {
 			throw new PCacheException("New timeseries has the starting point" +
 					" before the existing timeseries. Are you trying to insert" +
 					" points? Insertions aren't supported in FixedTimeseries." +
 					" Use variableTimeseries for that.");
 		}
 		
+		// Get the last timestamp of what needs to be added
 		String endingTimestamp = timestamps.get(timestamps.size()-1);
 		long endingTimestampMilis = Commons.ISO8601toMilis(endingTimestamp);
 		
+		// Fill with nulls and then fill points
 		_fillNULLs(startingTimestampMilis, endingTimestampMilis, this._null);
 		_fillPoints(timestamps, dataPoints);
 	}
@@ -198,7 +196,11 @@ public class FixedTimeseries<T>
 	 */
 	public void removeTill(String toTimestamp) throws PCacheException {
 		
-		// Get the timestamp in miliseconds
+		// Get the timestamp of where the series starts
+		long seriesStartingTimestamp = this._timestamps.get(0);
+		
+		// Get the timestamp of where the series needs to be truncated till 
+		// in miliseconds
 		long toMilis = Commons.ISO8601toMilis(toTimestamp);
 		
 		/*
@@ -219,7 +221,7 @@ public class FixedTimeseries<T>
 		 * This is why, after getting the offset, we add 1 
 		 * 
 		 */
-		int offset  = Commons.getOffset(toMilis, this._startingTimestamp, 
+		int offset  = Commons.getOffset(toMilis, seriesStartingTimestamp, 
 				this._tick);
 		offset = offset + 1;
 		
@@ -228,9 +230,6 @@ public class FixedTimeseries<T>
 		if (offset > this._dataPoints.size() || offset < 0) {
 			throw new PCacheException("Timestamp doesn't exist");
 		}
-		
-		// Update the starting timestamp
-		this._startingTimestamp = toMilis + this._tick;
 		
 		/*
 		 * Get a sublist FROM offset till the end of list, therby effectivly
@@ -244,6 +243,9 @@ public class FixedTimeseries<T>
 		this._dataPoints = this._dataPoints.subList( offset, 
 				this._dataPoints.size());
 		
+		this._timestamps = this._timestamps.subList(offset, 
+				this._timestamps.size());
+		
 	}
 	
 	/**
@@ -254,6 +256,11 @@ public class FixedTimeseries<T>
 	 */
 	public void removeFrom(String fromTimestamp) throws PCacheException {
 		
+		// Get the timestamp of where the series starts
+		long seriesStartingTimestamp = this._timestamps.get(0);
+		
+		// Get the timestamp of where the series needs to be truncated from 
+		// in miliseconds
 		long fromMilis = Commons.ISO8601toMilis(fromTimestamp);
 		
 		/*
@@ -274,7 +281,7 @@ public class FixedTimeseries<T>
 		 * This is why, after getting the offset, we subtract 1 
 		 * 
 		 */
-		int offset  = Commons.getOffset(fromMilis, this._startingTimestamp, 
+		int offset  = Commons.getOffset(fromMilis, seriesStartingTimestamp, 
 				this._tick);
 		offset = offset - 1;
 		
@@ -283,9 +290,6 @@ public class FixedTimeseries<T>
 		if (offset > this._dataPoints.size() || offset < 0) {
 			throw new PCacheException("Timestamp doesn't exist");
 		}
-		
-		// Update the ending timestamp
-		this._endingTimestamp = fromMilis - this._tick;
 		
 		/*
 		 * Get a sublist FROM 0 till the offset position, therby effectivly
@@ -297,6 +301,7 @@ public class FixedTimeseries<T>
 		 *    inclusive
 		 */
 		this._dataPoints = this._dataPoints.subList(0, (offset+1));
+		this._timestamps = this._timestamps.subList(0, (offset+1));
 	}
 	
 	/**
@@ -308,10 +313,16 @@ public class FixedTimeseries<T>
 	 */
 	public void modifyPoint(String timestampToModify, T newValue) throws PCacheException {
 		
+		// Get the timestamp of where the series starts
+		long seriesStartingTimestamp = this._timestamps.get(0);
+		
 		// All dat timestamp conversion shizbomb
+		// Get the timestamp to modify the value of in miliseconds
 		long timestampToModifyInMilis = Commons.ISO8601toMilis(timestampToModify);
+		
+		// Get its offset
 		int offset = Commons.getOffset(timestampToModifyInMilis, 
-				this._startingTimestamp, this._tick);
+				seriesStartingTimestamp, this._tick);
 		
 		// If the offset calculated is more than the no. of data points
 		// He's an idiot
