@@ -9,6 +9,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import com.pcache.exceptions.PCacheException;
+import com.pcache.utils.Commons;
 
 /**
  * The central class for storing timeseries
@@ -39,12 +40,9 @@ public class VariableTimeseries {
 	 */
 	public boolean contains(String timestamp) {
 		
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-		
 		// Convert the timestamp to a UNIX time representation,
 		// getting the no. of miliseconds elapsed since EPOC
-		long milisSinceEpoc = formatter.parseDateTime(timestamp)
-				.getMillis();
+		long milisSinceEpoc  = Commons.ISO8601toMilis(timestamp);
 
 		return this._timeseries.containsKey(milisSinceEpoc);
 	}
@@ -65,11 +63,6 @@ public class VariableTimeseries {
 			ArrayList<Object> dataPoints) throws PCacheException{
 
 		
-		// Pick up a ISO date time formatter
-		// the .dateTime() means that it should be in the 
-		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-		
 		// Go through all the timestamps
 		for (int i=0; i<timestamps.size(); i++) {
 			
@@ -79,8 +72,7 @@ public class VariableTimeseries {
 			
 			// Convert the timestamp to a UNIX time representation,
 			// getting the no. of miliseconds elapsed since EPOC
-			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
-					.getMillis();
+			long milisSinceEpoc = Commons.ISO8601toMilis(timestampISO8601);
 			
 			// Add or update the timestamp, datapoint
 			// Put does updates also. so 2 birds, one stone!
@@ -156,16 +148,11 @@ public class VariableTimeseries {
 	public Map<Long, Object> getRangeBetween(String timestampFrom, 
 			String timestampTo) {
 		
-		// Pick up a ISO8601 formatter
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-		
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocFrom = formatter.parseDateTime(timestampFrom)
-				.getMillis();
+		long milisSinceEpocFrom = Commons.ISO8601toMilis(timestampFrom);
 
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocTo = formatter.parseDateTime(timestampTo)
-				.getMillis();
+		long milisSinceEpocTo = Commons.ISO8601toMilis(timestampTo);
 
 		// Return a map
 		return ((TreeMap<Long, Object>) this._timeseries)
@@ -181,12 +168,8 @@ public class VariableTimeseries {
 	 */
 	public Map<Long, Object> getRangeFrom(String timestampFrom) {
 
-		// Pick up a ISO8601 formatter
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocFrom = formatter.parseDateTime(timestampFrom)
-				.getMillis();
+		long milisSinceEpocFrom = Commons.ISO8601toMilis(timestampFrom);
 
 		// Get the last key in the series of timestamps
 		long lastKey = ((TreeMap<Long, Object>) this._timeseries).lastKey();
@@ -205,13 +188,9 @@ public class VariableTimeseries {
 	 */
 	public Map<Long, Object> getRangeTo(String timestampTo) {
 
-		// Pick up a ISO8601 formatter
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocTo = formatter.parseDateTime(timestampTo)
-				.getMillis();
-
+		long milisSinceEpocTo = Commons.ISO8601toMilis(timestampTo);
+	
 		// Get the first key in the series of timestamps
 		long firstKey = ((TreeMap<Long, Object>) this._timeseries).firstKey();
 
@@ -276,11 +255,6 @@ public class VariableTimeseries {
 
 		ArrayList<Long> timestampsSinceEpoc = new ArrayList<>();
 
-		// Pick up a ISO date time formatter
-		// the .dateTime() means that it should be in the 
-		// ISO8601 format of YYYY-MM-DDTHH:MM:SS.SSS+Z
-		DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-		
 		// Go through all the timestamps
 		for (int i=0; i<timestamps.size(); i++) {
 			
@@ -289,8 +263,7 @@ public class VariableTimeseries {
 			
 			// Convert the timestamp to a UNIX time representation,
 			// getting the no. of miliseconds elapsed since EPOC
-			long milisSinceEpoc = formatter.parseDateTime(timestampISO8601)
-					.getMillis();
+			long milisSinceEpoc = Commons.ISO8601toMilis(timestampISO8601);
 			
 			timestampsSinceEpoc.add(milisSinceEpoc);
 		}
