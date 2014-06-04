@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import com.pcache.DO.timeseries.VariableTimeseries;
-import com.pcache.engines.VariableTimeseriesEngine;
+import com.pcache.engines.VariableTimeseriesEngineOld;
 import com.pcache.exceptions.PCacheException;
 
 public class TestBed {
@@ -77,7 +77,7 @@ public class TestBed {
         for (int i=startId;i<endId;i++) {
         	
 			String namespace = namespacePrefix + i;
-			VariableTimeseriesEngine.addNewNamespace(namespace);
+			VariableTimeseriesEngineOld.addNewNamespace(namespace);
         }
         end = System.currentTimeMillis();
         System.out.println(String.format("%s Ns' created in %sms", noOfNsSSi, (end-start)));
@@ -91,7 +91,7 @@ public class TestBed {
         	String structureId = String.format("ns_%s_s_%s", nsId, i);
         	String structureDefinition = structDefs.get(i);
 
-            VariableTimeseriesEngine.addNewStructure(namespace, structureId, structureDefinition);
+            VariableTimeseriesEngineOld.addNewStructure(namespace, structureId, structureDefinition);
         }
         end = System.currentTimeMillis();
         System.out.println(String.format("%s S' created under 1 namespace in in %sms", noOfNsSSi, (end-start)));
@@ -114,7 +114,7 @@ public class TestBed {
 
             totalMakeTsTime += (makeTsEnd - makeTsStart);
 
-            VariableTimeseriesEngine.addNewStructureInstance(namespace, structureId, structureInstanceId, ts);
+            VariableTimeseriesEngineOld.addNewStructureInstance(namespace, structureId, structureInstanceId, ts);
         }
         end = System.currentTimeMillis();
         end = end - totalMakeTsTime;
@@ -146,7 +146,7 @@ public class TestBed {
 			
 			String namespace = namespacePrefix + i;
 
-			VariableTimeseriesEngine.addNewNamespace(namespace);
+			VariableTimeseriesEngineOld.addNewNamespace(namespace);
 
 //			System.out.println(namespace);
 
@@ -155,7 +155,7 @@ public class TestBed {
 				String structureId = namespace + structurePrefix + j;
 				String structureDefinition = structDefs.get(j);
 
-				VariableTimeseriesEngine.addNewStructure(namespace, structureId, structureDefinition);
+				VariableTimeseriesEngineOld.addNewStructure(namespace, structureId, structureDefinition);
 
 //				System.out.println("  "+structureId + ":" + structureDefinition);
 
@@ -171,7 +171,7 @@ public class TestBed {
 
 					totalMakeTsTime += (endMakeTs - startMakeTs);
 
-					VariableTimeseriesEngine.addNewStructureInstance(namespace, structureId, structureInstanceId, ts);
+					VariableTimeseriesEngineOld.addNewStructureInstance(namespace, structureId, structureInstanceId, ts);
 
 //					System.out.println("    " + structureInstanceId + ":" + noOfPointsInTs + "["+(System.currentTimeMillis() - start)+"ms]");
 				}
@@ -191,7 +191,7 @@ public class TestBed {
 
 		System.out.println("Fetching... ["+nsToGet + " " + sToGet + " " + siToGet+"]");
 		start = System.currentTimeMillis();
-		VariableTimeseries tsGot = VariableTimeseriesEngine.getTimeseries(nsToGet, sToGet, siToGet);
+		VariableTimeseries tsGot = VariableTimeseriesEngineOld.getTimeseries(nsToGet, sToGet, siToGet);
 		System.out.println("Done. Took " + (System.currentTimeMillis() - start) + "ms");	
 	}
 
