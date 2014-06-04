@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 import com.pcache.exceptions.PCacheException;
 import com.pcache.utils.Commons;
 
@@ -39,7 +36,7 @@ public class VariableTimeseries {
 	 * @return true/false based on its existance
 	 */
 	public boolean contains(String timestamp) {
-		
+
 		// Convert the timestamp to a UNIX time representation,
 		// getting the no. of miliseconds elapsed since EPOC
 		long milisSinceEpoc  = Commons.ISO8601toMilis(timestamp);
@@ -59,25 +56,40 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if there is no one to one correlation 
 	 * 			between the timestamps and the data points
 	 */
-	private void addOrUpdatePoints(ArrayList<String> timestamps, 
-			ArrayList<Object> dataPoints) throws PCacheException{
+	private void addOrUpdatePoints(List<String> timestamps, 
+			List<Object> dataPoints) throws PCacheException{
 
-		
-		// Go through all the timestamps
-		for (int i=0; i<timestamps.size(); i++) {
-			
-			// Pick up the timestamp and the data point
-			String timestampISO8601 = timestamps.get(i);
-			Object dataPoint = dataPoints.get(i);
-			
-			// Convert the timestamp to a UNIX time representation,
-			// getting the no. of miliseconds elapsed since EPOC
-			long milisSinceEpoc = Commons.ISO8601toMilis(timestampISO8601);
-			
-			// Add or update the timestamp, datapoint
-			// Put does updates also. so 2 birds, one stone!
-			_timeseries.put(milisSinceEpoc, dataPoint);
-			
+		try {
+
+			// Sanity checks
+			exceptIfLengthUnequal(timestamps, dataPoints);
+
+			// Go through all the timestamps
+			for (int i=0; i<timestamps.size(); i++) {
+
+				// Pick up the timestamp and the data point
+				String timestampISO8601 = timestamps.get(i);
+				Object dataPoint = dataPoints.get(i);
+
+				// Convert the timestamp to a UNIX time representation,
+				// getting the no. of miliseconds elapsed since EPOC
+				long milisSinceEpoc = Commons.ISO8601toMilis(timestampISO8601);
+
+				// Add or update the timestamp, datapoint
+				// Put does updates also. so 2 birds, one stone!
+				_timeseries.put(milisSinceEpoc, dataPoint);
+
+			}
+		}
+
+		catch (NullPointerException ex) {
+			throw new PCacheException("Timestamps and dataPoints should not be " +
+					"null", ex);
+		}
+
+		catch (IllegalArgumentException ex) {
+			throw new PCacheException("One or more of the timestamps isn't in " +
+					"ISO8601 format", ex);
 		}
 
 	}
@@ -89,13 +101,13 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if timeseries isn't associated to the
 	 * 			datapoints or if the points already exist in the timeseries
 	 */
-	public void addPoints(ArrayList<String> timestamps,
-			ArrayList<Object> dataPoints) throws PCacheException {
-		
+	public void addPoints(List<String> timestamps,
+			List<Object> dataPoints) throws PCacheException {
+
 		// Sanity checks
 		exceptIfLengthUnequal(timestamps, dataPoints);
 		exceptIfPointsExist(timestamps);
-		
+
 		// Call the core procedure to add points into the timeseries
 		addOrUpdatePoints(timestamps, dataPoints);
 	}
@@ -107,13 +119,13 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if timeseries isn't associated to the
 	 * 			datapoints or if the points don't exist in the timeseries
 	 */
-	public void updatePoints(ArrayList<String> timestamps,
-			ArrayList<Object> dataPoints) throws PCacheException {
+	public void updatePoints(List<String> timestamps,
+			List<Object> dataPoints) throws PCacheException {
 
 		// Sanity checks
 		exceptIfLengthUnequal(timestamps, dataPoints);
 		exceptIfNoPointsExist(timestamps);
-		
+
 		// Call the core procedure to update points in the timeseries
 		addOrUpdatePoints(timestamps, dataPoints);
 	}
@@ -124,7 +136,7 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if one or more points specified to be 
 	 * 			deleted, doesn't exist
 	 */
-	public void removePoints(ArrayList<String> timestamps) 
+	public void removePoints(List<String> timestamps) 
 			throws PCacheException {
 
 		// Sanity Checks
@@ -135,9 +147,9 @@ public class VariableTimeseries {
 		for (long timestamp : timestampsSinceEpoc) {
 			this._timeseries.remove(timestamp);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Get the set of points between 2 given timeseries'
 	 * @param timestampFrom the ISO8601 timestamp representing the from
@@ -147,7 +159,7 @@ public class VariableTimeseries {
 	 */
 	public Map<Long, Object> getRangeBetween(String timestampFrom, 
 			String timestampTo) {
-		
+
 		// Convert from timestamp to miliseconds since EPOC
 		long milisSinceEpocFrom = Commons.ISO8601toMilis(timestampFrom);
 
@@ -177,7 +189,7 @@ public class VariableTimeseries {
 		// Return a map
 		return ((TreeMap<Long, Object>) this._timeseries)
 				.subMap(milisSinceEpocFrom, true, lastKey, true);
-		
+
 	}
 
 	/**
@@ -190,14 +202,14 @@ public class VariableTimeseries {
 
 		// Convert from timestamp to miliseconds since EPOC
 		long milisSinceEpocTo = Commons.ISO8601toMilis(timestampTo);
-	
+
 		// Get the first key in the series of timestamps
 		long firstKey = ((TreeMap<Long, Object>) this._timeseries).firstKey();
 
 		// Return a map
 		return ((TreeMap<Long, Object>) this._timeseries)
 				.subMap(firstKey, true, milisSinceEpocTo, true);
-		
+
 	}
 
 	/**
@@ -207,7 +219,7 @@ public class VariableTimeseries {
 	public Map<Long, Object> getAll() {
 		return this._timeseries;
 	}
-	
+
 	/**
 	 * Constructor. Initialize a time series. 
 	 * @param timestamps an array of ISO8601 timestamps. The timestamps are to 
@@ -218,14 +230,14 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if the no. of timestamps do not match
 	 * 			the no. of data points
 	 */
-	public VariableTimeseries (ArrayList<String> timestamps, 
-			ArrayList<Object> dataPoints) throws PCacheException {
-		
+	public VariableTimeseries (List<String> timestamps, 
+			List<Object> dataPoints) throws PCacheException {
+
 		// Declare a new tree map
 		_timeseries = new TreeMap<Long, Object>();
 
 		addOrUpdatePoints(timestamps, dataPoints);
-		
+
 	}
 
 	/**
@@ -235,9 +247,9 @@ public class VariableTimeseries {
 	 * @param dataPoints the associated set of data points
 	 * @throws PCacheException thrown if the length of both are unequal
 	 */
-	private void exceptIfLengthUnequal(ArrayList<String> timestamps,
-			ArrayList<Object> dataPoints) throws PCacheException {
-		
+	private void exceptIfLengthUnequal(List<String> timestamps,
+			List<Object> dataPoints) throws PCacheException {
+
 		if (timestamps.size() != dataPoints.size()) {
 			throw new PCacheException("Sizes don't match. The number of data " +
 					"points should equal the number of timestamps");
@@ -251,25 +263,25 @@ public class VariableTimeseries {
 	 * @return a list of timestamps in miliseconds since EPOC format
 	 */
 	private List<Long> convertToUnixTimeMiliseconds(
-			ArrayList<String> timestamps) {
+			List<String> timestamps) {
 
-		ArrayList<Long> timestampsSinceEpoc = new ArrayList<>();
+		List<Long> timestampsSinceEpoc = new ArrayList<>();
 
 		// Go through all the timestamps
 		for (int i=0; i<timestamps.size(); i++) {
-			
+
 			// Pick up the timestamp 
 			String timestampISO8601 = timestamps.get(i);
-			
+
 			// Convert the timestamp to a UNIX time representation,
 			// getting the no. of miliseconds elapsed since EPOC
 			long milisSinceEpoc = Commons.ISO8601toMilis(timestampISO8601);
-			
+
 			timestampsSinceEpoc.add(milisSinceEpoc);
 		}
-		
+
 		return timestampsSinceEpoc;
-		
+
 	}
 
 
@@ -279,16 +291,16 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if the set of points already exist in the
 	 * 			cache
 	 */
-	private void exceptIfPointsExist(ArrayList<String> timestamps) 
+	private void exceptIfPointsExist(List<String> timestamps) 
 			throws PCacheException {
 
 		// Get the EPOC representations
 		List<Long> timestampsInMilis = 
 				convertToUnixTimeMiliseconds(timestamps);
-		
+
 		// Go through the timestamps
 		for (long timestamp : timestampsInMilis) {
-			
+
 			// If timeseries already contains it, except
 			if (this._timeseries.containsKey(timestamp)) {
 				throw new PCacheException("Some point(s) already exist in the "
@@ -305,16 +317,16 @@ public class VariableTimeseries {
 	 * @throws PCacheException thrown if the set of points don't exist in the
 	 * 			cache
 	 */
-	private void exceptIfNoPointsExist(ArrayList<String> timestamps) 
+	private void exceptIfNoPointsExist(List<String> timestamps) 
 			throws PCacheException {
 
 		// Get the EPOC representations
 		List<Long> timestampsInMilis = 
 				convertToUnixTimeMiliseconds(timestamps);
-		
+
 		// Go through the timestamps
 		for (long timestamp : timestampsInMilis) {
-			
+
 			// If the timeseries doesn't contain it, except
 			if (!this._timeseries.containsKey(timestamp)) {
 				throw new PCacheException("Some point(s) don't exist in the "
