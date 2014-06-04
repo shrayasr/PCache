@@ -100,5 +100,127 @@ public class VariableTimeseriesEngineTests
 		
 		assertEquals(id1+1, id2);
 	}
-
+	
+	@Test (expected=PCacheException.class)
+	public void test_addPoints_unequal() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToAdd = new ArrayList<String>() {{
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			add(3);
+			add(1);
+			add(2);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		VariableTimeseriesEngine.addPoints(id, timestampsToAdd, dataPointsToAdd);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_addPoints_nulls() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToAdd = null;
+		List<Object> dataPointsToAdd = null;
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		VariableTimeseriesEngine.addPoints(id, timestampsToAdd, dataPointsToAdd);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_addPoints_invalidTimestamp() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToAdd = new ArrayList<String>() {{
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2asdf010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int beforeAdd = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.addPoints(id, timestampsToAdd, dataPointsToAdd);
+		int afterAdd = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(beforeAdd+5, afterAdd);
+		
+	}
+	
+	@Test
+	public void test_addPoints_ok() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToAdd = new ArrayList<String>() {{
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int beforeAdd = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.addPoints(id, timestampsToAdd, dataPointsToAdd);
+		int afterAdd = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(beforeAdd+5, afterAdd);
+		
+	}
 }

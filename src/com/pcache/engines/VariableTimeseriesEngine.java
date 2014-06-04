@@ -1,6 +1,5 @@
 package com.pcache.engines;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class VariableTimeseriesEngine
 	}
 	
 	public static void addPoints(long id, 
-			ArrayList<String> timestamps, ArrayList<Object> dataPoints) 
+			List<String> timestamps, List<Object> dataPoints) 
 					throws PCacheException {
 		
 		_idVarTsMap.get(id).addPoints(timestamps, dataPoints);
@@ -39,14 +38,14 @@ public class VariableTimeseriesEngine
 	}
 	
 	public static void modifyPoints(long id,
-			ArrayList<String> timestampsToModify, ArrayList<Object> newDataPoints) 
+			List<String> timestampsToModify, List<Object> newDataPoints) 
 					throws PCacheException {
 		
 		_idVarTsMap.get(id).updatePoints(timestampsToModify, newDataPoints);
 		
 	}
 	
-	public static void removePoints(long id, ArrayList<String> timestampsToRemove) 
+	public static void removePoints(long id, List<String> timestampsToRemove) 
 			throws PCacheException {
 		
 		_idVarTsMap.get(id).removePoints(timestampsToRemove);
@@ -62,5 +61,9 @@ public class VariableTimeseriesEngine
 	
 	public static Map<Long, Object> getTo(long id, String timestampTo) {
 		return _idVarTsMap.get(id).getRangeTo(timestampTo);
+	}
+	
+	public static int size(long id) {
+		return _idVarTsMap.get(id).size();
 	}
 }
