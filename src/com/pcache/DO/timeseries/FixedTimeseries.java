@@ -82,8 +82,8 @@ public class FixedTimeseries<T>
 		String endingTimestamp = timestamps.get(timestamps.size()-1);
 		
 		// Convert them to Milis
-		long startingTimestampMilis = Commons.ISO8601toMilis(startingTimestamp);
-		long endingTimestampMilis = Commons.ISO8601toMilis(endingTimestamp);
+		long startingTimestampMilis = Commons.convertISO8601toMilis(startingTimestamp);
+		long endingTimestampMilis = Commons.convertISO8601toMilis(endingTimestamp);
 		
 		// Declare a new arraylist for holding data points and timestamps
 		this._dataPoints = new ArrayList<>();
@@ -117,7 +117,7 @@ public class FixedTimeseries<T>
 			T dataPoint = dataPoints.get(i);
 			
 			// Get the timestamps representation in milis
-			long timestampInMilis = Commons.ISO8601toMilis(timestamp);
+			long timestampInMilis = Commons.convertISO8601toMilis(timestamp);
 			
 			// Get the index of that timestamp
 			int index = Commons.getOffset(timestampInMilis, 
@@ -169,7 +169,7 @@ public class FixedTimeseries<T>
 		
 		// Get the first timestamp in what needs to be added
 		String startingTimestamp = timestamps.get(0);
-		long startingTimestampMilis = Commons.ISO8601toMilis(startingTimestamp);
+		long startingTimestampMilis = Commons.convertISO8601toMilis(startingTimestamp);
 		
 		// what needs to be added should be greater than what exists
 		if (startingTimestampMilis < seriesEndingTimestampMilis) {
@@ -181,7 +181,7 @@ public class FixedTimeseries<T>
 		
 		// Get the last timestamp of what needs to be added
 		String endingTimestamp = timestamps.get(timestamps.size()-1);
-		long endingTimestampMilis = Commons.ISO8601toMilis(endingTimestamp);
+		long endingTimestampMilis = Commons.convertISO8601toMilis(endingTimestamp);
 		
 		// Fill with nulls and then fill points
 		_fillNULLs(startingTimestampMilis, endingTimestampMilis, this._null);
@@ -201,7 +201,7 @@ public class FixedTimeseries<T>
 		
 		// Get the timestamp of where the series needs to be truncated till 
 		// in miliseconds
-		long toMilis = Commons.ISO8601toMilis(toTimestamp);
+		long toMilis = Commons.convertISO8601toMilis(toTimestamp);
 		
 		/*
 		 * Calculate the offset. 
@@ -261,7 +261,7 @@ public class FixedTimeseries<T>
 		
 		// Get the timestamp of where the series needs to be truncated from 
 		// in miliseconds
-		long fromMilis = Commons.ISO8601toMilis(fromTimestamp);
+		long fromMilis = Commons.convertISO8601toMilis(fromTimestamp);
 		
 		/*
 		 * Calculate the offset. 
@@ -318,7 +318,7 @@ public class FixedTimeseries<T>
 		
 		// All dat timestamp conversion shizbomb
 		// Get the timestamp to modify the value of in miliseconds
-		long timestampToModifyInMilis = Commons.ISO8601toMilis(timestampToModify);
+		long timestampToModifyInMilis = Commons.convertISO8601toMilis(timestampToModify);
 		
 		// Get its offset
 		int offset = Commons.getOffset(timestampToModifyInMilis, 

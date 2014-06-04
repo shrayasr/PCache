@@ -1,5 +1,7 @@
 package com.pcache.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,11 +13,39 @@ import com.pcache.exceptions.PCacheException;
 public class Commons
 {
 
-	public static long ISO8601toMilis(String timestamp) 
+	public static long convertISO8601toMilis(String timestamp) 
 			throws IllegalArgumentException {
 		
 		DateTimeFormatter ISO8601Formatter = ISODateTimeFormat.dateTime();
 		return ISO8601Formatter.parseDateTime(timestamp).getMillis();
+	}
+	
+	/**
+	 * Convert the given timestamps to UNIX time representation (in miliseconds)
+	 * @param timestamps the set of timestamps to convert
+	 * @return a list of timestamps in miliseconds since EPOC format
+	 */
+	public static List<Long> convertISO8601toMilis(
+			List<String> timestamps) {
+
+		List<Long> timestampsSinceEpoc = new ArrayList<>();
+
+		// Go through all the timestamps
+		for (int i=0; i<timestamps.size(); i++) {
+
+			// Pick up the timestamp 
+			String timestampISO8601 = timestamps.get(i);
+
+			// Convert the timestamp to a UNIX time representation,
+			// getting the no. of miliseconds elapsed since EPOC
+			long milisSinceEpoc = Commons.convertISO8601toMilis(
+					timestampISO8601);
+
+			timestampsSinceEpoc.add(milisSinceEpoc);
+		}
+
+		return timestampsSinceEpoc;
+
 	}
 	
 	/**

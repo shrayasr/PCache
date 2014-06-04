@@ -39,7 +39,7 @@ public class VariableTimeseries {
 
 		// Convert the timestamp to a UNIX time representation,
 		// getting the no. of miliseconds elapsed since EPOC
-		long milisSinceEpoc  = Commons.ISO8601toMilis(timestamp);
+		long milisSinceEpoc  = Commons.convertISO8601toMilis(timestamp);
 
 		return this._timeseries.containsKey(milisSinceEpoc);
 	}
@@ -73,7 +73,7 @@ public class VariableTimeseries {
 
 				// Convert the timestamp to a UNIX time representation,
 				// getting the no. of miliseconds elapsed since EPOC
-				long milisSinceEpoc = Commons.ISO8601toMilis(timestampISO8601);
+				long milisSinceEpoc = Commons.convertISO8601toMilis(timestampISO8601);
 
 				// Add or update the timestamp, datapoint
 				// Put does updates also. so 2 birds, one stone!
@@ -142,7 +142,8 @@ public class VariableTimeseries {
 		// Sanity Checks
 		exceptIfNoPointsExist(timestamps);
 
-		List<Long> timestampsSinceEpoc = convertToUnixTimeMiliseconds(timestamps);
+		List<Long> timestampsSinceEpoc = 
+				Commons.convertISO8601toMilis(timestamps);
 
 		for (long timestamp : timestampsSinceEpoc) {
 			this._timeseries.remove(timestamp);
@@ -161,10 +162,10 @@ public class VariableTimeseries {
 			String timestampTo) {
 
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocFrom = Commons.ISO8601toMilis(timestampFrom);
+		long milisSinceEpocFrom = Commons.convertISO8601toMilis(timestampFrom);
 
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocTo = Commons.ISO8601toMilis(timestampTo);
+		long milisSinceEpocTo = Commons.convertISO8601toMilis(timestampTo);
 
 		// Return a map
 		return ((TreeMap<Long, Object>) this._timeseries)
@@ -181,7 +182,7 @@ public class VariableTimeseries {
 	public Map<Long, Object> getRangeFrom(String timestampFrom) {
 
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocFrom = Commons.ISO8601toMilis(timestampFrom);
+		long milisSinceEpocFrom = Commons.convertISO8601toMilis(timestampFrom);
 
 		// Get the last key in the series of timestamps
 		long lastKey = ((TreeMap<Long, Object>) this._timeseries).lastKey();
@@ -201,7 +202,7 @@ public class VariableTimeseries {
 	public Map<Long, Object> getRangeTo(String timestampTo) {
 
 		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocTo = Commons.ISO8601toMilis(timestampTo);
+		long milisSinceEpocTo = Commons.convertISO8601toMilis(timestampTo);
 
 		// Get the first key in the series of timestamps
 		long firstKey = ((TreeMap<Long, Object>) this._timeseries).firstKey();
