@@ -11,7 +11,8 @@ import com.pcache.exceptions.PCacheException;
 public class Commons
 {
 
-	public static long ISO8601toMilis(String timestamp) {
+	public static long ISO8601toMilis(String timestamp) 
+			throws IllegalArgumentException {
 		
 		DateTimeFormatter ISO8601Formatter = ISODateTimeFormat.dateTime();
 		return ISO8601Formatter.parseDateTime(timestamp).getMillis();
