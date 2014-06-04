@@ -13,81 +13,81 @@ import org.junit.Test;
 
 import com.pcache.DO.Node;
 import com.pcache.DO.timeseries.VariableTimeseries;
-import com.pcache.engines.VariableTimeseriesEngine;
+import com.pcache.engines.VariableTimeseriesEngineOld;
 import com.pcache.exceptions.PCacheException;
 
-public class CacheEngineTest
+public class VariableTimeseriesEngineOldTests
 {
 
 	@Before
 	public void setUp() throws Exception
 	{
-		VariableTimeseriesEngine.reInitializeCache();
+		VariableTimeseriesEngineOld.reInitializeCache();
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewNamespace_nsInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("asdf!@#$");
+		VariableTimeseriesEngineOld.addNewNamespace("asdf!@#$");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testAddNewNamespace_nsExists() throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
 	}
 	
 	@Test 
 	public void testAddNewNamespace_ok() throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameNamespace_oldNsInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.renameNamespace("foo@", "bar");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.renameNamespace("foo@", "bar");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testRenameNamespace_oldNsNoExist() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.renameNamespace("bar", "baz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.renameNamespace("bar", "baz");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testRenameNamespace_newNsInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.renameNamespace("foo", "bar@");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.renameNamespace("foo", "bar@");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testRenameNamespace_newNsExist() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewNamespace("bar");
-		VariableTimeseriesEngine.renameNamespace("foo", "bar");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("bar");
+		VariableTimeseriesEngineOld.renameNamespace("foo", "bar");
 	}
 	
 	@Test 
 	public void testRenameNamespace_ok() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.renameNamespace("foo", "bar");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.renameNamespace("foo", "bar");
 	}
 
 	@Test
 	public void testGetNamespaces_ok() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewNamespace("bar");
-		VariableTimeseriesEngine.addNewNamespace("baz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("bar");
+		VariableTimeseriesEngineOld.addNewNamespace("baz");
 
-		List<Node> namespaces = new ArrayList<Node>(VariableTimeseriesEngine.getNamespaces());
+		List<Node> namespaces = new ArrayList<Node>(VariableTimeseriesEngineOld.getNamespaces());
 
 		assertEquals(3, namespaces.size());
 	}
@@ -95,36 +95,36 @@ public class CacheEngineTest
 	@Test (expected=PCacheException.class)
 	public void testRemoveNamespace_nsInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewNamespace("bar");
-		VariableTimeseriesEngine.addNewNamespace("baz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("bar");
+		VariableTimeseriesEngineOld.addNewNamespace("baz");
 
-		VariableTimeseriesEngine.removeNamespace("foo!");
+		VariableTimeseriesEngineOld.removeNamespace("foo!");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRemoveNamespace_nsNoExist() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewNamespace("bar");
-		VariableTimeseriesEngine.addNewNamespace("baz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("bar");
+		VariableTimeseriesEngineOld.addNewNamespace("baz");
 
-		VariableTimeseriesEngine.removeNamespace("fooz");
+		VariableTimeseriesEngineOld.removeNamespace("fooz");
 	}
 
 	@Test 
 	public void testRemoveNamespace_ok() throws PCacheException
 	{
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewNamespace("bar");
-		VariableTimeseriesEngine.addNewNamespace("baz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewNamespace("bar");
+		VariableTimeseriesEngineOld.addNewNamespace("baz");
 
-		int noOfNamespaceBeforeDelete = VariableTimeseriesEngine.getNamespaces().size();
+		int noOfNamespaceBeforeDelete = VariableTimeseriesEngineOld.getNamespaces().size();
 
-		VariableTimeseriesEngine.removeNamespace("foo");
+		VariableTimeseriesEngineOld.removeNamespace("foo");
 
-		int noOfNamespaceAfterDelete = VariableTimeseriesEngine.getNamespaces().size();
+		int noOfNamespaceAfterDelete = VariableTimeseriesEngineOld.getNamespaces().size();
 
 		assertEquals(noOfNamespaceBeforeDelete-1, noOfNamespaceAfterDelete);
 	}
@@ -132,126 +132,126 @@ public class CacheEngineTest
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructure_nsInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo!", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo!", "bar", "baz,boo");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructure_nsNoExists() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo_nope", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo_nope", "bar", "baz,boo");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructure_structInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar!", "baz,boo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar!", "baz,boo");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructure_structExists() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "qwer,asdf");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "qwer,asdf");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructure_structDefnInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "!!baz,boo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "!!baz,boo");
 	}
 	
 	@Test 
 	public void testAddNewStructure_ok() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameStructure_nsInvalid() throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.renameStructure("foo!", "bar", "barz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.renameStructure("foo!", "bar", "barz");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameStructure_nsNoExists() throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.renameStructure("fooz", "bar", "barz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.renameStructure("fooz", "bar", "barz");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameStructure_oldStructInvalid() 
 			throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.renameStructure("foo", "bar!", "barz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.renameStructure("foo", "bar!", "barz");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameStructure_oldStructNoExists() 
 			throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.renameStructure("foo", "barz", "barzz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.renameStructure("foo", "barz", "barzz");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameStructure_newStructInvalid() 
 			throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.renameStructure("foo", "bar", "bar!");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.renameStructure("foo", "bar", "bar!");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRenameStructure_newStructExists() 
 			throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructure("foo", "baz", "foo,bar");
-		VariableTimeseriesEngine.renameStructure("foo", "bar", "baz");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "baz", "foo,bar");
+		VariableTimeseriesEngineOld.renameStructure("foo", "bar", "baz");
 	}
 
 	@Test(expected=PCacheException.class)
 	public void testGetStructuresUnderNamespace_nsInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.getStructures("foo!");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.getStructures("foo!");
 	}
 
 	@Test(expected=PCacheException.class)
 	public void testGetStructuresUnderNamespace_nsNoExist() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.getStructures("bar");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.getStructures("bar");
 	}
 
 	@Test
 	public void testGetStructuresUnderNamespace_ok() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "foo1", "a,b");
-		VariableTimeseriesEngine.addNewStructure("foo", "foo2", "c,d");
-		VariableTimeseriesEngine.addNewStructure("foo", "foo3", "e,f");
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "foo1", "a,b");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "foo2", "c,d");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "foo3", "e,f");
 
-		List<Node> structures = new ArrayList<Node>(VariableTimeseriesEngine
+		List<Node> structures = new ArrayList<Node>(VariableTimeseriesEngineOld
 				.getStructures("foo"));
 
 		assertEquals(3, structures.size());
@@ -260,55 +260,55 @@ public class CacheEngineTest
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructure_nsInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 
-		VariableTimeseriesEngine.removeStructure("foo!", "bar");
+		VariableTimeseriesEngineOld.removeStructure("foo!", "bar");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructure_nsNoExists() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 
-		VariableTimeseriesEngine.removeStructure("fooz", "bar");
+		VariableTimeseriesEngineOld.removeStructure("fooz", "bar");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructure_structInvalid() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 
-		VariableTimeseriesEngine.removeStructure("foo", "bar!");
+		VariableTimeseriesEngineOld.removeStructure("foo", "bar!");
 	}
 	
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructure_structNoExists() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 
-		VariableTimeseriesEngine.removeStructure("foo", "barz");
+		VariableTimeseriesEngineOld.removeStructure("foo", "barz");
 	}
 
 	@Test 
 	public void testRemoveStructure_ok() throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 
-		int noStructsBeforeDelete = VariableTimeseriesEngine.getStructures("foo").size();
+		int noStructsBeforeDelete = VariableTimeseriesEngineOld.getStructures("foo").size();
 
-		VariableTimeseriesEngine.removeStructure("foo", "bar");
+		VariableTimeseriesEngineOld.removeStructure("foo", "bar");
 
-		int noStructsAfterDelete = VariableTimeseriesEngine.getStructures("foo").size();
+		int noStructsAfterDelete = VariableTimeseriesEngineOld.getStructures("foo").size();
 
 		assertEquals(noStructsBeforeDelete-1, noStructsAfterDelete);
 	}
@@ -317,64 +317,64 @@ public class CacheEngineTest
 	public void testAddNewStructureInstance_nsInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo!", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo!", "bar", "baz=1,boo=2",null);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_nsNoExist() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_structIdInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_structIdNoExist() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_structInstIdInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo!=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo!=2",null);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_structInstIdExist() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testAddNewStructureInstance_structInstanceIdNoMatch() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,bo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,bo=2",null);
 	}
 
 	@Test 
@@ -410,66 +410,66 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2",ts);
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testGetInstancesUnderStructure_nsInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
 		
-		VariableTimeseriesEngine.getStructureInstances("foo!", "bar");
+		VariableTimeseriesEngineOld.getStructureInstances("foo!", "bar");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testGetInstancesUnderStructure_nsNoExist() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("fooz", "bar", "baz=1,boo=2",null);
 
-		VariableTimeseriesEngine.getStructureInstances("fooz", "bar");
+		VariableTimeseriesEngineOld.getStructureInstances("fooz", "bar");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testGetInstancesUnderStructure_structIdInvalid() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar!", "baz=1,boo=2",null);
 
-		VariableTimeseriesEngine.getStructureInstances("foo", "bar!");
+		VariableTimeseriesEngineOld.getStructureInstances("foo", "bar!");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testGetInstancesUnderStructure_structIdNoExist() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "barr", "baz=1,boo=2",null);
 
-		VariableTimeseriesEngine.getStructureInstances("foo", "bara");
+		VariableTimeseriesEngineOld.getStructureInstances("foo", "bara");
 	}
 
 	@Test 
 	public void testGetInstancesUnderStructure_ok() 
 			throws PCacheException
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2",null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=3,boo=2",null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2",null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2",null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=3,boo=2",null);
 
-		List<Node> structInstances = new ArrayList<Node>(VariableTimeseriesEngine
+		List<Node> structInstances = new ArrayList<Node>(VariableTimeseriesEngineOld
 				.getStructureInstances("foo", "bar"));
 
 		assertEquals(3, structInstances.size());
@@ -479,87 +479,87 @@ public class CacheEngineTest
 	public void testRemoveStructureInstance_nsInvalid() 
 			throws PCacheException 
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 
-		VariableTimeseriesEngine.removeStructureInstance("foo!", "bar", "baz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("foo!", "bar", "baz=1,boo=2");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructureInstance_nsNoExist() throws PCacheException  
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 
-		VariableTimeseriesEngine.removeStructureInstance("fooz", "bar", "baz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("fooz", "bar", "baz=1,boo=2");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructureInstance_structInvalid() 
 			throws PCacheException  
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 		
-		VariableTimeseriesEngine.removeStructureInstance("foo", "bar!", "baz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("foo", "bar!", "baz=1,boo=2");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructureInstance_structNoExist() 
 			throws PCacheException  
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 		
-		VariableTimeseriesEngine.removeStructureInstance("foo", "barz", "baz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("foo", "barz", "baz=1,boo=2");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructureInstance_structInstanceInvalid() 
 			throws PCacheException  
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 		
-		VariableTimeseriesEngine.removeStructureInstance("foo", "bar", "!baz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("foo", "bar", "!baz=1,boo=2");
 	}
 
 	@Test (expected=PCacheException.class)
 	public void testRemoveStructureInstance_structInstanceNoExist() 
 			throws PCacheException  
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 		
-		VariableTimeseriesEngine.removeStructureInstance("foo", "bar", "bazz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("foo", "bar", "bazz=1,boo=2");
 	}
 
 	@Test 
 	public void testRemoveStructureInstance_ok() throws PCacheException  
 	{
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=2,boo=2", null);
 		
-		int noOfInstancesBeforeDel = VariableTimeseriesEngine
+		int noOfInstancesBeforeDel = VariableTimeseriesEngineOld
 				.getStructureInstances("foo", "bar").size();
 
-		VariableTimeseriesEngine.removeStructureInstance("foo", "bar", "baz=1,boo=2");
+		VariableTimeseriesEngineOld.removeStructureInstance("foo", "bar", "baz=1,boo=2");
 
-		int noOfInstancesAfterDel = VariableTimeseriesEngine
+		int noOfInstancesAfterDel = VariableTimeseriesEngineOld
 				.getStructureInstances("foo", "bar").size();
 
 		assertEquals(noOfInstancesBeforeDel-1, noOfInstancesAfterDel);
@@ -599,9 +599,9 @@ public class CacheEngineTest
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -617,7 +617,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo!", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo!", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -655,9 +655,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -673,7 +673,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("fooz", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("fooz", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -712,9 +712,9 @@ public class CacheEngineTest
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -730,7 +730,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo", "bar!", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo", "bar!", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -769,9 +769,9 @@ public class CacheEngineTest
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -787,7 +787,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo", "barz", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo", "barz", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -826,9 +826,9 @@ public class CacheEngineTest
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -844,7 +844,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo", "bar", "!baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo", "bar", "!baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -883,9 +883,9 @@ public class CacheEngineTest
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -901,7 +901,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo", "bar", "baz=2,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo", "bar", "baz=2,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 	}
 
@@ -909,9 +909,9 @@ public class CacheEngineTest
 	public void testAddPointsToTimeseries_tsNull() throws PCacheException
 	{
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -927,7 +927,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -966,11 +966,11 @@ public class CacheEngineTest
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
 
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
-		int countBeforeAdd = VariableTimeseriesEngine.getTimeseries("foo", "bar", 
+		int countBeforeAdd = VariableTimeseriesEngineOld.getTimeseries("foo", "bar", 
 				"baz=1,boo=2").size();
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
@@ -987,10 +987,10 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.addPointsToTimeseries("foo", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.addPointsToTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
-		int countAfterAdd = VariableTimeseriesEngine.getTimeseries("foo", "bar", 
+		int countAfterAdd = VariableTimeseriesEngineOld.getTimeseries("foo", "bar", 
 				"baz=1,boo=2").size();
 
 		assertEquals(countBeforeAdd+2, countAfterAdd);
@@ -1029,9 +1029,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1047,7 +1047,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo!", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo!", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1085,9 +1085,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1103,7 +1103,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("fooz", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("fooz", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1141,9 +1141,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1159,7 +1159,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo", "bar!", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo", "bar!", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1197,9 +1197,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1215,7 +1215,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo", "barz", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo", "barz", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1253,9 +1253,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1271,7 +1271,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo", "bar", "!baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo", "bar", "!baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1309,9 +1309,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1327,7 +1327,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo", "bar", "baz=2,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo", "bar", "baz=2,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1337,9 +1337,9 @@ public class CacheEngineTest
 			throws PCacheException
 	{
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 		
 		ArrayList<String> timestampsToAdd = new ArrayList<String>() {{
 			
@@ -1355,7 +1355,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
 	}
@@ -1392,13 +1392,13 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		int downCountBeforeUpdate = 0;
 
-		Map<Long, Object> points = VariableTimeseriesEngine.getTimeseriesFrom("foo", "bar", 
+		Map<Long, Object> points = VariableTimeseriesEngineOld.getTimeseriesFrom("foo", "bar", 
 				"baz=1,boo=2", "2010-01-07T12:00:00.000+05:30");
 
 		for (Entry<Long, Object> entry : points.entrySet()) {
@@ -1419,10 +1419,10 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.updatePointsInTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToAdd, dataPointsToAdd);
 
-		points = VariableTimeseriesEngine.getTimeseriesFrom("foo", "bar", "baz=1,boo=2", 
+		points = VariableTimeseriesEngineOld.getTimeseriesFrom("foo", "bar", "baz=1,boo=2", 
 				"2010-01-07T12:00:00.000+05:30");
 
 		int downCountAfterUpdate = 0;
@@ -1468,9 +1468,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1488,7 +1488,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo!", "bar", "baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo!", "bar", "baz=1,boo=2", ts2);
 
 	}
 
@@ -1524,9 +1524,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1544,7 +1544,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("fooz", "bar", "baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("fooz", "bar", "baz=1,boo=2", ts2);
 
 	}
 
@@ -1581,9 +1581,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1601,7 +1601,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo", "bar!", "baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo", "bar!", "baz=1,boo=2", ts2);
 
 	}
 
@@ -1638,9 +1638,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1658,7 +1658,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo", "barz", "baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo", "barz", "baz=1,boo=2", ts2);
 
 	}
 
@@ -1695,9 +1695,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1715,7 +1715,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo", "bar", "!baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo", "bar", "!baz=1,boo=2", ts2);
 
 	}
 
@@ -1752,9 +1752,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1772,7 +1772,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo", "bar", "baz=2,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo", "bar", "baz=2,boo=2", ts2);
 
 	}
 
@@ -1780,9 +1780,9 @@ public class CacheEngineTest
 	public void testUpdateTimeseries_tsNull() throws PCacheException
 	{
 			
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", null);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1800,7 +1800,7 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo", "bar", "baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo", "bar", "baz=1,boo=2", ts2);
 
 	}
 
@@ -1837,9 +1837,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> newTimestamps = new ArrayList<String>() {{
 			
@@ -1857,9 +1857,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts2 = new VariableTimeseries(newTimestamps, newDataPoints);
 
-		VariableTimeseriesEngine.updateTimeseries("foo", "bar", "baz=1,boo=2", ts2);
+		VariableTimeseriesEngineOld.updateTimeseries("foo", "bar", "baz=1,boo=2", ts2);
 
-		int countAfterReplace = VariableTimeseriesEngine.getTimeseries("foo", "bar", 
+		int countAfterReplace = VariableTimeseriesEngineOld.getTimeseries("foo", "bar", 
 				"baz=1,boo=2").size();
 
 		assertEquals(2, countAfterReplace);
@@ -1899,9 +1899,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
 			
@@ -1910,7 +1910,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("foo!", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("foo!", "bar", "baz=1,boo=2", 
 				timestampsToRemove);
 	}
 
@@ -1947,9 +1947,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
 			
@@ -1958,7 +1958,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("fooz", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("fooz", "bar", "baz=1,boo=2", 
 				timestampsToRemove);
 	}
 
@@ -1995,9 +1995,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
 			
@@ -2006,7 +2006,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("foo", "bar!", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("foo", "bar!", "baz=1,boo=2", 
 				timestampsToRemove);
 	}
 
@@ -2043,9 +2043,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
 			
@@ -2054,7 +2054,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("foo", "barz", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("foo", "barz", "baz=1,boo=2", 
 				timestampsToRemove);
 	}
 
@@ -2091,9 +2091,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
 			
@@ -2102,7 +2102,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("foo", "bar", "!baz=1,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("foo", "bar", "!baz=1,boo=2", 
 				timestampsToRemove);
 	}
 
@@ -2139,9 +2139,9 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
 			
@@ -2150,7 +2150,7 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("foo", "bar", "baz=2,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("foo", "bar", "baz=2,boo=2", 
 				timestampsToRemove);
 	}
 
@@ -2186,11 +2186,11 @@ public class CacheEngineTest
 
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
 		
-		VariableTimeseriesEngine.addNewNamespace("foo");
-		VariableTimeseriesEngine.addNewStructure("foo", "bar", "baz,boo");
-		VariableTimeseriesEngine.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
+		VariableTimeseriesEngineOld.addNewNamespace("foo");
+		VariableTimeseriesEngineOld.addNewStructure("foo", "bar", "baz,boo");
+		VariableTimeseriesEngineOld.addNewStructureInstance("foo", "bar", "baz=1,boo=2", ts);
 
-		int countBeforeRemove = VariableTimeseriesEngine.getTimeseries("foo", "bar", 
+		int countBeforeRemove = VariableTimeseriesEngineOld.getTimeseries("foo", "bar", 
 				"baz=1,boo=2").size();
 
 		ArrayList<String> timestampsToRemove = new ArrayList<String>() {{
@@ -2200,10 +2200,10 @@ public class CacheEngineTest
 			
 		}};
 
-		VariableTimeseriesEngine.removePointsFromTimeseries("foo", "bar", "baz=1,boo=2", 
+		VariableTimeseriesEngineOld.removePointsFromTimeseries("foo", "bar", "baz=1,boo=2", 
 				timestampsToRemove);
 
-		int countAfterRemove = VariableTimeseriesEngine.getTimeseries("foo", "bar", 
+		int countAfterRemove = VariableTimeseriesEngineOld.getTimeseries("foo", "bar", 
 				"baz=1,boo=2").size();
 
 		assertEquals(countBeforeRemove-2, countAfterRemove);
