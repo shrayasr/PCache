@@ -402,4 +402,110 @@ public class VariableTimeseriesEngineTests
 		assertEquals(val, 2);
 		
 	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_removePoints_timeseriesNoExist() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+			add(4);
+		}};
+		
+		List<String> timestampsToRemove = new ArrayList<String>() {{
+			add("2010-01-03T12:00:00.000+05:30");
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int sizeBeforeRemove = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.removePoints(id, timestampsToRemove);
+		int sizeAfterRemove = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(sizeBeforeRemove-1, sizeAfterRemove);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_removePoints_invalidTimeseries() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+			add(4);
+		}};
+		
+		List<String> timestampsToRemove = new ArrayList<String>() {{
+			add("asdf2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int sizeBeforeRemove = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.removePoints(id, timestampsToRemove);
+		int sizeAfterRemove = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(sizeBeforeRemove-1, sizeAfterRemove);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_removePoints_nulls() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+			add(4);
+		}};
+		
+		List<String> timestampsToRemove = null;
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int sizeBeforeRemove = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.removePoints(id, timestampsToRemove);
+		int sizeAfterRemove = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(sizeBeforeRemove-1, sizeAfterRemove);
+		
+	}
+	
+	@Test
+	public void test_removePoints_ok() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+			add(4);
+		}};
+		
+		List<String> timestampsToRemove = new ArrayList<String>() {{
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int sizeBeforeRemove = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.removePoints(id, timestampsToRemove);
+		int sizeAfterRemove = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(sizeBeforeRemove-1, sizeAfterRemove);
+		
+	}
 }
