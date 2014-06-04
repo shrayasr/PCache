@@ -187,6 +187,35 @@ public class VariableTimeseriesEngineTests
 		
 	}
 	
+	@Test (expected = PCacheException.class)
+	public void test_addPoints_timestampExists() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToAdd = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
+			add(1);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		int beforeAdd = VariableTimeseriesEngine.size(id);
+		VariableTimeseriesEngine.addPoints(id, timestampsToAdd, dataPointsToAdd);
+		int afterAdd = VariableTimeseriesEngine.size(id);
+		
+		assertEquals(beforeAdd+5, afterAdd);
+		
+	}
+	
 	@Test
 	public void test_addPoints_ok() throws PCacheException {
 		
@@ -221,6 +250,156 @@ public class VariableTimeseriesEngineTests
 		int afterAdd = VariableTimeseriesEngine.size(id);
 		
 		assertEquals(beforeAdd+5, afterAdd);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_modifyPoints_timestampNoExist() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToModify = new ArrayList<String>() {{
+			add("2012-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToModify = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
+				dataPointsToModify);
+		
+		Object val = VariableTimeseriesEngine.getAll(id)
+				.get("2010-01-01T12:00:00.000+05:30");
+		
+		assertEquals(val, 2);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_modifyPoints_invalidTimestamp() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToModify = new ArrayList<String>() {{
+			add("asdf2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToModify = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
+				dataPointsToModify);
+		
+		Object val = VariableTimeseriesEngine.getAll(id)
+				.get("2010-01-01T12:00:00.000+05:30");
+		
+		assertEquals(val, 2);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_modifyPoints_unequal() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToModify = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToModify = new ArrayList<Object>() {{
+			add(2);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
+				dataPointsToModify);
+		
+		Object val = VariableTimeseriesEngine.getAll(id)
+				.get("2010-01-01T12:00:00.000+05:30");
+		
+		assertEquals(val, 2);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_modifyPoints_null() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToModify = null;
+		List<Object> dataPointsToModify = null;
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
+				dataPointsToModify);
+		
+		Object val = VariableTimeseriesEngine.getAll(id)
+				.get("2010-01-01T12:00:00.000+05:30");
+		
+		assertEquals(val, 2);
+		
+	}
+	
+	public void test_modifyPoints_ok() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+		}};
+		
+		List<String> timestampsToModify = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPointsToModify = new ArrayList<Object>() {{
+			add(2);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
+				dataPointsToModify);
+		
+		Object val = VariableTimeseriesEngine.getAll(id)
+				.get("2010-01-01T12:00:00.000+05:30");
+		
+		assertEquals(val, 2);
 		
 	}
 }
