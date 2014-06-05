@@ -1,9 +1,11 @@
 package com.pcache.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -506,6 +508,59 @@ public class VariableTimeseriesEngineTests
 		int sizeAfterRemove = VariableTimeseriesEngine.size(id);
 		
 		assertEquals(sizeBeforeRemove-1, sizeAfterRemove);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getAll_wrongId() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+			add(4);
+		}};
+		
+		Map<Long, Object> timeseriesExpected = new HashMap<Long, Object>() {{
+			put(1262327400000L,3);
+			put(1262413800000L,4);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		Map<Long, Object> timeseriesActual = VariableTimeseriesEngine
+				.getAll(12341L);
+		
+		assertEquals(timeseriesExpected, timeseriesActual);
+		
+	}
+	
+	@Test
+	public void test_getAll_ok() throws PCacheException {
+		
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(3);
+			add(4);
+		}};
+		
+		Map<Long, Object> timeseriesExpected = new HashMap<Long, Object>() {{
+			put(1262327400000L,3);
+			put(1262413800000L,4);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		Map<Long, Object> timeseriesActual = VariableTimeseriesEngine.getAll(id);
+		
+		assertEquals(timeseriesExpected, timeseriesActual);
 		
 	}
 }
