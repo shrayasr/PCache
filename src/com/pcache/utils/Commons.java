@@ -14,10 +14,21 @@ public class Commons
 {
 
 	public static long convertISO8601toMilis(String timestamp) 
-			throws IllegalArgumentException {
+			throws PCacheException {
 		
-		DateTimeFormatter ISO8601Formatter = ISODateTimeFormat.dateTime();
-		return ISO8601Formatter.parseDateTime(timestamp).getMillis();
+		try {
+			DateTimeFormatter ISO8601Formatter = ISODateTimeFormat.dateTime();
+			return ISO8601Formatter.parseDateTime(timestamp).getMillis();
+		}
+		
+		catch (NullPointerException ex) {
+			throw new PCacheException("Timestamp can't be null", ex);
+		}
+		
+		catch (IllegalArgumentException ex) {
+			throw new PCacheException("Invalid timestamp format, Format is " +
+					"restricted to ISO8601", ex);
+		}
 	}
 	
 	/**
@@ -26,7 +37,7 @@ public class Commons
 	 * @return a list of timestamps in miliseconds since EPOC format
 	 */
 	public static List<Long> convertISO8601toMilis(
-			List<String> timestamps) {
+			List<String> timestamps) throws PCacheException {
 
 		List<Long> timestampsSinceEpoc = new ArrayList<>();
 

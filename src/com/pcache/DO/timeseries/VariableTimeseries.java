@@ -33,8 +33,9 @@ public class VariableTimeseries {
 	 * Check if a given timestamp exists within the series
 	 * @param timestamp the timestamp to check for
 	 * @return true/false based on its existance
+	 * @throws PCacheException 
 	 */
-	public boolean contains(String timestamp) {
+	public boolean contains(String timestamp) throws PCacheException {
 
 		// Convert the timestamp to a UNIX time representation,
 		// getting the no. of miliseconds elapsed since EPOC
@@ -82,12 +83,6 @@ public class VariableTimeseries {
 			throw new PCacheException("Timestamps and dataPoints should not be " +
 					"null", ex);
 		}
-
-		catch (IllegalArgumentException ex) {
-			throw new PCacheException("One or more of the timestamps isn't in " +
-					"ISO8601 format", ex);
-		}
-
 
 	}
 
@@ -156,9 +151,10 @@ public class VariableTimeseries {
 	 * @param timestampTo the ISO8601 timestamp representing the to
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
+	 * @throws PCacheException 
 	 */
 	public Map<Long, Object> getRangeBetween(String timestampFrom, 
-			String timestampTo) {
+			String timestampTo) throws PCacheException {
 
 		// Convert from timestamp to miliseconds since EPOC
 		long milisSinceEpocFrom = Commons.convertISO8601toMilis(timestampFrom);
@@ -177,8 +173,10 @@ public class VariableTimeseries {
 	 * @param timestampFrom the ISO8601 timestamp representing the from
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
+	 * @throws PCacheException 
 	 */
-	public Map<Long, Object> getRangeFrom(String timestampFrom) {
+	public Map<Long, Object> getRangeFrom(String timestampFrom) 
+			throws PCacheException {
 
 		// Convert from timestamp to miliseconds since EPOC
 		long milisSinceEpocFrom = Commons.convertISO8601toMilis(timestampFrom);
@@ -197,8 +195,10 @@ public class VariableTimeseries {
 	 * @param timestampFrom the ISO8601 timestamp representing the from
 	 * @return a map of the timeseries - data representation for the given 
 	 * 			range
+	 * @throws PCacheException 
 	 */
-	public Map<Long, Object> getRangeTo(String timestampTo) {
+	public Map<Long, Object> getRangeTo(String timestampTo) 
+			throws PCacheException {
 
 		// Convert from timestamp to miliseconds since EPOC
 		long milisSinceEpocTo = Commons.convertISO8601toMilis(timestampTo);

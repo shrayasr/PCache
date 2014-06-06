@@ -77,7 +77,12 @@ public class VariableTimeseriesEngine
 		return _idVarTsMap.get(id).getRangeFrom(timestampFrom);
 	}
 
-	public static Map<Long, Object> getTo(long id, String timestampTo) {
+	public static Map<Long, Object> getTo(long id, String timestampTo) 
+			throws PCacheException {
+		
+		// Sanity checks
+		_exceptIfInvalidId(id);
+		
 		return _idVarTsMap.get(id).getRangeTo(timestampTo);
 	}
 

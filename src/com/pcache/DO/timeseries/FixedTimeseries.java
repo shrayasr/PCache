@@ -105,8 +105,10 @@ public class FixedTimeseries<T>
 	 * of points with the actual data points
 	 * @param timestamps Arraylist of timestamps that feature in the dataset
 	 * @param dataPoints Arraylist of data points
+	 * @throws PCacheException 
 	 */
-	private void _fillPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) {
+	private void _fillPoints(ArrayList<String> timestamps, ArrayList<T> dataPoints) 
+			throws PCacheException {
 		
 		long seriesStartingTimestampMilis = this._timestamps.get(0);
 		
