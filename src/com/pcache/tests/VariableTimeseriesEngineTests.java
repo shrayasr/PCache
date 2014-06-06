@@ -1,6 +1,6 @@
 package com.pcache.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -561,6 +561,335 @@ public class VariableTimeseriesEngineTests
 		Map<Long, Object> timeseriesActual = VariableTimeseriesEngine.getAll(id);
 		
 		assertEquals(timeseriesExpected, timeseriesActual);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getFrom_invalidId() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampFrom="2010-01-09T12:00:00.000+05:30";
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getFrom(1121L, timestampFrom);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getFrom_invalidTimestamp() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		Map<Long, Object> expectedTimeseries = new HashMap<Long, Object>() {{
+			
+			put(1263018600000L, 1);
+			put(1263105000000L, 2);
+			put(1263191400000L, 3);
+			put(1263277800000L, 3);
+			
+		}};
+		
+		String timestampFrom="asdf2010-01-09T12:00:00.000+05:30";
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getFrom(id, timestampFrom);
+		
+		assertEquals(expectedTimeseries, actualTimeseries);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getFrom_null() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampFrom=null;
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getFrom(id, timestampFrom);
+		
+	}
+	
+	@Test
+	public void test_getFrom_ok() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		Map<Long, Object> expectedTimeseries = new HashMap<Long, Object>() {{
+			
+			put(1263018600000L, 1);
+			put(1263105000000L, 2);
+			put(1263191400000L, 3);
+			put(1263277800000L, 3);
+			
+		}};
+		
+		String timestampFrom="2010-01-09T12:00:00.000+05:30";
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getFrom(id, timestampFrom);
+		
+		assertEquals(expectedTimeseries, actualTimeseries);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getTo_invalidId() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampFrom="2010-01-04T12:00:00.000+05:30";
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getTo(121L, timestampFrom);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getTo_invalidTimestamp() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampFrom="asdf2010-01-04T12:00:00.000+05:30";
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getTo(id, timestampFrom);
+		
+	}
+	
+	@Test (expected=PCacheException.class)
+	public void test_getTo_null() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampFrom=null;
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getTo(id, timestampFrom);
+		
+	}
+	
+	@Test
+	public void test_getTo_ok() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<Object> dataPoints = new ArrayList<Object>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(1);
+			add(2);
+			add(3);
+			add(3);
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		Map<Long, Object> expectedTimeseries = new HashMap<Long, Object>() {{
+			//{1262327400000=1, 1262413800000=2, 1262500200000=3, 1262586600000=1}
+			put(1262327400000L, 1);
+			put(1262413800000L, 2);
+			put(1262500200000L, 3);
+			put(1262586600000L, 1);
+			
+		}};
+		
+		String timestampFrom="2010-01-04T12:00:00.000+05:30";
+		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+				.getTo(id, timestampFrom);
+		
+		assertEquals(expectedTimeseries, actualTimeseries);
 		
 	}
 }
