@@ -9,32 +9,26 @@ import java.net.UnknownHostException;
 
 public class Client {
 
-	public static void main (String[] args) throws UnknownHostException, IOException {
+	public static void main (String[] args) {
 		
 		String HOST = "localhost";
 		int PORT_NUMBER = 6369;
 
-		Socket pcacheSocket = new Socket(HOST, PORT_NUMBER);
+		try (
+				Socket socket = new Socket(HOST, PORT_NUMBER);
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		) {
+			
+			String line = "";
+			while ((line = in.readLine()) != null) {
+				System.out.println(line);
+			}
 
-		PrintWriter out = new PrintWriter(pcacheSocket.getOutputStream(), true);
-		BufferedReader in  = new BufferedReader(new InputStreamReader(
-				pcacheSocket.getInputStream()));
-
-		String payload = "HELLO_WORLD";
-
-		out.println(payload);
-		System.out.println("client: " + payload);
-
-		String response = "";
-		while((response = in.readLine()) != null) {
-			System.out.println("REPLY: " + response);
-			System.out.println("BOOM");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		System.out.println("here");
-
-		pcacheSocket.close();
-
 
 	}
 
