@@ -27,7 +27,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			
@@ -54,7 +54,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -73,7 +73,7 @@ public class VariableTimeseriesTest
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
 
-		Map<Long, Object> tsSub = ts.getRangeBetween(timestampFrom, timestampTo);
+		VariableTimeseries tsSub = ts.getRangeBetween(timestampFrom, timestampTo);
 
 		assertEquals(3, tsSub.size());
 
@@ -96,7 +96,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -113,7 +113,7 @@ public class VariableTimeseriesTest
 
 		String timestampFrom = "2010-01-05T12:00:00.000+05:30";
 
-		Map<Long, Object> tsSub = ts.getRangeFrom(timestampFrom);
+		VariableTimeseries tsSub = ts.getRangeFrom(timestampFrom);
 
 		assertEquals(5, tsSub.size());
 
@@ -136,7 +136,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -153,7 +153,7 @@ public class VariableTimeseriesTest
 
 		String timestampTo = "2010-01-20T12:00:00.000+05:30";
 		
-		Map<Long, Object> tsSub = ts.getRangeTo(timestampTo);
+		VariableTimeseries tsSub = ts.getRangeTo(timestampTo);
 
 		assertEquals(6, tsSub.size());
 
@@ -176,7 +176,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -201,7 +201,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> moreDataPoints = new ArrayList<Object>() {{
+		ArrayList<String> moreDataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			add("DOWN");
@@ -232,7 +232,7 @@ public class VariableTimeseriesTest
 			
 		}};
 		
-		ArrayList<Object> dataPoints = new ArrayList<Object>() {{
+		ArrayList<String> dataPoints = new ArrayList<String>() {{
 			
 			add("UP");
 			add("DOWN");

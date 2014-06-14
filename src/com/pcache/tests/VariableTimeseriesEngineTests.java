@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.pcache.DO.timeseries.VariableTimeseries;
 import com.pcache.engines.VariableTimeseriesEngine;
 import com.pcache.exceptions.PCacheException;
 
@@ -23,8 +24,8 @@ public class VariableTimeseriesEngineTests
 			add("20aa10-01-08T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
 		}};
 		
 		long id1 = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -34,7 +35,7 @@ public class VariableTimeseriesEngineTests
 	public void test_allocateNewVarTs_nulls() throws PCacheException
 	{
 		List<String> timestamps = null;
-		List<Object> dataPoints = null;
+		List<String> dataPoints = null;
 		
 		long id1 = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 	}
@@ -52,17 +53,18 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-09T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
+
 		}};
 		
 		long id1 = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -84,17 +86,17 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id1 = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -110,8 +112,8 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToAdd = new ArrayList<String>() {{
@@ -122,10 +124,10 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-08T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
-			add(3);
-			add(1);
-			add(2);
+		List<String> dataPointsToAdd = new ArrayList<String>() {{
+			add("3");
+			add("1");
+			add("2");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -140,12 +142,12 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToAdd = null;
-		List<Object> dataPointsToAdd = null;
+		List<String> dataPointsToAdd = null;
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		VariableTimeseriesEngine.addPoints(id, timestampsToAdd, dataPointsToAdd);
@@ -159,8 +161,8 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToAdd = new ArrayList<String>() {{
@@ -171,12 +173,12 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-08T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
+		List<String> dataPointsToAdd = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -196,16 +198,16 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToAdd = new ArrayList<String>() {{
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
-			add(1);
+		List<String> dataPointsToAdd = new ArrayList<String>() {{
+			add("1");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -225,8 +227,8 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToAdd = new ArrayList<String>() {{
@@ -237,12 +239,12 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-08T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToAdd = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
+		List<String> dataPointsToAdd = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -262,16 +264,16 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToModify = new ArrayList<String>() {{
 			add("2012-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToModify = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPointsToModify = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -279,8 +281,8 @@ public class VariableTimeseriesEngineTests
 		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
 				dataPointsToModify);
 		
-		Object val = VariableTimeseriesEngine.getAll(id)
-				.get("2010-01-01T12:00:00.000+05:30");
+		String val = VariableTimeseriesEngine.getAll(id)
+				.getOne("2010-01-01T12:00:00.000+05:30");
 		
 		assertEquals(val, 2);
 		
@@ -293,16 +295,16 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToModify = new ArrayList<String>() {{
 			add("asdf2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToModify = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPointsToModify = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -310,8 +312,8 @@ public class VariableTimeseriesEngineTests
 		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
 				dataPointsToModify);
 		
-		Object val = VariableTimeseriesEngine.getAll(id)
-				.get("2010-01-01T12:00:00.000+05:30");
+		String val = VariableTimeseriesEngine.getAll(id)
+				.getOne("2010-01-01T12:00:00.000+05:30");
 		
 		assertEquals(val, 2);
 		
@@ -324,17 +326,17 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToModify = new ArrayList<String>() {{
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToModify = new ArrayList<Object>() {{
-			add(2);
-			add(3);
+		List<String> dataPointsToModify = new ArrayList<String>() {{
+			add("2");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -342,8 +344,8 @@ public class VariableTimeseriesEngineTests
 		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
 				dataPointsToModify);
 		
-		Object val = VariableTimeseriesEngine.getAll(id)
-				.get("2010-01-01T12:00:00.000+05:30");
+		String val = VariableTimeseriesEngine.getAll(id)
+				.getOne("2010-01-01T12:00:00.000+05:30");
 		
 		assertEquals(val, 2);
 		
@@ -356,20 +358,20 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToModify = null;
-		List<Object> dataPointsToModify = null;
+		List<String> dataPointsToModify = null;
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
 		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
 				dataPointsToModify);
 		
-		Object val = VariableTimeseriesEngine.getAll(id)
-				.get("2010-01-01T12:00:00.000+05:30");
+		String val = VariableTimeseriesEngine.getAll(id)
+				.getOne("2010-01-01T12:00:00.000+05:30");
 		
 		assertEquals(val, 2);
 		
@@ -381,16 +383,16 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
 		}};
 		
 		List<String> timestampsToModify = new ArrayList<String>() {{
 			add("2010-01-01T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPointsToModify = new ArrayList<Object>() {{
-			add(2);
+		List<String> dataPointsToModify = new ArrayList<String>() {{
+			add("2");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
@@ -398,8 +400,8 @@ public class VariableTimeseriesEngineTests
 		VariableTimeseriesEngine.modifyPoints(id, timestampsToModify, 
 				dataPointsToModify);
 		
-		Object val = VariableTimeseriesEngine.getAll(id)
-				.get("2010-01-01T12:00:00.000+05:30");
+		String val = VariableTimeseriesEngine.getAll(id)
+				.getOne("2010-01-01T12:00:00.000+05:30");
 		
 		assertEquals(val, 2);
 		
@@ -413,9 +415,9 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-02T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
-			add(4);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
+			add("4");
 		}};
 		
 		List<String> timestampsToRemove = new ArrayList<String>() {{
@@ -440,9 +442,9 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-02T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
-			add(4);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
+			add("4");
 		}};
 		
 		List<String> timestampsToRemove = new ArrayList<String>() {{
@@ -467,9 +469,9 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-02T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
-			add(4);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
+			add("4");
 		}};
 		
 		List<String> timestampsToRemove = null;
@@ -492,9 +494,9 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-02T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
-			add(4);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
+			add("4");
 		}};
 		
 		List<String> timestampsToRemove = new ArrayList<String>() {{
@@ -519,19 +521,22 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-02T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
-			add(4);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
+			add("4");
 		}};
 		
-		Map<Long, Object> timeseriesExpected = new HashMap<Long, Object>() {{
-			put(1262327400000L,3);
-			put(1262413800000L,4);
+		Map<Long, String> timeseriesExpectedPoints = new HashMap<Long, String>() {{
+			put(1262327400000L,"3");
+			put(1262413800000L,"4");
 		}};
+		
+		VariableTimeseries timeseriesExpected = new VariableTimeseries(
+				timeseriesExpectedPoints);
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, Object> timeseriesActual = VariableTimeseriesEngine
+		VariableTimeseries timeseriesActual = VariableTimeseriesEngine
 				.getAll(12341L);
 		
 		assertEquals(timeseriesExpected, timeseriesActual);
@@ -546,21 +551,24 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-02T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(3);
-			add(4);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("3");
+			add("4");
 		}};
 		
-		Map<Long, Object> timeseriesExpected = new HashMap<Long, Object>() {{
-			put(1262327400000L,3);
-			put(1262413800000L,4);
+		Map<Long, String> timeseriesExpectedPoints = new HashMap<Long, String>() {{
+			put(1262327400000L,"3");
+			put(1262413800000L,"4");
 		}};
+		
+		VariableTimeseries timeseriesExpected = new VariableTimeseries(
+				timeseriesExpectedPoints);
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, Object> timeseriesActual = VariableTimeseriesEngine.getAll(id);
+		VariableTimeseries timeseriesActual = VariableTimeseriesEngine.getAll(id);
 		
-		assertEquals(timeseriesExpected, timeseriesActual);
+		assertEquals(timeseriesExpected.toJson(), timeseriesActual.toJson());
 		
 	}
 	
@@ -580,23 +588,23 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
 		String timestampFrom="2010-01-09T12:00:00.000+05:30";
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getFrom(1121L, timestampFrom);
 		
 	}
@@ -617,35 +625,39 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, Object> expectedTimeseries = new HashMap<Long, Object>() {{
+		Map<Long, String> expectedTimeseriesPoints = new HashMap<Long, String>() {{
 			
-			put(1263018600000L, 1);
-			put(1263105000000L, 2);
-			put(1263191400000L, 3);
-			put(1263277800000L, 3);
+			put(1263018600000L, "1");
+			put(1263105000000L, "2");
+			put(1263191400000L, "3");
+			put(1263277800000L, "3");
 			
 		}};
 		
+		VariableTimeseries expectedTimeseries = new VariableTimeseries(
+				expectedTimeseriesPoints);
+		
 		String timestampFrom="asdf2010-01-09T12:00:00.000+05:30";
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getFrom(id, timestampFrom);
 		
-		assertEquals(expectedTimeseries, actualTimeseries);
+		assertEquals(expectedTimeseries.toJson(), actualTimeseries.toJson());
 		
 	}
 	
@@ -665,23 +677,23 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
 		String timestampFrom=null;
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getFrom(id, timestampFrom);
 		
 	}
@@ -702,35 +714,38 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, Object> expectedTimeseries = new HashMap<Long, Object>() {{
+		Map<Long, String> expectedTimeseriesPoints = new HashMap<Long, String>() {{
 			
-			put(1263018600000L, 1);
-			put(1263105000000L, 2);
-			put(1263191400000L, 3);
-			put(1263277800000L, 3);
+			put(1263018600000L, "1");
+			put(1263105000000L, "2");
+			put(1263191400000L, "3");
+			put(1263277800000L, "3");
 			
 		}};
 		
+		VariableTimeseries expectedTimeseries = new VariableTimeseries(
+				expectedTimeseriesPoints);
+		
 		String timestampFrom="2010-01-09T12:00:00.000+05:30";
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getFrom(id, timestampFrom);
 		
-		assertEquals(expectedTimeseries, actualTimeseries);
+		assertEquals(expectedTimeseries.toJson(), actualTimeseries.toJson());
 		
 	}
 	
@@ -750,23 +765,23 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
 		String timestampFrom="2010-01-04T12:00:00.000+05:30";
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getTo(121L, timestampFrom);
 		
 	}
@@ -787,23 +802,23 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
 		String timestampFrom="asdf2010-01-04T12:00:00.000+05:30";
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getTo(id, timestampFrom);
 		
 	}
@@ -824,23 +839,23 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
 		String timestampFrom=null;
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getTo(id, timestampFrom);
 		
 	}
@@ -861,35 +876,37 @@ public class VariableTimeseriesEngineTests
 			add("2010-01-12T12:00:00.000+05:30");
 		}};
 		
-		List<Object> dataPoints = new ArrayList<Object>() {{
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(1);
-			add(2);
-			add(3);
-			add(3);
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
 		}};
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, Object> expectedTimeseries = new HashMap<Long, Object>() {{
-			//{1262327400000=1, 1262413800000=2, 1262500200000=3, 1262586600000=1}
-			put(1262327400000L, 1);
-			put(1262413800000L, 2);
-			put(1262500200000L, 3);
-			put(1262586600000L, 1);
+		Map<Long, String> expectedTimeseriesPoints = new HashMap<Long, String>() {{
+			put(1262327400000L, "1");
+			put(1262413800000L, "2");
+			put(1262500200000L, "3");
+			put(1262586600000L, "1");
 			
 		}};
 		
+		VariableTimeseries expectedTimeseries = new VariableTimeseries(
+				expectedTimeseriesPoints);
+		
 		String timestampFrom="2010-01-04T12:00:00.000+05:30";
-		Map<Long, Object>actualTimeseries = VariableTimeseriesEngine
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getTo(id, timestampFrom);
 		
-		assertEquals(expectedTimeseries, actualTimeseries);
+		assertEquals(expectedTimeseries.toJson(), actualTimeseries.toJson());
 		
 	}
 }

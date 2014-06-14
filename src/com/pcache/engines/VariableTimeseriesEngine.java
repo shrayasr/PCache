@@ -27,7 +27,7 @@ public class VariableTimeseriesEngine
 	static {
 		_idVarTsMap = new HashMap<>();
 	}
-
+	
 	/**
 	 * Create a new timeseries and allocate it an ID 
 	 * @param timestamps The list of timestamps to create
@@ -38,7 +38,7 @@ public class VariableTimeseriesEngine
 	 * 			* Nulls
 	 */
 	public static long allocate(List<String> timestamps, 
-			List<Object> dataPoints) throws PCacheException {
+			List<String> dataPoints) throws PCacheException {
 
 		// Create a new variable timeseries with the given set of data
 		VariableTimeseries ts = new VariableTimeseries(timestamps, dataPoints);
@@ -64,7 +64,7 @@ public class VariableTimeseriesEngine
 	 * 			* If points passed already exist
 	 */
 	public static void addPoints(long id, 
-			List<String> timestamps, List<Object> dataPoints) 
+			List<String> timestamps, List<String> dataPoints) 
 					throws PCacheException {
 
 		// Sanity checks
@@ -86,7 +86,7 @@ public class VariableTimeseriesEngine
 	 * 			* If points passed don't exist
 	 */
 	public static void modifyPoints(long id,
-			List<String> timestampsToModify, List<Object> newDataPoints) 
+			List<String> timestampsToModify, List<String> newDataPoints) 
 					throws PCacheException {
 
 		// Sanity checks
@@ -113,6 +113,14 @@ public class VariableTimeseriesEngine
 
 		_idVarTsMap.get(id).removePoints(timestampsToRemove);
 	}
+	
+	public static String get(long id, String timestamp) throws PCacheException {
+		
+		// Sanity Checks
+		_exceptIfInvalidId(id);
+		
+		return null;
+	}
 
 	/**
 	 * Get the list of ALL points in a given timeseries
@@ -121,7 +129,7 @@ public class VariableTimeseriesEngine
 	 * @throws PCacheException thrown if:
 	 * 			* ID passed doesn't exist
 	 */
-	public static  Map<Long, Object> getAll(long id) throws PCacheException {
+	public static VariableTimeseries getAll(long id) throws PCacheException {
 
 		// Sanity checks
 		_exceptIfInvalidId(id);
@@ -140,7 +148,7 @@ public class VariableTimeseriesEngine
 	 * 			* Nulls
 	 * 			* Timestamp isn't in ISO8601 format
 	 */
-	public static Map<Long, Object> getFrom(long id, String timestampFrom) 
+	public static VariableTimeseries getFrom(long id, String timestampFrom) 
 			throws PCacheException {
 
 		// Sanity checks
@@ -160,7 +168,7 @@ public class VariableTimeseriesEngine
 	 * 			* Nulls
 	 * 			* Timestamp isn't in ISO8601 format
 	 */
-	public static Map<Long, Object> getTo(long id, String timestampTo) 
+	public static VariableTimeseries getTo(long id, String timestampTo) 
 			throws PCacheException {
 		
 		// Sanity checks
