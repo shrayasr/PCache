@@ -1,4 +1,4 @@
-package com.pcache.exceptions;
+package main.com.pcache.exceptions;
 
 public class PCacheException extends Exception {
 

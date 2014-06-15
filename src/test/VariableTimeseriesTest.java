@@ -1,4 +1,4 @@
-package com.pcache.tests;
+package test;
 
 import static org.junit.Assert.*;
 
@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import main.com.pcache.DO.timeseries.VariableTimeseries;
+import main.com.pcache.exceptions.PCacheException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.pcache.DO.timeseries.VariableTimeseries;
-import com.pcache.exceptions.PCacheException;
 
 public class VariableTimeseriesTest
 {

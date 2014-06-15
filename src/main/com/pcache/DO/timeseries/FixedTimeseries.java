@@ -1,10 +1,11 @@
-package com.pcache.DO.timeseries;
+package main.com.pcache.DO.timeseries;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pcache.exceptions.PCacheException;
-import com.pcache.utils.Commons;
+import main.com.pcache.exceptions.PCacheException;
+import main.com.pcache.utils.Commons;
+
 
 /**
  * The FixedTimeseries class allows another take on handling timeseries data.

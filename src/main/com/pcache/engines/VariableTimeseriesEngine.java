@@ -1,11 +1,12 @@
-package com.pcache.engines;
+package main.com.pcache.engines;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pcache.DO.timeseries.VariableTimeseries;
-import com.pcache.exceptions.PCacheException;
+import main.com.pcache.DO.timeseries.VariableTimeseries;
+import main.com.pcache.exceptions.PCacheException;
+
 
 /**
  * Class to hold the list of variable time series' in the system. 

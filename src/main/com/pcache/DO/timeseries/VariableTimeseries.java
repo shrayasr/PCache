@@ -1,4 +1,4 @@
-package com.pcache.DO.timeseries;
+package main.com.pcache.DO.timeseries;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,11 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import main.com.pcache.exceptions.PCacheException;
+import main.com.pcache.utils.Commons;
+
 import org.joda.time.DateTime;
 
 import com.google.gson.Gson;
-import com.pcache.exceptions.PCacheException;
-import com.pcache.utils.Commons;
 
 /**
  * The central class for storing timeseries

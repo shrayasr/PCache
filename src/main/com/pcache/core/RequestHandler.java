@@ -1,4 +1,4 @@
-package com.pcache.core;
+package main.com.pcache.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,10 +8,11 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
+import main.com.pcache.engines.VariableTimeseriesEngine;
+import main.com.pcache.exceptions.PCacheException;
+
 import org.joda.time.DateTime;
 
-import com.pcache.engines.VariableTimeseriesEngine;
-import com.pcache.exceptions.PCacheException;
 
 public class RequestHandler implements Runnable {
 
