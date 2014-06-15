@@ -24,7 +24,7 @@ public class Client implements Runnable{
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				) {
 			
-			out.println("ALLOCATE 2010-01-01T12:00:00.000+05:30,2010-01-02T12:00:00.000+05:30,2010-01-03T12:00:00.000+05:30,2010-01-04T12:00:00.000+05:30,2010-01-05T12:00:00.000+05:30 1,2,3,4,5");
+			out.println("ALLOC 2010-01-01T12:00:00.000+05:30,2010-01-02T12:00:00.000+05:30,2010-01-03T12:00:00.000+05:30,2010-01-04T12:00:00.000+05:30,2010-01-05T12:00:00.000+05:30 1,2,3,4,5");
 			//out.println("SIZE 1");
 
 			String line = "";
