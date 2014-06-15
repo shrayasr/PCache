@@ -221,9 +221,16 @@ public class VariableTimeseries {
 		// Get the last key in the series of timestamps
 		long lastKey = ((TreeMap<Long, String>) this._timeseries).lastKey();
 
+		try {
 		// Return a map
 		return new VariableTimeseries(((TreeMap<Long, String>) this._timeseries)
 				.subMap(milisSinceEpocFrom, true, lastKey, true));
+		}
+		
+		catch (IllegalArgumentException ex) {
+			throw new PCacheException("Timestamp provided exceeds the max " +
+					"timestamp stored in the cache.", ex);
+		}
 
 	}
 
@@ -243,9 +250,16 @@ public class VariableTimeseries {
 		// Get the first key in the series of timestamps
 		long firstKey = ((TreeMap<Long, String>) this._timeseries).firstKey();
 
+		try {
 		// Return a map
 		return new VariableTimeseries(((TreeMap<Long, String>) this._timeseries)
 				.subMap(firstKey, true, milisSinceEpocTo, true));
+		}
+		
+		catch (IllegalArgumentException ex) {
+			throw new PCacheException("Timestamp provided preceeds the min " +
+					"timestamp stored in the cache.", ex);
+		}
 
 	}
 

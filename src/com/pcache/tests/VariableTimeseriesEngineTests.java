@@ -698,6 +698,43 @@ public class VariableTimeseriesEngineTests
 		
 	}
 	
+	@Test (expected = PCacheException.class)
+	public void test_getFrom_timestampGreater() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampFrom="2010-01-13T12:00:00.000+05:30";
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
+				.getFrom(id, timestampFrom);
+		
+	}
+	
 	@Test
 	public void test_getFrom_ok() throws PCacheException
 	{
@@ -857,6 +894,43 @@ public class VariableTimeseriesEngineTests
 		String timestampFrom=null;
 		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
 				.getTo(id, timestampFrom);
+		
+	}
+	
+	@Test (expected = PCacheException.class)
+	public void test_getTo_timestampLesser() throws PCacheException
+	{
+		List<String> timestamps = new ArrayList<String>() {{
+			add("2010-01-01T12:00:00.000+05:30");
+			add("2010-01-02T12:00:00.000+05:30");
+			add("2010-01-03T12:00:00.000+05:30");
+			add("2010-01-04T12:00:00.000+05:30");
+			add("2010-01-05T12:00:00.000+05:30");
+			add("2010-01-08T12:00:00.000+05:30");
+			add("2010-01-09T12:00:00.000+05:30");
+			add("2010-01-10T12:00:00.000+05:30");
+			add("2010-01-11T12:00:00.000+05:30");
+			add("2010-01-12T12:00:00.000+05:30");
+		}};
+		
+		List<String> dataPoints = new ArrayList<String>() {{
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("1");
+			add("2");
+			add("3");
+			add("3");
+		}};
+		
+		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
+		
+		String timestampTo="2009-01-04T12:00:00.000+05:30";
+		VariableTimeseries actualTimeseries = VariableTimeseriesEngine
+				.getTo(id, timestampTo);
 		
 	}
 	
