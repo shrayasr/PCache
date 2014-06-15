@@ -62,7 +62,7 @@ public class RequestHandler implements Runnable {
 				break;
 			}
 
-			case "ALLOCATE": {
+			case "ALLOC": {
 
 				if (tokens.length != 3) {
 					throw new PCacheException("ALLOCATE takes 2 arguments. " +
@@ -139,6 +139,62 @@ public class RequestHandler implements Runnable {
 				String timestampFrom = tokens[2].trim();
 				
 				out.println(VariableTimeseriesEngine.getTo(ID, timestampFrom).toJson());
+				
+				break;
+			}
+			
+			case "ADD": {
+				
+				if (tokens.length != 4) {
+					throw new PCacheException("ADD takes 3 arguments. " +
+							"Usage: ADD <ID> <TIMESTAMPS> <DATAPOINTS>");
+				}
+				
+				long ID = Long.parseLong(tokens[1]);
+				
+				List<String> timestamps = Arrays.asList(tokens[2].split(","));
+				List<String> dataPoints = Arrays.asList(tokens[3].split(","));
+				
+				VariableTimeseriesEngine.addPoints(ID, timestamps, dataPoints);
+				
+				out.println("DONE. "+timestamps.size()+" points added");
+				
+				break;
+			}
+			
+			case "MOD": {
+				
+				if (tokens.length != 4) {
+					throw new PCacheException("MOD takes 3 arguments. " +
+							"Usage: MOD <ID> <TIMESTAMPS> <DATAPOINTS>");
+				}
+				
+				long ID = Long.parseLong(tokens[1]);
+				
+				List<String> timestamps = Arrays.asList(tokens[2].split(","));
+				List<String> dataPoints = Arrays.asList(tokens[3].split(","));
+				
+				VariableTimeseriesEngine.modifyPoints(ID, timestamps, dataPoints);
+				
+				out.println("DONE. "+timestamps.size()+" points modified");
+				
+				break;
+			}
+			
+			case "DEL": {
+				
+				if (tokens.length != 3) {
+					throw new PCacheException("DEL takes 2 arguments. " +
+							"Usage: DEL <ID> <TIMESTAMPS>");
+				}
+				
+				long ID = Long.parseLong(tokens[1]);
+				
+				List<String> timestamps = Arrays.asList(tokens[2].split(","));
+				
+				VariableTimeseriesEngine.removePoints(ID, timestamps);
+				
+				out.println("DONE. "+timestamps.size()+" points deleted");
 				
 				break;
 			}
