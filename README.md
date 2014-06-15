@@ -1,4 +1,4 @@
-#Project Cache
+#Project Cache [![Build Status](https://travis-ci.org/shrayas/PCache.svg?branch=master)](https://travis-ci.org/shrayas/PCache)
 > Time series cache for the final sem dissertation 2014
 
 **THIS IS STILL MAJOR WIP** 
