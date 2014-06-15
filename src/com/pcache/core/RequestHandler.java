@@ -55,6 +55,12 @@ public class RequestHandler implements Runnable {
 			String command = tokens[0].trim().toUpperCase();
 
 			switch(command) {
+			
+			case "PING": {
+				out.println("PONG");
+				
+				break;
+			}
 
 			case "ALLOCATE": {
 
@@ -103,8 +109,45 @@ public class RequestHandler implements Runnable {
 				long ID = Long.parseLong(tokens[1]);
 				
 				out.println(VariableTimeseriesEngine.getAll(ID).toJson());
+				
+				break;
 			}
-
+			
+			case "GETFROM": {
+				
+				if (tokens.length != 3) {
+					throw new PCacheException("GETFROM takes 2 arguments. " +
+							"Usage: GETFROM <ID> <FROM TIMESTAMP>");
+				}
+				
+				long ID = Long.parseLong(tokens[1]);
+				String timestampFrom = tokens[2].trim();
+				
+				out.println(VariableTimeseriesEngine.getFrom(ID, timestampFrom).toJson());
+				
+				break;
+			}
+			
+			case "GETTO": {
+				
+				if (tokens.length != 3) {
+					throw new PCacheException("GETTO takes 2 arguments. " +
+							"Usage: GETTO <ID> <TO TIMESTAMP>");
+				}
+				
+				long ID = Long.parseLong(tokens[1]);
+				String timestampFrom = tokens[2].trim();
+				
+				out.println(VariableTimeseriesEngine.getTo(ID, timestampFrom).toJson());
+				
+				break;
+			}
+			
+			default: {
+				out.println("ERR: Command not supported");
+				break;
+			}
+			
 			}
 
 			System.out.println(_socket.getInetAddress() +
@@ -113,7 +156,7 @@ public class RequestHandler implements Runnable {
 		}
 
 		catch (PCacheException ex) {
-			out.println(ex.getMessage());
+			out.println("ERR: " + ex.getMessage());
 		}
 
 		finally {
