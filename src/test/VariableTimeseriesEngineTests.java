@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.com.pcache.DO.PCacheTimestamp;
 import main.com.pcache.DO.timeseries.VariableTimeseries;
 import main.com.pcache.engines.VariableTimeseriesEngine;
 import main.com.pcache.exceptions.PCacheException;
@@ -527,9 +528,10 @@ public class VariableTimeseriesEngineTests
 			add("4");
 		}};
 		
-		Map<Long, String> timeseriesExpectedPoints = new HashMap<Long, String>() {{
-			put(1262327400000L,"3");
-			put(1262413800000L,"4");
+		Map<PCacheTimestamp, String> timeseriesExpectedPoints = 
+				new HashMap<PCacheTimestamp, String>() {{
+			put(new PCacheTimestamp("2010-01-01T12:00:00.000+05:30"),"3");
+			put(new PCacheTimestamp("2010-01-02T12:00:00.000+05:30"),"4");
 		}};
 		
 		VariableTimeseries timeseriesExpected = new VariableTimeseries(
@@ -557,9 +559,10 @@ public class VariableTimeseriesEngineTests
 			add("4");
 		}};
 		
-		Map<Long, String> timeseriesExpectedPoints = new HashMap<Long, String>() {{
-			put(1262327400000L,"3");
-			put(1262413800000L,"4");
+		Map<PCacheTimestamp, String> timeseriesExpectedPoints = 
+				new HashMap<PCacheTimestamp, String>() {{
+			put(new PCacheTimestamp("2010-01-01T12:00:00.000+05:30"),"3");
+			put(new PCacheTimestamp("2010-01-02T12:00:00.000+05:30"),"4");
 		}};
 		
 		VariableTimeseries timeseriesExpected = new VariableTimeseries(
@@ -641,12 +644,13 @@ public class VariableTimeseriesEngineTests
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, String> expectedTimeseriesPoints = new HashMap<Long, String>() {{
+		Map<PCacheTimestamp, String> expectedTimeseriesPoints = 
+				new HashMap<PCacheTimestamp, String>() {{
 			
-			put(1263018600000L, "1");
-			put(1263105000000L, "2");
-			put(1263191400000L, "3");
-			put(1263277800000L, "3");
+			put(new PCacheTimestamp("2010-01-09T12:00:00.000+05:30"), "1");
+			put(new PCacheTimestamp("2010-01-10T12:00:00.000+05:30"), "2");
+			put(new PCacheTimestamp("2010-01-11T12:00:00.000+05:30"), "3");
+			put(new PCacheTimestamp("2010-01-12T12:00:00.000+05:30"), "3");
 			
 		}};
 		
@@ -767,12 +771,13 @@ public class VariableTimeseriesEngineTests
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, String> expectedTimeseriesPoints = new HashMap<Long, String>() {{
+		Map<PCacheTimestamp, String> expectedTimeseriesPoints = 
+				new HashMap<PCacheTimestamp, String>() {{
 			
-			put(1263018600000L, "1");
-			put(1263105000000L, "2");
-			put(1263191400000L, "3");
-			put(1263277800000L, "3");
+			put(new PCacheTimestamp("2010-01-09T12:00:00.000+05:30"), "1");
+			put(new PCacheTimestamp("2010-01-10T12:00:00.000+05:30"), "2");
+			put(new PCacheTimestamp("2010-01-11T12:00:00.000+05:30"), "3");
+			put(new PCacheTimestamp("2010-01-12T12:00:00.000+05:30"), "3");
 			
 		}};
 		
@@ -966,11 +971,13 @@ public class VariableTimeseriesEngineTests
 		
 		long id = VariableTimeseriesEngine.allocate(timestamps, dataPoints);
 		
-		Map<Long, String> expectedTimeseriesPoints = new HashMap<Long, String>() {{
-			put(1262327400000L, "1");
-			put(1262413800000L, "2");
-			put(1262500200000L, "3");
-			put(1262586600000L, "1");
+		Map<PCacheTimestamp, String> expectedTimeseriesPoints = 
+				new HashMap<PCacheTimestamp, String>() {{
+			
+			put(new PCacheTimestamp("2010-01-01T12:00:00.000+05:30"), "1");
+			put(new PCacheTimestamp("2010-01-02T12:00:00.000+05:30"), "2");
+			put(new PCacheTimestamp("2010-01-03T12:00:00.000+05:30"), "3");
+			put(new PCacheTimestamp("2010-01-04T12:00:00.000+05:30"), "1");
 			
 		}};
 		

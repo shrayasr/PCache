@@ -1,15 +1,13 @@
 package main.com.pcache.DO.timeseries;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import main.com.pcache.DO.PCacheTimestamp;
 import main.com.pcache.exceptions.PCacheException;
 import main.com.pcache.utils.Commons;
-
-import org.joda.time.DateTime;
 
 import com.google.gson.Gson;
 
@@ -25,8 +23,8 @@ public class VariableTimeseries {
 	 * find the right place. Also treemaps have a neat "submap" feature that
 	 * allows to get a subset of a map
 	 */
-	private Map<Long, String> _timeseries;
-	
+	private Map<PCacheTimestamp, String> _timeseries;
+
 	/**
 	 * Constructor. Initialize a time series. 
 	 * @param timestamps an array of ISO8601 timestamps. The timestamps are to 
@@ -42,20 +40,20 @@ public class VariableTimeseries {
 
 		// Sanity Checks
 		_exceptIfLengthUnequal(timestamps, dataPoints);
-		
+
 		// Declare a new tree map
-		_timeseries = new TreeMap<Long, String>();
+		_timeseries = new TreeMap<PCacheTimestamp, String>();
 
 		_addOrUpdatePoints(timestamps, dataPoints);
 
 	}
-	
+
 	/**
 	 * Constructor. Create a variable timeseries out of an existing set
 	 * @param timeseries the Long - string mapping to create the 
 	 * 			variabletimeseries out of
 	 */
-	public VariableTimeseries(Map<Long, String> timeseries) {
+	public VariableTimeseries(Map<PCacheTimestamp, String> timeseries) {
 		this._timeseries = timeseries;
 	}
 
@@ -75,11 +73,7 @@ public class VariableTimeseries {
 	 */
 	public boolean contains(String timestamp) throws PCacheException {
 
-		// Convert the timestamp to a UNIX time representation,
-		// getting the no. of miliseconds elapsed since EPOC
-		long milisSinceEpoc  = Commons.convertISO8601toMilis(timestamp);
-
-		return this._timeseries.containsKey(milisSinceEpoc);
+		return this._timeseries.containsKey(new PCacheTimestamp(timestamp));
 	}
 
 	/**
@@ -112,7 +106,7 @@ public class VariableTimeseries {
 
 				// Add or update the timestamp, datapoint
 				// Put does updates also. so 2 birds, one stone!
-				_timeseries.put(milisSinceEpoc, dataPoint);
+				_timeseries.put(new PCacheTimestamp(timestampISO8601), dataPoint);
 
 			}
 		}
@@ -174,11 +168,8 @@ public class VariableTimeseries {
 		// Sanity Checks
 		_exceptIfNoPointsExist(timestamps);
 
-		List<Long> timestampsSinceEpoc = 
-				Commons.convertISO8601toMilis(timestamps);
-
-		for (long timestamp : timestampsSinceEpoc) {
-			this._timeseries.remove(timestamp);
+		for (String timestamp : timestamps) {
+			this._timeseries.remove(new PCacheTimestamp(timestamp));
 		}
 
 	}
@@ -194,15 +185,10 @@ public class VariableTimeseries {
 	public VariableTimeseries getRangeBetween(String timestampFrom, 
 			String timestampTo) throws PCacheException {
 
-		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocFrom = Commons.convertISO8601toMilis(timestampFrom);
-
-		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocTo = Commons.convertISO8601toMilis(timestampTo);
-
 		// Return a timeseries
-		return new VariableTimeseries(((TreeMap<Long, String>) this._timeseries)
-				.subMap(milisSinceEpocFrom, true, milisSinceEpocTo, true));
+		return new VariableTimeseries(((TreeMap<PCacheTimestamp, String>) this._timeseries)
+				.subMap(new PCacheTimestamp(timestampFrom), true, 
+						new PCacheTimestamp(timestampTo), true));
 
 	}
 
@@ -216,18 +202,17 @@ public class VariableTimeseries {
 	public VariableTimeseries getRangeFrom(String timestampFrom) 
 			throws PCacheException {
 
-		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocFrom = Commons.convertISO8601toMilis(timestampFrom);
-
 		// Get the last key in the series of timestamps
-		long lastKey = ((TreeMap<Long, String>) this._timeseries).lastKey();
+		PCacheTimestamp lastKey = ((TreeMap<PCacheTimestamp, String>) 
+				this._timeseries).lastKey();
 
 		try {
-		// Return a map
-		return new VariableTimeseries(((TreeMap<Long, String>) this._timeseries)
-				.subMap(milisSinceEpocFrom, true, lastKey, true));
+			// Return a map
+			return new VariableTimeseries(((TreeMap<PCacheTimestamp, String>) 
+					this._timeseries).subMap(new PCacheTimestamp(timestampFrom), 
+							true, lastKey, true));
 		}
-		
+
 		catch (IllegalArgumentException ex) {
 			throw new PCacheException("Timestamp provided exceeds the max " +
 					"timestamp stored in the cache.", ex);
@@ -245,18 +230,17 @@ public class VariableTimeseries {
 	public VariableTimeseries getRangeTo(String timestampTo) 
 			throws PCacheException {
 
-		// Convert from timestamp to miliseconds since EPOC
-		long milisSinceEpocTo = Commons.convertISO8601toMilis(timestampTo);
-
 		// Get the first key in the series of timestamps
-		long firstKey = ((TreeMap<Long, String>) this._timeseries).firstKey();
+		PCacheTimestamp firstKey = ((TreeMap<PCacheTimestamp, String>) 
+				this._timeseries).firstKey();
 
 		try {
-		// Return a map
-		return new VariableTimeseries(((TreeMap<Long, String>) this._timeseries)
-				.subMap(firstKey, true, milisSinceEpocTo, true));
+			// Return a map
+			return new VariableTimeseries(((TreeMap<PCacheTimestamp, String>) 
+					this._timeseries).subMap(firstKey, true, 
+							new PCacheTimestamp(timestampTo), true));
 		}
-		
+
 		catch (IllegalArgumentException ex) {
 			throw new PCacheException("Timestamp provided preceeds the min " +
 					"timestamp stored in the cache.", ex);
@@ -271,7 +255,7 @@ public class VariableTimeseries {
 	public VariableTimeseries getAll() {
 		return this;
 	}
-	
+
 	/**
 	 * Return a particular timestamps value
 	 * @param timestamp the timestamp to look for in the map
@@ -280,29 +264,29 @@ public class VariableTimeseries {
 	 * 			* timestamp not in ISO8601 format
 	 */
 	public String getOne(String timestamp) throws PCacheException {
-		
+
 		long milis = Commons.convertISO8601toMilis(timestamp);
 		return this._timeseries.get(milis);
 	}
-	
+
 	/**
 	 * Convert the current timeseries to JSON format with the key as the 
 	 * ISO8601 formatted timestamp 
 	 * @return the JSON
 	 */
 	public String toJson() {
-		
+
 		Map<String, String> jsonMap = new TreeMap<String, String>();
-		
-		for (Entry<Long, String> entry : this._timeseries.entrySet())
+
+		for (Entry<PCacheTimestamp, String> entry : this._timeseries.entrySet())
 		{
-		   DateTime d = new DateTime(entry.getKey()); 
-		   jsonMap.put(d.toString(), entry.getValue());
+			PCacheTimestamp ts = entry.getKey();
+			jsonMap.put(ts.toString(), entry.getValue());
 		}
 		
 		final Gson gson = new Gson();
 		return gson.toJson(jsonMap);
-		
+
 	}
 
 
@@ -346,15 +330,12 @@ public class VariableTimeseries {
 			throws PCacheException {
 
 		try {
-			// Get the EPOC representations
-			List<Long> timestampsInMilis = 
-					Commons.convertISO8601toMilis(timestamps);
 
 			// Go through the timestamps
-			for (long timestamp : timestampsInMilis) {
+			for (String timestamp : timestamps) {
 
 				// If timeseries already contains it, except
-				if (this._timeseries.containsKey(timestamp)) {
+				if (this._timeseries.containsKey(new PCacheTimestamp(timestamp))) {
 					throw new PCacheException("Some point(s) already exist in the "
 							+ "timeseries");
 				}
@@ -384,15 +365,11 @@ public class VariableTimeseries {
 			throws PCacheException {
 
 		try {
-			// Get the EPOC representations
-			List<Long> timestampsInMilis = 
-					Commons.convertISO8601toMilis(timestamps);
-
 			// Go through the timestamps
-			for (long timestamp : timestampsInMilis) {
+			for (String timestamp : timestamps) {
 
 				// If the timeseries doesn't contain it, except
-				if (!this._timeseries.containsKey(timestamp)) {
+				if (!this._timeseries.containsKey(new PCacheTimestamp(timestamp))) {
 					throw new PCacheException("Some point(s) don't exist in the "
 							+ "timeseries");
 				}
