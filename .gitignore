@@ -72,16 +72,12 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# Created by http://www.gitignore.io
-
 ### Gradle ###
 .gradle
 build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
-
-# Created by http://www.gitignore.io
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
