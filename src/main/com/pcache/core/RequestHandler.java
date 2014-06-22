@@ -50,10 +50,14 @@ public class RequestHandler implements Runnable {
 	{
 
 		String[] tokens = line.split(" ");
+		long operationStartTime = 0L;
+		long operationEndTime = 0L;
 
 		try {
 
 			String command = tokens[0].trim().toUpperCase();
+
+			operationStartTime = System.currentTimeMillis();
 
 			switch(command) {
 			
@@ -207,9 +211,11 @@ public class RequestHandler implements Runnable {
 			
 			}
 
+			operationEndTime = System.currentTimeMillis();
+
 			System.out.println(_socket.getInetAddress() +
 					" ["+DateTime.now().toString("d/m/Y:H:M:S z")+"] " +
-					command);
+					command + " ["+(operationEndTime - operationStartTime)/1000.0+"s]");
 		}
 
 		catch (PCacheException ex) {
