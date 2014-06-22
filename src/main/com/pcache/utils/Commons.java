@@ -2,8 +2,7 @@ package main.com.pcache.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Random;
 
 import main.com.pcache.exceptions.PCacheException;
 
@@ -66,6 +65,16 @@ public class Commons
 	            (l + " cannot be cast to int without changing its value.");
 	    }
 	    return (int) l;
+	}
+
+	public static int randInt(int min, int max) {
+		
+		Random rand = new Random();
+
+		int randomNum = rand.nextInt((max-min) + 1) + min;
+
+		return randomNum;
+		
 	}
 	
 }
