@@ -1,4 +1,4 @@
-package main.com.pcache.core;
+package main.com.pcache.performance;
 
 public class MultipleAsyncClients
 {

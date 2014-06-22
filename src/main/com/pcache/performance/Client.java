@@ -1,4 +1,4 @@
-package main.com.pcache.core;
+package main.com.pcache.performance;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,7 +11,15 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
 
-	//public static void main (String[] args) {
+	private String _command;
+
+	public Client() {
+		_command = null;
+	}
+
+	public Client(String command) {
+		this._command = command;
+	}
 	
 	public void run() {
 
@@ -24,7 +32,9 @@ public class Client implements Runnable{
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				) {
 			
-			out.println("ALLOC 2010-01-01T12:00:00.000+05:30,2010-01-02T12:00:00.000+05:30,2010-01-03T12:00:00.000+05:30,2010-01-04T12:00:00.000+05:30,2010-01-05T12:00:00.000+05:30 1,2,3,4,5");
+			if (_command != null) {
+				out.println(_command);
+			}
 			//out.println("SIZE 1");
 
 			String line = "";
