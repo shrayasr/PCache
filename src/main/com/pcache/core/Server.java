@@ -5,20 +5,42 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.sql.PooledConnection;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 public class Server {
 
-	public static void main (String[] args) {
+	private static int _PORT_NUMBER=6369;
+	private static int _POOL_SIZE = 10;
+
+	public static void main (String[] args) throws ParseException {
+
+		Options options = new Options();
+
+		Option pool_size = new Option("pool_size", true, "No. of threads to use to handle connections");
+		pool_size.isRequired();
+
+		options.addOption(pool_size);
+
+		CommandLineParser parser = new GnuParser();
+		CommandLine cmd = parser.parse(options, args);
+
+		if (cmd.hasOption("pool_size")) {
+			_POOL_SIZE = Integer.parseInt(cmd.getOptionValue("pool_size"));
+		}
 		
-		ExecutorService executorService = Executors.newFixedThreadPool(10);
-		
-		int PORT_NUMBER=6369;
-		
-		System.out.println("Listening on " + PORT_NUMBER);
+		System.out.println("Starting PCache Server");
+		System.out.println("PORT: " + _PORT_NUMBER);
+		System.out.println("THREAD POOL SIZE: " + _POOL_SIZE);
+
+		ExecutorService executorService = Executors.newFixedThreadPool(_POOL_SIZE);
 
 		boolean listening = true;
-		try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER)) {
+		try (ServerSocket serverSocket = new ServerSocket(_PORT_NUMBER)) {
 			
 			while (listening) {
 				executorService.execute(new RequestHandler(serverSocket.accept()));
