@@ -38,7 +38,7 @@ public class VariableTimeseriesEngine
 	 * 			* Lengths are unequal
 	 * 			* Nulls
 	 */
-	public static long allocate(List<String> timestamps, 
+	public synchronized static long allocate(List<String> timestamps, 
 			List<String> dataPoints) throws PCacheException {
 
 		// Create a new variable timeseries with the given set of data
@@ -64,7 +64,7 @@ public class VariableTimeseriesEngine
 	 * 			* ID passed doesn't exist
 	 * 			* If points passed already exist
 	 */
-	public static void addPoints(long id, 
+	public synchronized static void addPoints(long id, 
 			List<String> timestamps, List<String> dataPoints) 
 					throws PCacheException {
 
@@ -86,7 +86,7 @@ public class VariableTimeseriesEngine
 	 * 			* ID passed doesn't exist
 	 * 			* If points passed don't exist
 	 */
-	public static void modifyPoints(long id,
+	public synchronized static void modifyPoints(long id,
 			List<String> timestampsToModify, List<String> newDataPoints) 
 					throws PCacheException {
 
@@ -106,7 +106,7 @@ public class VariableTimeseriesEngine
 	 * 			* ID passed doesn't exist
 	 * 			* If points passed don't exist
 	 */
-	public static void removePoints(long id, List<String> timestampsToRemove) 
+	public synchronized static void removePoints(long id, List<String> timestampsToRemove) 
 			throws PCacheException {
 
 		// Sanity checks
@@ -115,7 +115,7 @@ public class VariableTimeseriesEngine
 		_idVarTsMap.get(id).removePoints(timestampsToRemove);
 	}
 	
-	public static String get(long id, String timestamp) throws PCacheException {
+	public synchronized static String get(long id, String timestamp) throws PCacheException {
 		
 		// Sanity Checks
 		_exceptIfInvalidId(id);
@@ -130,7 +130,7 @@ public class VariableTimeseriesEngine
 	 * @throws PCacheException thrown if:
 	 * 			* ID passed doesn't exist
 	 */
-	public static VariableTimeseries getAll(long id) throws PCacheException {
+	public synchronized static VariableTimeseries getAll(long id) throws PCacheException {
 
 		// Sanity checks
 		_exceptIfInvalidId(id);
@@ -149,7 +149,7 @@ public class VariableTimeseriesEngine
 	 * 			* Nulls
 	 * 			* Timestamp isn't in ISO8601 format
 	 */
-	public static VariableTimeseries getFrom(long id, String timestampFrom) 
+	public synchronized static VariableTimeseries getFrom(long id, String timestampFrom) 
 			throws PCacheException {
 
 		// Sanity checks
@@ -169,7 +169,7 @@ public class VariableTimeseriesEngine
 	 * 			* Nulls
 	 * 			* Timestamp isn't in ISO8601 format
 	 */
-	public static VariableTimeseries getTo(long id, String timestampTo) 
+	public synchronized static VariableTimeseries getTo(long id, String timestampTo) 
 			throws PCacheException {
 		
 		// Sanity checks
@@ -186,7 +186,7 @@ public class VariableTimeseriesEngine
 	 * 			* Nulls
 	 * 			* ID passed doesn't exist
 	 */
-	public static int size(long id) throws PCacheException {
+	public synchronized static int size(long id) throws PCacheException {
 
 		// Sanity checks
 		_exceptIfInvalidId(id);
@@ -200,7 +200,7 @@ public class VariableTimeseriesEngine
 	 * @throws PCacheException thrown if:
 	 * 			* ID passed doesn't exist
 	 */
-	private static void _exceptIfInvalidId(long id) throws PCacheException {
+	private synchronized static void _exceptIfInvalidId(long id) throws PCacheException {
 
 		if (_idVarTsMap.get(id) == null) {
 			throw new PCacheException("That ID doesn't exist anymore in the " +
