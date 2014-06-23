@@ -1,5 +1,10 @@
 package main.com.pcache.performance;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import main.com.pcache.utils.Commons;
 
 public class TestBed {
@@ -53,6 +58,30 @@ public class TestBed {
 	}
 
 	public static void main(String[] args) {
+		
+		Properties propertyHandler = new Properties();
+		
+		try {
+			propertyHandler.load(new FileInputStream("properties/testbed.properties"));
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		}
+		
+		_noOfTimeseriess = Integer.parseInt(propertyHandler.getProperty(
+				"NO_OF_TIMESERIES"));
+		_noOfClients = Integer.parseInt(propertyHandler.getProperty(
+				"NO_OF_CLIENTS"));
+		_startYear = Integer.parseInt(propertyHandler.getProperty("START_YEAR"));
+		_endYear = Integer.parseInt(propertyHandler.getProperty("END_YEAR"));
+		_startNoOfDays = Integer.parseInt(propertyHandler.getProperty(
+				"START_NO_OF_DAYS"));
+		_endNoOfDays = Integer.parseInt(propertyHandler.getProperty(
+				"END_NO_OF_DAYS"));
 
 		int noOfPointsAllocated = _initialize();
 		_doStuff();
