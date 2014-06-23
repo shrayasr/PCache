@@ -11,24 +11,31 @@ import java.util.List;
 import main.com.pcache.engines.VariableTimeseriesEngine;
 import main.com.pcache.exceptions.PCacheException;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.joda.time.DateTime;
 
 
 public class RequestHandler implements Runnable {
 
 	private Socket _socket;
+	Logger _log;
 
 	public RequestHandler(Socket socket) {
 		this._socket = socket;
+		
+		PropertyConfigurator.configure("properties/log4j.properties");
+		_log = Logger.getLogger(RequestHandler.class.getName());
 	}
 
 	public void run() {
 
-		try ( PrintWriter out = new PrintWriter(_socket.getOutputStream(), 
-				true);
+		try ( 
+				PrintWriter out = new PrintWriter(_socket.getOutputStream(), true);
 
 				BufferedReader in = new BufferedReader(new InputStreamReader(
-						_socket.getInputStream())); ) {
+						_socket.getInputStream())); 
+		) {
 
 			String line = in.readLine();
 
@@ -213,9 +220,14 @@ public class RequestHandler implements Runnable {
 
 			operationEndTime = System.currentTimeMillis();
 
-			System.out.println(_socket.getInetAddress() +
-					" ["+DateTime.now().toString("d/m/Y:H:M:S z")+"] " +
-					command + " ["+(operationEndTime - operationStartTime)/1000.0+"s]");
+			String logMessage = _socket.getInetAddress() 
+					+ " ["+DateTime.now().toString("d/m/Y:H:M:S z")+"] " 
+					+ command 
+					+ " ["+(operationEndTime - operationStartTime)/1000.0+"s]";
+			
+			//System.out.println();
+			
+			_log.info(logMessage);
 		}
 
 		catch (PCacheException ex) {
