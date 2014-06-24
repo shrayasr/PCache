@@ -100,10 +100,6 @@ public class VariableTimeseries {
 				String timestampISO8601 = timestamps.get(i);
 				String dataPoint = dataPoints.get(i);
 
-				// Convert the timestamp to a UNIX time representation,
-				// getting the no. of miliseconds elapsed since EPOC
-				long milisSinceEpoc = Commons.convertISO8601toMilis(timestampISO8601);
-
 				// Add or update the timestamp, datapoint
 				// Put does updates also. so 2 birds, one stone!
 				_timeseries.put(new PCacheTimestamp(timestampISO8601), dataPoint);
