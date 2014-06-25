@@ -1,5 +1,6 @@
 # Project specific
 logs/
+*.properties
 
 # Created by http://www.gitignore.io
 

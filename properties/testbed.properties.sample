@@ -1,0 +1,17 @@
+# No. of timeseries to allocate in the cache
+NO_OF_TIMESERIES=400
+
+# No. of clients to access the cache with after allocation
+NO_OF_CLIENTS=100
+
+# Start year of the timeseries allocated in the cache
+START_YEAR=2010
+
+# End year of the timeseries allocated in the cache
+END_YEAR=2020
+
+# Starting no. of points in the cache
+START_NO_OF_DAYS = 100
+
+# Ending no. of points in the cache
+END_NO_OF_DAYS = 200
