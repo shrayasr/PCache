@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -12,6 +13,7 @@ public class Client implements Runnable{
 
 	private String _command;
 	private Logger _logger;
+	private CountDownLatch _latch;
 	
 	private void _initializeLogger() {
 		PropertyConfigurator.configure("properties/log4j.properties");
@@ -23,8 +25,9 @@ public class Client implements Runnable{
 		_initializeLogger();
 	}
 
-	public Client(String command) {
+	public Client(String command, CountDownLatch latch) {
 		this._command = command;
+		this._latch = latch;
 		_initializeLogger();
 	}
 	
@@ -49,12 +52,16 @@ public class Client implements Runnable{
 				System.out.println(line);
 			}
 			
+			
 
 		} catch (Exception ex) {
 			
-			_logger.error(ex);
-			
-		} 
+      _logger.error("CLIENT ERROR");
+			_logger.error(ex.getMessage());
+		}  
+		finally {
+			_latch.countDown();
+		}
 
 	}
 
