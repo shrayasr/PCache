@@ -51,6 +51,16 @@ public class VariableTimeseriesEngine
 		_idVarTsMap.put(id, ts);
 		return id;
 	}
+	
+	public synchronized static void deallocate(long id) throws PCacheException {
+		
+		// Sanity check
+		_exceptIfInvalidId(id);
+		
+		// Throw it from the map
+		_idVarTsMap.remove(id);
+		
+	}
 
 	/**
 	 * Add points to a given timeseries

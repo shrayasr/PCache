@@ -95,6 +95,22 @@ public class RequestHandler implements Runnable {
 
 				break;
 			}
+			
+			case "DEALLOC": {
+				
+				if (tokens.length != 2) {
+					throw new PCacheException("DEALLOC takes 1 argument. " +
+							"Usage: DEALLOC <ID>");
+				}
+				
+				long ID = Long.parseLong(tokens[1]);
+				
+				VariableTimeseriesEngine.deallocate(ID);
+				
+				out.println("DEALLOCATED " + ID);
+				
+				break;
+			}
 
 			case "SIZE": {
 				
