@@ -73,6 +73,15 @@ public class RequestHandler implements Runnable {
 				
 				break;
 			}
+			
+			case "STATS": {
+				
+				int noOfTimeseries = VariableTimeseriesEngine.noOfTimeseries();
+				
+				out.println("No. of time series': " + noOfTimeseries);
+				
+				break;
+			}
 
 			case "ALLOC": {
 
@@ -237,11 +246,9 @@ public class RequestHandler implements Runnable {
 			operationEndTime = System.currentTimeMillis();
 
 			String logMessage = _socket.getInetAddress() 
-					+ " ["+DateTime.now().toString("d/m/Y:H:M:S z")+"] " 
+					+ " ["+DateTime.now().toString("d/m/Y:H:M:s z")+"] " 
 					+ command 
 					+ " ["+(operationEndTime - operationStartTime)/1000.0+"s]";
-			
-			//System.out.println();
 			
 			_log.info(logMessage);
 		}

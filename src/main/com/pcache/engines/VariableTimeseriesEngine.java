@@ -203,6 +203,12 @@ public class VariableTimeseriesEngine
 
 		return _idVarTsMap.get(id).size();
 	}
+	
+	public synchronized static int noOfTimeseries() {
+		
+		return _idVarTsMap.size();
+		
+	}
 
 	/**
 	 * Throw an exception if the ID passed doesn't exist in the map
