@@ -32,7 +32,7 @@ task testbed(type:Jar) {
     include "main/com/pcache/**"
   }
   from configurations.compile.collect { zipTree it }
-  manifest.attributes "Main-Class": "main.com.pcache.performance.TestBed"
+  manifest.attributes "Main-Class": "main.com.pcache.performance.TB2"
 }
 
 artifacts {
