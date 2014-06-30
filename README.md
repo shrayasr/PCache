@@ -1,4 +1,4 @@
-#Project Cache [![Build Status](https://travis-ci.org/shrayas/PCache.svg?branch=master)](https://travis-ci.org/shrayas/PCache)
+#Project Cache [![Build Status](https://travis-ci.org/shrayasr/PCache.svg?branch=master)](https://travis-ci.org/shrayasr/PCache)
 > Time series cache for the final sem dissertation 2014
 
 **UPDATE: I finished my dissertation presentation yesterday, the 28th of June 2014. Feels good, kinda. The MS is now over!**
