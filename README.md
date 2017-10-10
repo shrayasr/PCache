@@ -1,4 +1,4 @@
-#Project Cache [![Build Status](https://travis-ci.org/shrayasr/PCache.svg?branch=master)](https://travis-ci.org/shrayasr/PCache)
+# Project Cache [![Build Status](https://travis-ci.org/shrayasr/PCache.svg?branch=master)](https://travis-ci.org/shrayasr/PCache)
 > Time series cache for the final sem dissertation 2014
 
 **UPDATE: I finished my dissertation presentation yesterday, the 28th of June 2014. Feels good, kinda. The MS is now over!**
@@ -8,15 +8,15 @@
 *TBH, i don't even know what i'm doing :D*
 
 
-##Topic
+## Topic
 
 Time Series Data is all around us: Temperature, stocks, weather are a few to name. This kind of data however usually occurs in bulk and it is very expensive to store and retrieve out of a database. Some of the computations that can be performed on this data can be offloaded to the cache because of its simplicity. The aim is to build a high performance backend cache that caters to Time Series Data. Such a cache would allow for a lot of functions that are Time Series Data specific like updates of individual points inside it without having to re-warm the entire cache and small computations.
 
-##Objectives
+## Objectives
 
 The key objective is to build an in memory cache that is tailor made for Time Series Data. This cache would be open to connections from multiple endpoints (REST APIs and socket connections) through which changes can be made within the cache for single / multiple data points. The cache would also allow a restricted set of computations. The fact that this is an in memory cache means that it is very vital that the memory underneath be managed in the best of ways. The cache also aims to hold large amounts of data in memory by adopting a self adaptive storage which optimizes the memory to hold large chunks of data while using the least memory. This project is intended to be a part of an SAP product which works very closely with Stock Time Series Data. 
 
-##Scope
+## Scope
 
 * Efficiently handle Time Series Data, represented by a TIMESTAMP (ISO8601) and a value
 * Allow updates to individual / multiple points stored in the cache
